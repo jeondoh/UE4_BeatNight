@@ -2,6 +2,7 @@
 
 #include "SpawnEnemy.h"
 #include "Enemy.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ASpawnEnemy::ASpawnEnemy()
@@ -10,6 +11,7 @@ ASpawnEnemy::ASpawnEnemy()
 	PrimaryActorTick.bCanEverTick = true;
 
 	SpawnDelayTime = 1.0f; // 스폰 딜레이 시간
+	Enemy = CreateDefaultSubobject<AEnemy>(TEXT("Enemy"));
 }
 
 // Called when the game starts or when spawned
@@ -25,6 +27,20 @@ void ASpawnEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// 스테이지 몬스터 존재 확인(추후 스테이지 작업시 사용)
+	/*
+	TArray<AActor*> arrOutActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemy::StaticClass(), arrOutActors);
+
+	if(arrOutActors.IsValidIndex(0))
+	{
+		for(int i = 0; i < arrOutActors.Num(); ++i)
+		{
+			AEnemy* FindEnemy = dynamic_cast<AEnemy*>(arrOutActors[i]);
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *FindEnemy->GetMonsterName());
+		}	
+	}
+	*/
 }
 
 void ASpawnEnemy::SpawnEnemyToDelay()
@@ -42,5 +58,13 @@ void ASpawnEnemy::SpawnEnemy()
 
 	const FVector Locate = GetActorLocation();
 	GetWorld()->SpawnActor<AEnemy>(SpawnEnemyType, Locate, GetActorRotation(), Param);
-	GetWorld()->GetTimerManager().ClearTimer(SpawnTimerHandle);	
+
+	// 스폰시 몬스터명 지정(스테이지 구별을 위해 필요)
+	// AEnemy* Enemy = Cast<AEnemy>(SpawnEnemyType);
+	if(Enemy)
+	{
+		Enemy->SetMonsterName(SpawnMonsterName);
+	}
+
+	GetWorld()->GetTimerManager().ClearTimer(SpawnTimerHandle);
 }

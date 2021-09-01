@@ -54,7 +54,7 @@ private:
 	int32 EnemyDamage;
 	/** 스테이지에 따른 몬스터명 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
-	FName MonsterName;
+	FString MonsterName;
 	
 	/**************************************************************************************************/
 	// 아이템 드롭
@@ -84,4 +84,10 @@ private:
 	USoundCue* DamagedSound;
 	
 	/**************************************************************************************************/
+
+// Getter & Setter
+public:
+	FORCEINLINE FString GetMonsterName() {return MonsterName;}
+	FORCEINLINE void SetMonsterName(FString Name) {MonsterName = Name;}
+	
 };

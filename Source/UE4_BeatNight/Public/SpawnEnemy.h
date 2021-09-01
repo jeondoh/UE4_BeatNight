@@ -36,10 +36,18 @@ private:
 	/** 스폰 타입 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="EnemySpawn", meta=(AllowPrivateAccess=true))
 	TSubclassOf<class AEnemy> SpawnEnemyType;
+	/** 스폰시 지정할 몬스터 이름 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="EnemySpawn", meta=(AllowPrivateAccess=true))
+	FString SpawnMonsterName;
+	/** Enemy 객체 */
+	UPROPERTY(VisibleAnywhere, meta=(AllowPrivateAccess=true))
+	AEnemy* Enemy;
 
 	UFUNCTION()
 	void SpawnEnemyToDelay();
 
 	UFUNCTION()
 	void SpawnEnemy();
+	
+	/**************************************************************************************************/
 };
