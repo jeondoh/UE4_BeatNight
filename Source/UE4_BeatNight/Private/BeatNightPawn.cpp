@@ -3,15 +3,11 @@
 
 #include "BeatNightPawn.h"
 
-#include "Components/SphereComponent.h"
-
 // Sets default values
 ABeatNightPawn::ABeatNightPawn()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	Comp = CreateDefaultSubobject<USphereComponent>(TEXT("asdffdsa"));
 }
 
 // Called when the game starts or when spawned
