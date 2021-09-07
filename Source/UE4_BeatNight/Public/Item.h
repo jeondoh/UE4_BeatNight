@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "Engine/StaticMeshActor.h"
 #include "Item.generated.h"
 
 UCLASS()
-class UE4_BEATNIGHT_API AItem : public AActor
+class UE4_BEATNIGHT_API AItem : public AStaticMeshActor
 {
 	GENERATED_BODY()
 	
