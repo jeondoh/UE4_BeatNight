@@ -39,9 +39,13 @@ private:
 	/** 스폰시 지정할 몬스터 이름 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="EnemySpawn", meta=(AllowPrivateAccess=true))
 	FString SpawnMonsterName;
-	/** Enemy 객체 */
-	UPROPERTY(VisibleAnywhere, meta=(AllowPrivateAccess=true))
-	AEnemy* Enemy;
+	/** 적이 이동할 지점
+	* MakeEditWidget = 해당 엑터의 위치를 중심으로 한 로컬 위치
+	*/
+	UPROPERTY(EditAnywhere, Category="EnemySpawn", meta=(AllowPrivateAccess=true, MakeEditWidget=true))
+	FVector PatrolPoint;
+	UPROPERTY(EditAnywhere, Category="EnemySpawn", meta=(AllowPrivateAccess=true, MakeEditWidget=true))
+	FVector PatrolPoint2;
 
 	UFUNCTION()
 	void SpawnEnemyToDelay();

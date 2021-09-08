@@ -2,6 +2,8 @@
 
 #include "BossStage2.h"
 
+#include "Kismet/KismetMathLibrary.h"
+
 ABossStage2::ABossStage2()
 {
 }
@@ -21,12 +23,12 @@ void ABossStage2::PostInitializeComponents()
 	Super::PostInitializeComponents();
 
 	// 보스 스폰시 등장모션 몽타주 실행
-	PlayLevelMontage();
+	// PlayLevelMontage();
 }
 
+/*
 void ABossStage2::PlayLevelMontage()
 {
-	// TODO : 등장시 음성 추가
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if(AnimInstance && LevelMontage)
 	{
@@ -34,3 +36,4 @@ void ABossStage2::PlayLevelMontage()
 		AnimInstance->Montage_JumpToSection(FName("LevelStart"));
 	}
 }
+*/

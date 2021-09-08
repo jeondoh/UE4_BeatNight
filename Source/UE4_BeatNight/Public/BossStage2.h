@@ -25,14 +25,17 @@ protected:
 
 	virtual void PostInitializeComponents() override;
 	
-	
 private:
 	/**************************************************************************************************/
 	// 몽타주 & 애니메이션
-	
-	/** 보스 스폰시 등장 몽타주 */
+
+	/*
+	// 보스 스폰시 등장 몽타주 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Boss|Animate", meta=(AllowPrivateAccess=true))
 	UAnimMontage* LevelMontage;
 	
 	void PlayLevelMontage();
+	*/
+
+	/**************************************************************************************************/	
 };
