@@ -2,10 +2,13 @@
 
 
 #include "Enemy.h"
-#include "Item.h"
+// #include "Item.h"
+#include "BeatNightPawn.h"
+#include "EnemyAIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Sound/SoundCue.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -27,7 +30,12 @@ AEnemy::AEnemy()
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	// 컴포넌트 오버랩 바인딩
+	AgroSphere->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::AgroSphereBeginOverlap);
+	AgroSphere->OnComponentEndOverlap.AddDynamic(this, &AEnemy::AgroSphereEndOverlap);
+	AttackSphere->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::AttackSphereBeginOverlap);
+	AttackSphere->OnComponentEndOverlap.AddDynamic(this, &AEnemy::AttackSphereEndOverlap);
 }
 
 // Called every frame
@@ -49,11 +57,11 @@ void AEnemy::InitalizedData()
 	MaxHealth = 100.f; // 최대 체력
 	Health = 100.f; // 체력
 	EnemyDamage = 10.f; // 데미지
-	MonsterName = TEXT(""); // 몬스터명
 }
 
 void AEnemy::DropItem()
 {
+	/*
 	if(bDropItem && ItemType)
 	{
 		FActorSpawnParameters Param;
@@ -68,6 +76,92 @@ void AEnemy::DropItem()
 			UGameplayStatics::PlaySoundAtLocation(this, DropSound, EnemyLocate);
 		}
 	}
-	
+	*/
 }
 
+void AEnemy::SetEnemyAIController()
+{
+	EnemyController = Cast<AEnemyAIController>(GetController());
+	// 위치변환 (로컬->월드 좌표)
+	const FVector WorldPatorlPoint = UKismetMathLibrary::TransformLocation(GetActorTransform(), PatrolPoint);
+	const FVector WorldPatorlPoint2 = UKismetMathLibrary::TransformLocation(GetActorTransform(), PatrolPoint2);
+
+	// BlackBoard에 변수 set
+	if(EnemyController)
+	{
+		// ValueAs '' = 해당 타입의 변수값 Set
+		EnemyController->GetBlackboardComponent()->SetValueAsVector(TEXT("PatrolPoint"), WorldPatorlPoint);
+		EnemyController->GetBlackboardComponent()->SetValueAsVector(TEXT("PatrolPoint2"), WorldPatorlPoint2);
+		EnemyController->RunBehaviorTree(BehaviorTree); // 루트노드에서 순차실행함.
+	}
+}
+
+void AEnemy::AgroSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+    UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if(OtherActor == nullptr) return;
+
+	ABeatNightPawn* Player = Cast<ABeatNightPawn>(OtherActor);
+	if(Player && EnemyController)
+	{
+		// 어그로 범위내에 Player가 들어오면 Blackboard의 Target을 Set
+		if(EnemyController->GetBlackboardComponent())
+		{
+			EnemyController->GetBlackboardComponent()->SetValueAsObject(TEXT("Target"), Player);
+		}
+	}
+}
+
+
+void AEnemy::AgroSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if(OtherActor == nullptr) return;
+	
+	ABeatNightPawn* Player = Cast<ABeatNightPawn>(OtherActor);
+	if(Player && EnemyController)
+	{
+		// 어그로 범위내에 Player가 없으면 Blackboard의 Target을 null 처리
+		if(EnemyController->GetBlackboardComponent())
+		{
+			EnemyController->GetBlackboardComponent()->SetValueAsObject(TEXT("Target"), nullptr);
+		}
+	}
+}
+
+void AEnemy::AttackSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if(OtherActor == nullptr) return;
+	
+	ABeatNightPawn* Player = Cast<ABeatNightPawn>(OtherActor);
+	if(Player && EnemyController)
+	{
+		// 어그로 범위내에 Player가 없으면 Blackboard의 Target을 null 처리
+		if(EnemyController->GetBlackboardComponent())
+		{
+			EnemyController->GetBlackboardComponent()->SetValueAsBool(TEXT("InAttackRange"), true);
+		}
+	}
+}
+
+void AEnemy::AttackSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if(OtherActor == nullptr) return;
+	
+	ABeatNightPawn* Player = Cast<ABeatNightPawn>(OtherActor);
+	if(Player && EnemyController)
+	{
+		// 어그로 범위내에 Player가 없으면 Blackboard의 Target을 null 처리
+		if(EnemyController->GetBlackboardComponent())
+		{
+			EnemyController->GetBlackboardComponent()->SetValueAsBool(TEXT("InAttackRange"), false);
+		}
+	}
+}
+
+void AEnemy::GetLookAtRotation(FVector TargetLocation)
+{
+	SetActorRotation(UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetLocation));
+}

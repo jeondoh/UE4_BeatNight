@@ -15,6 +15,9 @@ public:
 	// Sets default values for this character's properties
 	AEnemy();
 
+	/** 비헤이비어 설정 (SpawnEnemy에서 호출함) */
+	void SetEnemyAIController();
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -58,13 +61,13 @@ private:
 	
 	/**************************************************************************************************/
 	// 아이템 드롭
-
+	
 	/** 아이템 드롭 여부 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Items", meta=(AllowPrivateAccess=true))
 	bool bDropItem;
 	/** 아이템 타입 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Items", meta=(AllowPrivateAccess=true))
-	TSubclassOf<class AItem> ItemType;
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Items", meta=(AllowPrivateAccess=true))
+	// TSubclassOf<class AItem> ItemType;
 	/** 아이템 드롭 사운드 */
 	UPROPERTY(EditAnywhere, Category = "Enemy|Items", meta=(AllowPrivateAccess=true, MakeEditWidget=true))
 	class USoundCue* DropSound;
@@ -82,12 +85,56 @@ private:
 	/** 공격 받을때 사운드 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Effect", meta=(AllowPrivateAccess=true))
 	USoundCue* DamagedSound;
+
+	/**************************************************************************************************/
+	// 인공지능
+
+	/** Enemy의 행동 AI */
+	UPROPERTY(EditAnywhere, Category="Enemy|BehaviorTree", meta=(AllowPrivateAccess=true))
+	class UBehaviorTree* BehaviorTree;
+	/** 적이 이동할 지점
+	 * MakeEditWidget = 해당 엑터의 위치를 중심으로 한 로컬 위치
+	 */
+	UPROPERTY(VisibleAnywhere, Category="Enemy|BehaviorTree", meta=(AllowPrivateAccess=true, MakeEditWidget=true))
+	FVector PatrolPoint;
+	UPROPERTY(VisibleAnywhere, Category="Enemy|BehaviorTree", meta=(AllowPrivateAccess=true, MakeEditWidget=true))
+	FVector PatrolPoint2;
+
+	UPROPERTY()
+	class AEnemyAIController* EnemyController;
+
+	/** 어그로 범위 오버랩 */
+	UFUNCTION()
+	void AgroSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	
+	UFUNCTION()
+	void AgroSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, 
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	
+	/** 공격 범위 오버랩 */
+	UFUNCTION()
+	void AttackSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void AttackSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	/** Player 방향 바라보게 하기 */
+	UFUNCTION(BlueprintCallable)
+	void GetLookAtRotation(FVector TargetLocation);
 	
 	/**************************************************************************************************/
 
 // Getter & Setter
 public:
-	FORCEINLINE FString GetMonsterName() {return MonsterName;}
+	FORCEINLINE FString GetMonsterName() const {return MonsterName;}
 	FORCEINLINE void SetMonsterName(FString Name) {MonsterName = Name;}
+
+	FORCEINLINE UBehaviorTree* GetBehaviorTree() const {return BehaviorTree;}
+
+	FORCEINLINE void SetPatrolPoint(FVector PT) {PatrolPoint = PT;}
+	FORCEINLINE void SetPatrolPoint2(FVector PT) {PatrolPoint2 = PT;}
 	
 };

@@ -11,7 +11,6 @@ ASpawnEnemy::ASpawnEnemy()
 	PrimaryActorTick.bCanEverTick = true;
 
 	SpawnDelayTime = 1.0f; // 스폰 딜레이 시간
-	Enemy = CreateDefaultSubobject<AEnemy>(TEXT("Enemy"));
 }
 
 // Called when the game starts or when spawned
@@ -57,14 +56,16 @@ void ASpawnEnemy::SpawnEnemy()
 	Param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
 	const FVector Locate = GetActorLocation();
-	GetWorld()->SpawnActor<AEnemy>(SpawnEnemyType, Locate, GetActorRotation(), Param);
+	AEnemy* CastEnemy = GetWorld()->SpawnActor<AEnemy>(SpawnEnemyType, Locate, GetActorRotation(), Param);
 
-	// 스폰시 몬스터명 지정(스테이지 구별을 위해 필요)
-	// AEnemy* Enemy = Cast<AEnemy>(SpawnEnemyType);
-	if(Enemy)
+	// Enemy 몬스터명 & 정찰 포인트 지정
+	if(CastEnemy)
 	{
-		Enemy->SetMonsterName(SpawnMonsterName);
+		CastEnemy->SetMonsterName(SpawnMonsterName); // 스테이지 구별을 위해 몬스터명 지정
+		CastEnemy->SetPatrolPoint(PatrolPoint); // 정찰 포인트1
+		CastEnemy->SetPatrolPoint2(PatrolPoint2); // 정찰 포인트2
+		// Enemy의 BehaviorTree설정 (AI 동작)
+		CastEnemy->SetEnemyAIController();
 	}
-
 	GetWorld()->GetTimerManager().ClearTimer(SpawnTimerHandle);
 }
