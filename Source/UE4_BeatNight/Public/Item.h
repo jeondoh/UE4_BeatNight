@@ -28,10 +28,6 @@ private:
 	/**************************************************************************************************/
 	// 컴포넌트
 
-	/** 아이템 메시 */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="ItemComp|Props", meta=(AllowPrivateAccess=true))
-	UStaticMeshComponent* ItemMesh;
-
 	/** 충돌상자 */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="ItemComp|Props", meta=(AllowPrivateAccess=true))
 	class UBoxComponent* CollisionBox;
