@@ -22,20 +22,33 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaSeconds) override;
-
-	virtual void PostInitializeComponents() override;
 	
 private:
 	/**************************************************************************************************/
 	// 몽타주 & 애니메이션
 
-	/*
-	// 보스 스폰시 등장 몽타주 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Boss|Animate", meta=(AllowPrivateAccess=true))
-	UAnimMontage* LevelMontage;
-	
-	void PlayLevelMontage();
-	*/
+	/** Target(Player)공격 몽타주 Play */
+	UFUNCTION(BlueprintCallable)
+	void PlayAttackToTargetMontage(FName Section);
 
-	/**************************************************************************************************/	
+	/**************************************************************************************************/
+	// 보스 공격
+
+	/**  */
+	bool GetBeamEndLocation(const FVector& MuzzleSocketLocation, FHitResult& OutHitResult);
+	
+	/** 총(Gun) 공격 > 애니메이션 노티파이 */
+	UFUNCTION(BlueprintCallable)
+	void BossGunShot();
+	
+
+	/**************************************************************************************************/
+	// 이팩트
+
+	/** 총알 이팩트 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Boss|Particles", meta = (AllowPrivateAccess=true))
+	class UParticleSystem* BeamParticles;
+
+	/**************************************************************************************************/
+	
 };

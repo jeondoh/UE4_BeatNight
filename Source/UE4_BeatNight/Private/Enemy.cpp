@@ -57,6 +57,7 @@ void AEnemy::InitalizedData()
 	MaxHealth = 100.f; // 최대 체력
 	Health = 100.f; // 체력
 	EnemyDamage = 10.f; // 데미지
+	bCanAttack = false; // 공격가능여부
 }
 
 void AEnemy::DropItem()
@@ -102,12 +103,20 @@ void AEnemy::AgroSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AA
 	if(OtherActor == nullptr) return;
 
 	ABeatNightPawn* Player = Cast<ABeatNightPawn>(OtherActor);
-	if(Player && EnemyController)
+	if(Player)
 	{
-		// 어그로 범위내에 Player가 들어오면 Blackboard의 Target을 Set
-		if(EnemyController->GetBlackboardComponent())
+		// Player에 값 넣기
+		BeatNightPlayer = Player;
+		bCanAttack = true;
+		
+		if(EnemyController)
 		{
-			EnemyController->GetBlackboardComponent()->SetValueAsObject(TEXT("Target"), Player);
+			// 어그로 범위내에 Player가 들어오면 Blackboard의 Target을 Set
+			if(EnemyController->GetBlackboardComponent())
+			{
+				EnemyController->GetBlackboardComponent()->SetValueAsObject(TEXT("Target"), Player);
+				EnemyController->GetBlackboardComponent()->SetValueAsBool(TEXT("CanAttack"), bCanAttack);
+			}	
 		}
 	}
 }
@@ -119,12 +128,19 @@ void AEnemy::AgroSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 	if(OtherActor == nullptr) return;
 	
 	ABeatNightPawn* Player = Cast<ABeatNightPawn>(OtherActor);
-	if(Player && EnemyController)
+	if(Player)
 	{
-		// 어그로 범위내에 Player가 없으면 Blackboard의 Target을 null 처리
-		if(EnemyController->GetBlackboardComponent())
+		BeatNightPlayer = nullptr;
+		bCanAttack = false;
+		
+		if(EnemyController)
 		{
-			EnemyController->GetBlackboardComponent()->SetValueAsObject(TEXT("Target"), nullptr);
+			// 어그로 범위내에 Player가 없으면 Blackboard의 Target을 null 처리
+			if(EnemyController->GetBlackboardComponent())
+			{
+				EnemyController->GetBlackboardComponent()->SetValueAsObject(TEXT("Target"), nullptr);
+				EnemyController->GetBlackboardComponent()->SetValueAsBool(TEXT("CanAttack"), bCanAttack);
+			}
 		}
 	}
 }
@@ -163,5 +179,10 @@ void AEnemy::AttackSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AA
 
 void AEnemy::GetLookAtRotation(FVector TargetLocation)
 {
-	SetActorRotation(UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetLocation));
+	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetLocation);
+	FRotator LookAtRotationYaw(0.f, LookAtRotation.Yaw, 0.f);
+	// Target 방향으로 스무스하게 바라봄
+	FRotator Rotator = FMath::RInterpTo(GetActorRotation(), LookAtRotationYaw, GetWorld()->GetDeltaSeconds(), 200.f);
+
+	SetActorRotation(Rotator);
 }

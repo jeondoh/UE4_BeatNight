@@ -22,6 +22,23 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	// 캐릭터(Player)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Enemy", meta=(AllowPrivateAccess=true))	
+	class ABeatNightPawn* BeatNightPlayer;
+
+	/**************************************************************************************************/
+	// 애니메이션 & 몽타주
+
+	/** 공격 몽타주 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Anim", meta=(AllowPrivateAccess=true))
+	UAnimMontage* AttackMontage;
+
+	/** HP x% 이하일때 공격 몽타주 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Anim", meta=(AllowPrivateAccess=true))
+	UAnimMontage* AttackHpDwonMontage;
+	
+	/**************************************************************************************************/
+	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -58,6 +75,9 @@ private:
 	/** 스테이지에 따른 몬스터명 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
 	FString MonsterName;
+	/** 공격가능여부(AnimInstance에서 사용) */
+	UPROPERTY()
+	bool bCanAttack;
 	
 	/**************************************************************************************************/
 	// 아이템 드롭
@@ -99,10 +119,9 @@ private:
 	FVector PatrolPoint;
 	UPROPERTY(VisibleAnywhere, Category="Enemy|BehaviorTree", meta=(AllowPrivateAccess=true, MakeEditWidget=true))
 	FVector PatrolPoint2;
-
+	/** Enemy 컨트롤러 */
 	UPROPERTY()
 	class AEnemyAIController* EnemyController;
-
 	/** 어그로 범위 오버랩 */
 	UFUNCTION()
 	void AgroSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -136,5 +155,7 @@ public:
 
 	FORCEINLINE void SetPatrolPoint(FVector PT) {PatrolPoint = PT;}
 	FORCEINLINE void SetPatrolPoint2(FVector PT) {PatrolPoint2 = PT;}
+
+	FORCEINLINE bool GetCanAttack() const {return bCanAttack;}
 	
 };

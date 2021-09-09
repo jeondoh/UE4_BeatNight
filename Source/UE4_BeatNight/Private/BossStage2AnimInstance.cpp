@@ -20,5 +20,6 @@ void UBossStage2AnimInstance::UpdateAnimationProperties(float DeltaTime)
 		FVector Velocity{Boss->GetVelocity()};
 		Velocity.Z = 0.f;
 		Speed = Velocity.Size();
+		bCanAttack = Boss->GetCanAttack();
 	}
 }
