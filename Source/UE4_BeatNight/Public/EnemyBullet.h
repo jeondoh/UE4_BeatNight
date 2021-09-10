@@ -25,7 +25,7 @@ public:
 
 	/** 총알 생성시 필요 값 Set (Enemy 클래스에서 호출) */
 	UFUNCTION()
-	void SetBulletInfos(FVector Location, float Speed);
+	void SetBulletInfos(class AEnemy* Enemy, FVector Location, float Speed);
 
 private:
 
@@ -52,6 +52,9 @@ private:
 	/** 속성값이 세팅되었을때 True */
 	UPROPERTY()
 	bool CanMove;
+	/** Enemy 클래스 */
+	UPROPERTY()
+	class AEnemy* Enemy;
 	
 	/**************************************************************************************************/
 	// 이팩트

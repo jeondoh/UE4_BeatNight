@@ -58,6 +58,8 @@ private:
 	/** 총알 속도 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Boss|Props", meta=(AllowPrivateAccess=true))
 	float BulletSpeed;
+
+	/** 데미지 수치 */
 	
 	/** 몽타주 섹션 이름 */
 	FName AttackSlow;

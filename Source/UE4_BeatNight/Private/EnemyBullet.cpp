@@ -3,6 +3,7 @@
 
 #include "EnemyBullet.h"
 
+#include "Enemy.h"
 #include "BeatNightPawn.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -41,30 +42,34 @@ void AEnemyBullet::Tick(float DeltaTime)
 	// 총알 Player에게
 	if(CanMove)
 	{
-		SetActorLocation(GetActorLocation() + (PlayerLocation - GetActorLocation()) * BulletSpeed * DeltaTime); 
+		SetActorLocation(GetActorLocation() + (PlayerLocation - GetActorLocation()) * BulletSpeed * DeltaTime);
 	}
 }
 
-void AEnemyBullet::SetBulletInfos(FVector Location, float Speed)
+void AEnemyBullet::SetBulletInfos(AEnemy* GetEnemy, FVector Location, float Speed)
 {
-	// 플레이어 위치
 	PlayerLocation = Location;
 	BulletSpeed = Speed;
+	Enemy = GetEnemy;
 	CanMove = true;
 }
 
 void AEnemyBullet::BoxCompBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-                                       UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+    UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	ABeatNightPawn* TargetPlayer = Cast<ABeatNightPawn>(OtherActor);
 	// 총 맞는 대상이 Player
 	if(TargetPlayer)
 	{
-		UE_LOG(LogTemp, Error, TEXT("총맞음"));
 		// 총 맞는 위치에 파티클 생성
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), BulletParticles, GetActorTransform()); 
+		// Player에게 데미지 입힘
+		if(Enemy)
+		{
+			Enemy->DoDamage(TargetPlayer);
+		}
 		// 총알 제거
-		// Destroy();
+		Destroy();
 	}
 	// Destroy();
 }

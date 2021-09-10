@@ -26,4 +26,23 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	
+private:
+
+	void InitalizedData();
+	
+	/**************************************************************************************************/
+	// 캐릭터 상태
+	
+	/** HP 최대체력 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Char|Props", meta=(AllowPrivateAccess=true))
+	float MaxHealth;
+
+	/** 현재 체력 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Char|Props", meta=(AllowPrivateAccess=true))
+	float Health;
+
+	void Die();
+
 };

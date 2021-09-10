@@ -39,6 +39,11 @@ void AEnemy::BeginPlay()
 	AttackSphere->OnComponentEndOverlap.AddDynamic(this, &AEnemy::AttackSphereEndOverlap);
 }
 
+void AEnemy::DoDamage(ABeatNightPawn* Player)
+{
+	UGameplayStatics::ApplyDamage(Player, RandomizationDamage(EnemyDamage), EnemyController, this, UDamageType::StaticClass());
+}
+
 // Called every frame
 void AEnemy::Tick(float DeltaTime)
 {
@@ -184,4 +189,9 @@ void AEnemy::GetLookAtRotation(FVector TargetLocation)
 	FRotator Rotator = FMath::RInterpTo(GetActorRotation(), LookAtRotationYaw, GetWorld()->GetDeltaSeconds(), 200.f);
 
 	SetActorRotation(Rotator);
+}
+
+float AEnemy::RandomizationDamage(float Damage)
+{
+	return FMath::RandRange(Damage-10.f, Damage+30.f);
 }

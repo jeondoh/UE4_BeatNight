@@ -21,6 +21,10 @@ public:
 	/** Enemy 컨트롤러 */
 	UPROPERTY()
 	class AEnemyAIController* EnemyController;
+
+	/** 데미지 입히기 */
+	UFUNCTION()
+	void DoDamage(class ABeatNightPawn* Player);
 	
 protected:
 	// Called when the game starts or when spawned
@@ -40,7 +44,26 @@ protected:
 	/** HP x% 이하일때 공격 몽타주 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Anim", meta=(AllowPrivateAccess=true))
 	UAnimMontage* AttackHpDwonMontage;
+
+	/**************************************************************************************************/
+	// 몬스터 상태
 	
+	/** 최대 체력 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
+	int32 MaxHealth;
+	/** 체력 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
+	int32 Health;
+	/** 데미지 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
+	int32 EnemyDamage;
+	/** 스테이지에 따른 몬스터명 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
+	FString MonsterName;
+	/** 공격가능여부(AnimInstance에서 사용) */
+	UPROPERTY()
+	bool bCanAttack;
+
 	/**************************************************************************************************/
 	
 public:	
@@ -63,25 +86,6 @@ private:
 	/** 공격 범위 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Component", meta=(AllowPrivateAccess=true))
 	class USphereComponent* AttackSphere;
-
-	/**************************************************************************************************/
-	// 몬스터 상태
-	
-	/** 최대 체력 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
-	int32 MaxHealth;
-	/** 체력 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
-	int32 Health;
-	/** 데미지 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
-	int32 EnemyDamage;
-	/** 스테이지에 따른 몬스터명 */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
-	FString MonsterName;
-	/** 공격가능여부(AnimInstance에서 사용) */
-	UPROPERTY()
-	bool bCanAttack;
 	
 	/**************************************************************************************************/
 	// 아이템 드롭
@@ -144,6 +148,8 @@ private:
 	/** Player 방향 바라보게 하기 */
 	UFUNCTION(BlueprintCallable)
 	void GetLookAtRotation(FVector TargetLocation);
+
+	float RandomizationDamage(float Damage);
 	
 	/**************************************************************************************************/
 
@@ -158,5 +164,8 @@ public:
 	FORCEINLINE void SetPatrolPoint2(FVector PT) {PatrolPoint2 = PT;}
 
 	FORCEINLINE bool GetCanAttack() const {return bCanAttack;}
+
+	FORCEINLINE float GetEnemyDamage() const {return EnemyDamage;}
+	FORCEINLINE void SetEnemyDamage(float Damage) {EnemyDamage = Damage;}
 	
 };
