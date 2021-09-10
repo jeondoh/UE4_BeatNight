@@ -17,6 +17,10 @@ public:
 
 	/** 비헤이비어 설정 (SpawnEnemy에서 호출함) */
 	void SetEnemyAIController();
+
+	/** Enemy 컨트롤러 */
+	UPROPERTY()
+	class AEnemyAIController* EnemyController;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -86,8 +90,8 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Items", meta=(AllowPrivateAccess=true))
 	bool bDropItem;
 	/** 아이템 타입 */
-	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Items", meta=(AllowPrivateAccess=true))
-	// TSubclassOf<class AItem> ItemType;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Items", meta=(AllowPrivateAccess=true))
+	TSubclassOf<class AItem> ItemType;
 	/** 아이템 드롭 사운드 */
 	UPROPERTY(EditAnywhere, Category = "Enemy|Items", meta=(AllowPrivateAccess=true, MakeEditWidget=true))
 	class USoundCue* DropSound;
@@ -119,9 +123,6 @@ private:
 	FVector PatrolPoint;
 	UPROPERTY(VisibleAnywhere, Category="Enemy|BehaviorTree", meta=(AllowPrivateAccess=true, MakeEditWidget=true))
 	FVector PatrolPoint2;
-	/** Enemy 컨트롤러 */
-	UPROPERTY()
-	class AEnemyAIController* EnemyController;
 	/** 어그로 범위 오버랩 */
 	UFUNCTION()
 	void AgroSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,

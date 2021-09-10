@@ -4,12 +4,19 @@
 
 #include "BeatNightPawn.h"
 #include "DrawDebugHelpers.h"
+#include "EnemyAIController.h"
+#include "EnemyBullet.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
-#include "Kismet/GameplayStatics.h"
-#include "Particles/ParticleSystemComponent.h"
 
 ABossStage2::ABossStage2()
 {
+	AttackSlow = TEXT("Attack_Slow");
+	AttackFast = TEXT("Attack_Fast");
+	AttackGuided = TEXT("Attack_Guided");
+	AttackUlitmate = TEXT("Attack_Ultimate");
+	AmmoCount = 4.f; // 탄창 수
+	LastAmmo = AmmoCount; // 남은 총알 수
 }
 
 void ABossStage2::BeginPlay()
@@ -17,18 +24,27 @@ void ABossStage2::BeginPlay()
 	Super::BeginPlay();
 }
 
-void ABossStage2::Tick(float DeltaSeconds)
-{
-	Super::Tick(DeltaSeconds);
-}
-
 void ABossStage2::PlayAttackToTargetMontage(FName Section)
 {
+	if(EnemyController)
+	{
+		if(EnemyController->GetBlackboardComponent())
+		{
+			EnemyController->GetBlackboardComponent()->SetValueAsFloat(TEXT("DelayTime"), DelayTime);
+		}	
+	}
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if(AnimInstance && AttackMontage)
 	{
 		AnimInstance->Montage_Play(AttackMontage);
 		AnimInstance->Montage_JumpToSection(Section, AttackMontage);
+	}
+	// 총알이 없을 경우 Reload몽타주 실행
+	if(LastAmmo <= 0)
+	{
+		// TODO Attack 이후 총알 없으면 Reload 몽타주 실행하게 구현
+		// Reload 몽타주 길이만큼 Delay 시켜줘야함
+		LastAmmo = AmmoCount; // 남은 총알 초기화
 	}
 }
 
@@ -36,9 +52,9 @@ bool ABossStage2::GetBeamEndLocation(const FVector& MuzzleSocketLocation, FHitRe
 {
 	// 라인 추적 : 물체가 총구위치와 끝점을 지정해 충돌여부 확인
 	const FVector WeaponTraceStart{MuzzleSocketLocation};
-	const FVector PlayerLocation{BeatNightPlayer->GetActorLocation()};
+	const FVector EnemyForwardLocation{GetActorForwardVector()};
 	
-	FVector WeaponTraceEnd = PlayerLocation; 
+	FVector WeaponTraceEnd = BeatNightPlayer->GetActorLocation() + EnemyForwardLocation * 100.f;
 	
 	GetWorld()->LineTraceSingleByChannel(OutHitResult, WeaponTraceStart, WeaponTraceEnd, ECollisionChannel::ECC_Visibility);
 
@@ -50,7 +66,7 @@ bool ABossStage2::GetBeamEndLocation(const FVector& MuzzleSocketLocation, FHitRe
 	}
 	return false;
 }
-
+/*
 void ABossStage2::BossGunShot()
 {
 	// Boss Enemy 총구 소켓 가져오기
@@ -75,4 +91,61 @@ void ABossStage2::BossGunShot()
 			}
 		}
 	}
+}
+*/
+
+void ABossStage2::BossGunShot()
+{
+	const USkeletalMeshSocket* MuzzleSocket = GetMesh()->GetSocketByName("gun_MuzzleSocket");
+	if(MuzzleSocket)
+	{
+		const FTransform SocketTransForm = MuzzleSocket->GetSocketTransform(GetMesh());
+		// 총알스폰
+		FActorSpawnParameters Params;
+		Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+		if(SpawnEnemyBullet)
+		{
+			AEnemyBullet* Bullet = GetWorld()->SpawnActor<AEnemyBullet>(SpawnEnemyBullet,
+				SocketTransForm.GetLocation(), GetActorRotation(), Params);
+
+			Bullet->SetBulletInfos(BeatNightPlayer->GetActorLocation(), BulletSpeed);
+		}
+	}
+}
+
+FName ABossStage2::GetAttackSectionName()
+{
+	FName SectionName;
+	const int32 Section{FMath::RandRange(1, 100)};
+
+	if(Section >= 1 && Section <= 40)
+	{
+		// 40%
+		SectionName = AttackSlow;
+		LastAmmo--;	// 총알 수 줄어듬
+		BulletSpeed = 0.3f; // 총알 속도
+		DelayTime = 1.5f;
+	}
+	else if(Section >= 41 && Section <=80)
+	{
+		// 40%
+		SectionName = AttackFast;
+		LastAmmo--; // 총알 수 줄어듬
+		BulletSpeed = 0.5f; // 총알 속도
+		DelayTime = 1.2f;
+	}
+	else if(Section >= 81 && Section <=95)
+	{
+		// 15%
+		SectionName = AttackGuided;
+		DelayTime = 3.5f;
+	}
+	else
+	{
+		// 5%
+		SectionName = AttackUlitmate;
+		DelayTime = 3.5f;
+	}
+	return SectionName;
 }

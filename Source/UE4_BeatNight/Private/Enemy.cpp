@@ -2,13 +2,14 @@
 
 
 #include "Enemy.h"
-// #include "Item.h"
+#include "Item.h"
 #include "BeatNightPawn.h"
 #include "EnemyAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Sound/SoundCue.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -62,7 +63,6 @@ void AEnemy::InitalizedData()
 
 void AEnemy::DropItem()
 {
-	/*
 	if(bDropItem && ItemType)
 	{
 		FActorSpawnParameters Param;
@@ -77,7 +77,6 @@ void AEnemy::DropItem()
 			UGameplayStatics::PlaySoundAtLocation(this, DropSound, EnemyLocate);
 		}
 	}
-	*/
 }
 
 void AEnemy::SetEnemyAIController()
@@ -181,7 +180,7 @@ void AEnemy::GetLookAtRotation(FVector TargetLocation)
 {
 	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetLocation);
 	FRotator LookAtRotationYaw(0.f, LookAtRotation.Yaw, 0.f);
-	// Target 방향으로 스무스하게 바라봄
+	// Target 방향으로 바라봄(보간)
 	FRotator Rotator = FMath::RInterpTo(GetActorRotation(), LookAtRotationYaw, GetWorld()->GetDeltaSeconds(), 200.f);
 
 	SetActorRotation(Rotator);

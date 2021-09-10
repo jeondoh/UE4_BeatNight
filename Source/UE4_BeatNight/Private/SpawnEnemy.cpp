@@ -55,8 +55,7 @@ void ASpawnEnemy::SpawnEnemy()
 	// 찾지 못하면 AlwaysSpawn으로 동작
 	Param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
-	const FVector Locate = GetActorLocation();
-	AEnemy* CastEnemy = GetWorld()->SpawnActor<AEnemy>(SpawnEnemyType, Locate, GetActorRotation(), Param);
+	AEnemy* CastEnemy = GetWorld()->SpawnActor<AEnemy>(SpawnEnemyType, GetActorLocation(), GetActorRotation(), Param);
 
 	// Enemy 몬스터명 & 정찰 포인트 지정
 	if(CastEnemy)
