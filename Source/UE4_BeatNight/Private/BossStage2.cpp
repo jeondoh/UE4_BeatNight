@@ -129,7 +129,7 @@ void ABossStage2::BossUltimateAttack()
 		Bullet->SetBulletInfos(this, BulletSpeed);
 	}
 }
-
+/*
 FName ABossStage2::GetAttackSectionName()
 {
 	FName SectionName;
@@ -154,6 +154,47 @@ FName ABossStage2::GetAttackSectionName()
 		EnemyDamage = 20.f; // 데미지
 	}
 	else if(Section >= 81 && Section <=95)
+	{
+		// 15%
+		SectionName = AttackGuided;
+		DelayTime = 3.5f; // 대기시간
+	}
+	else
+	{
+		// 5%
+		SectionName = AttackUlitmate;
+		DelayTime = 3.5f; // 대기시간
+		BulletSpeed = 2200.f; // 총알 속도
+		EnemyDamage = 50.f; // 데미지
+	}
+	return SectionName;
+}
+*/
+
+FName ABossStage2::GetAttackSectionName()
+{
+	FName SectionName;
+	const int32 Section{FMath::RandRange(1, 4)};
+
+	if(Section == 1)
+	{
+		// 40%
+		SectionName = AttackSlow;
+		LastAmmo--;	// 총알 수 줄어듬
+		BulletSpeed = 1800.f; // 총알 속도
+		DelayTime = 1.5f; // 대기시간
+		EnemyDamage = 15.f; // 데미지
+	}
+	else if(Section == 2)
+	{
+		// 40%
+		SectionName = AttackFast;
+		LastAmmo--; // 총알 수 줄어듬
+		BulletSpeed = 2000.f; // 총알 속도
+		DelayTime = 1.2f; // 대기시간
+		EnemyDamage = 20.f; // 데미지
+	}
+	else if(Section == 3)
 	{
 		// 15%
 		SectionName = AttackGuided;
