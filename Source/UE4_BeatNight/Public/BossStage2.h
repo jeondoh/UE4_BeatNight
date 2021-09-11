@@ -39,13 +39,21 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void BossGunShot();
 
+	/** 구(Ball) 소환 공격 > 애니메이션 노티파이 */
+	UFUNCTION(BlueprintCallable)
+	void BossUltimateAttack();
+
 	/** 보스 공격 전 딜레이 시간 (각 섹션마다 대기시간 다름) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Boss|Props", meta=(AllowPrivateAccess=true))
 	float DelayTime;
 
 	/** 총알 스폰 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Boss|Props", meta=(AllowPrivateAccess=true))
-	TSubclassOf<class AEnemyBullet> SpawnEnemyBullet;
+	TSubclassOf<class AEnemyBullet> SpawnBullet;
+
+	/** 구(Ball) 스폰 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Boss|Props", meta=(AllowPrivateAccess=true))
+	TSubclassOf<class AEnemyBullet> SpawnBulletUltimate;
 
 	/** 보스 탄창 수(재장전 위함) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Boss|Props", meta=(AllowPrivateAccess=true))
@@ -73,10 +81,6 @@ private:
 
 	/**************************************************************************************************/
 	// 이팩트
-
-	/** 총알 이팩트 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Boss|Particles", meta = (AllowPrivateAccess=true))
-	class UParticleSystem* BeamParticles;
 
 	/**************************************************************************************************/
 	

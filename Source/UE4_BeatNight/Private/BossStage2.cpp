@@ -96,21 +96,37 @@ void ABossStage2::BossGunShot()
 
 void ABossStage2::BossGunShot()
 {
+	// Boss Enemy 총구 소켓 가져오기
 	const USkeletalMeshSocket* MuzzleSocket = GetMesh()->GetSocketByName("gun_MuzzleSocket");
-	if(MuzzleSocket)
+	const FTransform SocketTransForm = MuzzleSocket->GetSocketTransform(GetMesh());
+	// 총알스폰
+	FActorSpawnParameters Params;
+	Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	if(SpawnBullet)
 	{
-		const FTransform SocketTransForm = MuzzleSocket->GetSocketTransform(GetMesh());
-		// 총알스폰
-		FActorSpawnParameters Params;
-		Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		AEnemyBullet* Bullet = GetWorld()->SpawnActor<AEnemyBullet>(SpawnBullet,
+			SocketTransForm.GetLocation(), GetActorRotation(), Params);
 
-		if(SpawnEnemyBullet)
-		{
-			AEnemyBullet* Bullet = GetWorld()->SpawnActor<AEnemyBullet>(SpawnEnemyBullet,
-				SocketTransForm.GetLocation(), GetActorRotation(), Params);
+		Bullet->SetBulletInfos(this, BulletSpeed);
+	}
+}
 
-			Bullet->SetBulletInfos(this, BulletSpeed);
-		}
+void ABossStage2::BossUltimateAttack()
+{
+	// Boss Enemy 손 소켓 가져오기
+	const USkeletalMeshSocket* MuzzleSocket = GetMesh()->GetSocketByName("hand_r_ability_socket");
+	const FTransform SocketTransForm = MuzzleSocket->GetSocketTransform(GetMesh());
+	// 총알스폰
+	FActorSpawnParameters Params;
+	Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	if(SpawnBulletUltimate)
+	{
+		AEnemyBullet* Bullet = GetWorld()->SpawnActor<AEnemyBullet>(SpawnBulletUltimate,
+			SocketTransForm.GetLocation(), GetActorRotation(), Params);
+
+		Bullet->SetBulletInfos(this, BulletSpeed);
 	}
 }
 
@@ -148,6 +164,8 @@ FName ABossStage2::GetAttackSectionName()
 		// 5%
 		SectionName = AttackUlitmate;
 		DelayTime = 3.5f; // 대기시간
+		BulletSpeed = 2200.f; // 총알 속도
+		EnemyDamage = 50.f; // 데미지
 	}
 	return SectionName;
 }

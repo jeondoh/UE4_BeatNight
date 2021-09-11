@@ -40,6 +40,10 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Bullet|Component", meta=(AllowPrivateAccess=true))
 	class UBoxComponent* BoxComponent;
 
+	/** 총알 효과 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Bullet|Component", meta=(AllowPrivateAccess=true))
+	UParticleSystemComponent* BulletTrail;
+
 	/**************************************************************************************************/
 	// 속성
 
@@ -59,9 +63,13 @@ private:
 	/**************************************************************************************************/
 	// 이팩트
 
-	/** 총알 이팩트 */
+	/** 총알 이팩트 (총알이 캐릭터에 맞으면) */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Bullet|Particles", meta = (AllowPrivateAccess=true))
-	class UParticleSystem* BulletParticles;
+	class UParticleSystem* PlayerBulletParticles;
+	
+	/** 총알 이팩트 (총알이 캐릭터에 맞으면) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Bullet|Particles", meta = (AllowPrivateAccess=true))
+	class UParticleSystem* OtherBulletParticles;
 
 	/**************************************************************************************************/
 	// 충돌처리

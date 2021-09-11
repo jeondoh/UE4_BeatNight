@@ -7,6 +7,7 @@
 #include "BeatNightPawn.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 AEnemyBullet::AEnemyBullet()
@@ -20,6 +21,9 @@ AEnemyBullet::AEnemyBullet()
 
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComp"));
 	BoxComponent->SetupAttachment(GetRootComponent());
+
+	BulletTrail = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("BulletParticle"));
+	BulletTrail->SetupAttachment(GetRootComponent());
 	
 	BulletSpeed = 1800.f; // 총알속도
 	CanMove = false;
@@ -71,7 +75,7 @@ void AEnemyBullet::BoxCompBeginOverlap(UPrimitiveComponent* OverlappedComponent,
 	if(TargetPlayer)
 	{
 		// 총 맞는 위치에 파티클 생성
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), BulletParticles, GetActorTransform()); 
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), PlayerBulletParticles, GetActorTransform()); 
 		// Player에게 데미지 입힘
 		if(Enemy)
 		{
@@ -80,6 +84,16 @@ void AEnemyBullet::BoxCompBeginOverlap(UPrimitiveComponent* OverlappedComponent,
 		// 총알 제거
 		Destroy();
 	}
-	// Destroy();
+
+	AEnemy* TargetEnemy = Cast<AEnemy>(OtherActor);
+	AEnemyBullet* TargetThis = Cast<AEnemyBullet>(OtherActor);
+
+	if(!TargetEnemy && !TargetThis && !TargetPlayer)
+	{
+		// 총 맞는 위치에 파티클 생성
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), OtherBulletParticles, GetActorTransform());
+		Destroy();
+	}
+	
 }
 
