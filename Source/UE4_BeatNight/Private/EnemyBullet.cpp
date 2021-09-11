@@ -21,8 +21,7 @@ AEnemyBullet::AEnemyBullet()
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComp"));
 	BoxComponent->SetupAttachment(GetRootComponent());
 	
-
-	BulletSpeed = 0.1f; // 총알속도
+	BulletSpeed = 1800.f; // 총알속도
 	CanMove = false;
 }
 
@@ -32,6 +31,15 @@ void AEnemyBullet::BeginPlay()
 	Super::BeginPlay();
 	
 	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AEnemyBullet::BoxCompBeginOverlap);
+
+	AActor* FindActor = UGameplayStatics::GetActorOfClass(GetWorld(), ABeatNightPawn::StaticClass());
+	ABeatNightPawn* Player = Cast<ABeatNightPawn>(FindActor);
+	if(Player)
+	{
+		FVector NewLocation = Player->GetActorLocation() - GetActorLocation();
+		NewLocation.Normalize();
+		Direction = NewLocation;
+	}
 }
 
 // Called every frame
@@ -42,13 +50,14 @@ void AEnemyBullet::Tick(float DeltaTime)
 	// 총알 Player에게
 	if(CanMove)
 	{
-		SetActorLocation(GetActorLocation() + (PlayerLocation - GetActorLocation()) * BulletSpeed * DeltaTime);
+		FVector Location = Direction * BulletSpeed;
+		SetActorLocation(GetActorLocation() + Location * DeltaTime);
 	}
+
 }
 
-void AEnemyBullet::SetBulletInfos(AEnemy* GetEnemy, FVector Location, float Speed)
+void AEnemyBullet::SetBulletInfos(AEnemy* GetEnemy, float Speed)
 {
-	PlayerLocation = Location;
 	BulletSpeed = Speed;
 	Enemy = GetEnemy;
 	CanMove = true;

@@ -25,7 +25,7 @@ public:
 
 	/** 총알 생성시 필요 값 Set (Enemy 클래스에서 호출) */
 	UFUNCTION()
-	void SetBulletInfos(class AEnemy* Enemy, FVector Location, float Speed);
+	void SetBulletInfos(class AEnemy* Enemy, float Speed);
 
 private:
 
@@ -44,13 +44,13 @@ private:
 	// 속성
 
 	/** 총알 속도 */
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Bullet|Props", meta=(AllowPrivateAccess=true))
 	float BulletSpeed;
-	/** 총알 생성시간 기준 플레이어 위치 */
-	UPROPERTY()
-	FVector PlayerLocation;
+	/** 총알 이동 방향 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Bullet|Props", meta=(AllowPrivateAccess=true))
+	FVector Direction;
 	/** 속성값이 세팅되었을때 True */
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Bullet|Props", meta=(AllowPrivateAccess=true))
 	bool CanMove;
 	/** Enemy 클래스 */
 	UPROPERTY()

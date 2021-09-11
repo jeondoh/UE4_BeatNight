@@ -109,7 +109,7 @@ void ABossStage2::BossGunShot()
 			AEnemyBullet* Bullet = GetWorld()->SpawnActor<AEnemyBullet>(SpawnEnemyBullet,
 				SocketTransForm.GetLocation(), GetActorRotation(), Params);
 
-			Bullet->SetBulletInfos(this, BeatNightPlayer->GetActorLocation(), BulletSpeed);
+			Bullet->SetBulletInfos(this, BulletSpeed);
 		}
 	}
 }
@@ -124,7 +124,7 @@ FName ABossStage2::GetAttackSectionName()
 		// 40%
 		SectionName = AttackSlow;
 		LastAmmo--;	// 총알 수 줄어듬
-		BulletSpeed = 3.f; // 총알 속도
+		BulletSpeed = 1800.f; // 총알 속도
 		DelayTime = 1.5f; // 대기시간
 		EnemyDamage = 15.f; // 데미지
 	}
@@ -133,7 +133,7 @@ FName ABossStage2::GetAttackSectionName()
 		// 40%
 		SectionName = AttackFast;
 		LastAmmo--; // 총알 수 줄어듬
-		BulletSpeed = 3.5f; // 총알 속도
+		BulletSpeed = 2000.f; // 총알 속도
 		DelayTime = 1.2f; // 대기시간
 		EnemyDamage = 20.f; // 데미지
 	}
