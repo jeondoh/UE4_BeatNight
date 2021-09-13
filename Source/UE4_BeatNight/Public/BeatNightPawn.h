@@ -43,6 +43,13 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Char|Props", meta=(AllowPrivateAccess=true))
 	float Health;
 
+	/**************************************************************************************************/
+	// 아이템
+	
+
+
+	/**************************************************************************************************/
+
 	void Die();
 
 };

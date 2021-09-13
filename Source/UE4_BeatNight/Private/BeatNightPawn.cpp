@@ -62,4 +62,5 @@ void ABeatNightPawn::InitalizedData()
 
 void ABeatNightPawn::Die()
 {
+	
 }

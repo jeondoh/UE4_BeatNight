@@ -129,6 +129,12 @@ void ABossStage2::BossUltimateAttack()
 		Bullet->SetBulletInfos(this, BulletSpeed);
 	}
 }
+
+void ABossStage2::BossGuidedMissile()
+{
+	
+}
+
 /*
 FName ABossStage2::GetAttackSectionName()
 {

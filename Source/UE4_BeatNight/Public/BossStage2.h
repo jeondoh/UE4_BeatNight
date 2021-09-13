@@ -43,6 +43,10 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void BossUltimateAttack();
 
+	/** 유도탄(5발) Player에게 공격 > 애니메이션 노티파이 */
+	UFUNCTION(BlueprintCallable)
+	void BossGuidedMissile(); 
+
 	/** 보스 공격 전 딜레이 시간 (각 섹션마다 대기시간 다름) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Boss|Props", meta=(AllowPrivateAccess=true))
 	float DelayTime;
