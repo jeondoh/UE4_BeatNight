@@ -24,7 +24,7 @@ public:
 
 	/** 데미지 입히기 */
 	UFUNCTION()
-	void DoDamage(class ABeatNightPawn* Player);
+	void DoDamage(class ABeatNightPlayer* Player);
 	
 protected:
 	// Called when the game starts or when spawned
@@ -32,7 +32,7 @@ protected:
 
 	// 캐릭터(Player)
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Enemy", meta=(AllowPrivateAccess=true))	
-	class ABeatNightPawn* BeatNightPlayer;
+	class ABeatNightPlayer* BeatNightPlayer;
 
 	/**************************************************************************************************/
 	// 애니메이션 & 몽타주

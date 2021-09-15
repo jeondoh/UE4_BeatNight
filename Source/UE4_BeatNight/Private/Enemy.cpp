@@ -3,7 +3,7 @@
 
 #include "Enemy.h"
 #include "Item.h"
-#include "BeatNightPawn.h"
+#include "BeatNightPlayer.h"
 #include "EnemyAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Components/SphereComponent.h"
@@ -39,7 +39,7 @@ void AEnemy::BeginPlay()
 	AttackSphere->OnComponentEndOverlap.AddDynamic(this, &AEnemy::AttackSphereEndOverlap);
 }
 
-void AEnemy::DoDamage(ABeatNightPawn* Player)
+void AEnemy::DoDamage(ABeatNightPlayer* Player)
 {
 	UGameplayStatics::ApplyDamage(Player, RandomizationDamage(EnemyDamage), EnemyController, this, UDamageType::StaticClass());
 }
@@ -106,7 +106,7 @@ void AEnemy::AgroSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AA
 {
 	if(OtherActor == nullptr) return;
 
-	ABeatNightPawn* Player = Cast<ABeatNightPawn>(OtherActor);
+	ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(OtherActor);
 	if(Player)
 	{
 		// Player에 값 넣기
@@ -131,7 +131,7 @@ void AEnemy::AgroSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 {
 	if(OtherActor == nullptr) return;
 	
-	ABeatNightPawn* Player = Cast<ABeatNightPawn>(OtherActor);
+	ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(OtherActor);
 	if(Player)
 	{
 		BeatNightPlayer = nullptr;
@@ -154,7 +154,7 @@ void AEnemy::AttackSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, 
 {
 	if(OtherActor == nullptr) return;
 	
-	ABeatNightPawn* Player = Cast<ABeatNightPawn>(OtherActor);
+	ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(OtherActor);
 	if(Player && EnemyController)
 	{
 		// 어그로 범위내에 Player가 없으면 Blackboard의 Target을 null 처리
@@ -170,7 +170,7 @@ void AEnemy::AttackSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AA
 {
 	if(OtherActor == nullptr) return;
 	
-	ABeatNightPawn* Player = Cast<ABeatNightPawn>(OtherActor);
+	ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(OtherActor);
 	if(Player && EnemyController)
 	{
 		// 어그로 범위내에 Player가 없으면 Blackboard의 Target을 null 처리

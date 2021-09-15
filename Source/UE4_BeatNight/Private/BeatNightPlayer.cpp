@@ -38,6 +38,8 @@ void ABeatNightPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 float ABeatNightPlayer::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	AActor* DamageCauser)
 {
+
+	DamageAmount = Defense >= DamageAmount ? 0 : DamageAmount - Defense;
 	Health -= DamageAmount;
 	if(Health <= 0.f)
 	{

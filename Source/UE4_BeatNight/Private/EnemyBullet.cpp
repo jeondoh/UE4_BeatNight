@@ -4,7 +4,7 @@
 #include "EnemyBullet.h"
 
 #include "Enemy.h"
-#include "BeatNightPawn.h"
+#include "BeatNightPlayer.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
@@ -36,8 +36,8 @@ void AEnemyBullet::BeginPlay()
 	
 	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &AEnemyBullet::BoxCompBeginOverlap);
 
-	AActor* FindActor = UGameplayStatics::GetActorOfClass(GetWorld(), ABeatNightPawn::StaticClass());
-	ABeatNightPawn* Player = Cast<ABeatNightPawn>(FindActor);
+	AActor* FindActor = UGameplayStatics::GetActorOfClass(GetWorld(), ABeatNightPlayer::StaticClass());
+	ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(FindActor);
 	if(Player)
 	{
 		FVector NewLocation = Player->GetActorLocation() - GetActorLocation();
@@ -70,7 +70,7 @@ void AEnemyBullet::SetBulletInfos(AEnemy* GetEnemy, float Speed)
 void AEnemyBullet::BoxCompBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
     UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	ABeatNightPawn* TargetPlayer = Cast<ABeatNightPawn>(OtherActor);
+	ABeatNightPlayer* TargetPlayer = Cast<ABeatNightPlayer>(OtherActor);
 	// 총 맞는 대상이 Player
 	if(TargetPlayer)
 	{

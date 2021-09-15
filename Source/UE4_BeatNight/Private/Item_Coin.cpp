@@ -3,7 +3,7 @@
 
 #include "Item_Coin.h"
 
-#include "BeatNightPawn.h"
+#include "BeatNightPlayer.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
 
@@ -17,7 +17,7 @@ void AItem_Coin::AreaSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent
 {
 	Super::AreaSphereBeginOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 
-	ABeatNightPawn* Player = Cast<ABeatNightPawn>(OtherActor);
+	ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(OtherActor);
 	if(Player)
 	{
 		int PlayerCoins = Player->GetItemCoins();

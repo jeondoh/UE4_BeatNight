@@ -43,24 +43,36 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Char|Props", meta=(AllowPrivateAccess=true))
 	float Health;
 
+	/** 캐릭터 방어력 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Char|Props", meta=(AllowPrivateAccess=true))
+	float Defense;
+
 	/**************************************************************************************************/
 	// 아이템
 	
 	/** 코인 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Char|Items", meta=(AllowPrivateAccess=true))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Char|Items", meta=(AllowPrivateAccess=true))
 	uint8 Item_Coins;
 	/** 열쇠 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Char|Items", meta=(AllowPrivateAccess=true))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Char|Items", meta=(AllowPrivateAccess=true))
 	uint8 Item_Keys;
 
 	/**************************************************************************************************/
 
 	void Die();
 
-	public:
+public:
+	FORCEINLINE float GetMaxHealth() const {return MaxHealth;}
+	
+	FORCEINLINE float GetHealth() const {return Health;}
+	FORCEINLINE void SetHealth(float Amount) {Health = Amount;}
+	
 	FORCEINLINE uint8 GetItemCoins() const {return Item_Coins;}
 	FORCEINLINE void SetItemCoins(int Coins) {Item_Coins = Coins;}
 
 	FORCEINLINE uint8 GetItemKeys() const {return Item_Keys;}
 	FORCEINLINE void SetItemKeys(int Keys) {Item_Keys = Keys;}
+
+	FORCEINLINE uint8 GetDefense() const {return Defense;}
+	FORCEINLINE void SetDefense(float Amount) {Defense = Amount;}
 };

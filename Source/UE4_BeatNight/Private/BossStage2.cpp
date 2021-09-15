@@ -2,7 +2,7 @@
 
 #include "BossStage2.h"
 
-#include "BeatNightPawn.h"
+#include "BeatNightPlayer.h"
 #include "DrawDebugHelpers.h"
 #include "EnemyAIController.h"
 #include "EnemyBullet.h"
@@ -135,7 +135,6 @@ void ABossStage2::BossGuidedMissile()
 	
 }
 
-/*
 FName ABossStage2::GetAttackSectionName()
 {
 	FName SectionName;
@@ -175,8 +174,9 @@ FName ABossStage2::GetAttackSectionName()
 	}
 	return SectionName;
 }
-*/
 
+/*
+ * 테스트용
 FName ABossStage2::GetAttackSectionName()
 {
 	FName SectionName;
@@ -216,3 +216,4 @@ FName ABossStage2::GetAttackSectionName()
 	}
 	return SectionName;
 }
+*/
