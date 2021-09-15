@@ -19,23 +19,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-private:
-	
-	/**************************************************************************************************/
-	// 컴포넌트
-
-	/** 충돌상자 */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="ItemComp|Props", meta=(AllowPrivateAccess=true))
-	class UBoxComponent* CollisionBox;
-
-	/** 아이템 범위 Collision */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="ItemComp|Props", meta=(AllowPrivateAccess=true))
-	class USphereComponent* AreaSphere;
-
 	/**************************************************************************************************/
 	// 아이템 속성 
 
@@ -54,5 +37,31 @@ private:
 	/** 아이템 회전 여부에 따라 회전 */
 	void ItemRotate(float DeltaTime);
 
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	/** AreaSphere범위 오버랩 */
+	UFUNCTION()
+	virtual void AreaSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	
+	UFUNCTION()
+	virtual void AreaSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, 
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+private:
+	
+	/**************************************************************************************************/
+	// 컴포넌트
+
+	/** 충돌상자 */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="ItemComp|Props", meta=(AllowPrivateAccess=true))
+	class UBoxComponent* CollisionBox;
+
+	/** 아이템 범위 Collision */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="ItemComp|Props", meta=(AllowPrivateAccess=true))
+	class USphereComponent* AreaSphere;
+	
 	/**************************************************************************************************/
 };

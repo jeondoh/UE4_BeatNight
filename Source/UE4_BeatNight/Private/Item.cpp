@@ -29,7 +29,9 @@ AItem::AItem()
 void AItem::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	AreaSphere->OnComponentBeginOverlap.AddDynamic(this, &AItem::AreaSphereBeginOverlap);
+	AreaSphere->OnComponentEndOverlap.AddDynamic(this, &AItem::AreaSphereEndOverlap);
 }
 
 // Called every frame
@@ -41,6 +43,17 @@ void AItem::Tick(float DeltaTime)
 	ItemRotate(DeltaTime);
 }
 
+void AItem::AreaSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if(OtherActor == nullptr) return;
+}
+
+void AItem::AreaSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+}
+
 void AItem::ItemRotate(float DeltaTime)
 {
 	if(BItemRotate)
@@ -50,4 +63,3 @@ void AItem::ItemRotate(float DeltaTime)
 		SetActorRotation(NowRotation);
 	}
 }
-

@@ -3,17 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
-#include "BeatNightPawn.generated.h"
+#include "GameFramework/Character.h"
+#include "BeatNightPlayer.generated.h"
 
 UCLASS()
-class UE4_BEATNIGHT_API ABeatNightPawn : public APawn
+class UE4_BEATNIGHT_API ABeatNightPlayer : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this pawn's properties
-	ABeatNightPawn();
+	// Sets default values for this character's properties
+	ABeatNightPlayer();
 
 protected:
 	// Called when the game starts or when spawned
@@ -57,12 +57,10 @@ private:
 
 	void Die();
 
-public:
+	public:
 	FORCEINLINE uint8 GetItemCoins() const {return Item_Coins;}
 	FORCEINLINE void SetItemCoins(int Coins) {Item_Coins = Coins;}
 
 	FORCEINLINE uint8 GetItemKeys() const {return Item_Keys;}
 	FORCEINLINE void SetItemKeys(int Keys) {Item_Keys = Keys;}
-	
-
 };
