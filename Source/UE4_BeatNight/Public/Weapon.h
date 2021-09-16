@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Item.h"
 #include "WeaponType.h"
+#include "ItemType.h"
 #include "Weapon.generated.h"
 
 UCLASS()
@@ -28,7 +29,7 @@ private:
 	/**************************************************************************************************/
 	// 무기 속성
 	
-	/** 무기 열거형 */
+	/** 무기 종류 열거형 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon|Type", meta=(AllowPrivateAccess=true))
 	EWeaponType WeaponType;
 
@@ -39,7 +40,7 @@ private:
 	/** 무기(총) 총알 수 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon|Props", meta=(AllowPrivateAccess=true))
 	int32 GunAmmo;
-
+	
 	/**************************************************************************************************/
 	// 무기 효과
 
@@ -52,4 +53,5 @@ private:
 	class USoundCue* WeaponSound;
 
 	/**************************************************************************************************/
+	
 };

@@ -23,3 +23,9 @@ void UBossStage2AnimInstance::UpdateAnimationProperties(float DeltaTime)
 		bCanAttack = Boss->GetCanAttack();
 	}
 }
+
+void UBossStage2AnimInstance::ReloadFinish()
+{
+	Boss->SetCanAttack(true);
+	bCanAttack = true;
+}

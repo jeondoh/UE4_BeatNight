@@ -61,7 +61,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
 	FString MonsterName;
 	/** 공격가능여부(AnimInstance에서 사용) */
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
 	bool bCanAttack;
 
 	/**************************************************************************************************/
@@ -164,6 +164,7 @@ public:
 	FORCEINLINE void SetPatrolPoint2(FVector PT) {PatrolPoint2 = PT;}
 
 	FORCEINLINE bool GetCanAttack() const {return bCanAttack;}
+	FORCEINLINE void SetCanAttack(bool bAttack) {bCanAttack = bAttack;}
 
 	FORCEINLINE float GetEnemyDamage() const {return EnemyDamage;}
 	FORCEINLINE void SetEnemyDamage(float Damage) {EnemyDamage = Damage;}

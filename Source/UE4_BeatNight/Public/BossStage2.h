@@ -25,9 +25,22 @@ private:
 	/**************************************************************************************************/
 	// 몽타주 & 애니메이션
 
+	/** 공격 몽타주 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Boss|Anim", meta=(AllowPrivateAccess=true))
+	UAnimMontage* ReloadMontage;
+
 	/** Target(Player)공격 몽타주 Play */
 	UFUNCTION(BlueprintCallable)
 	void PlayAttackToTargetMontage(FName Section);
+
+	UFUNCTION()
+	void PlayAttackMontage(FName Section);
+	
+	UFUNCTION()
+	void PlayReloadMontage();
+
+	UFUNCTION(BlueprintCallable)
+	void PlayReloadParticle();
 
 	/**************************************************************************************************/
 	// 보스 공격
@@ -38,6 +51,10 @@ private:
 	/** 총(Gun) 공격 > 애니메이션 노티파이 */
 	UFUNCTION(BlueprintCallable)
 	void BossGunShot();
+
+	/** 총(Gun) 공격 종료 > 애니메이션 노티파이 */
+	UFUNCTION(BlueprintCallable)
+	void BossFinishGunShot();
 
 	/** 구(Ball) 소환 공격 > 애니메이션 노티파이 */
 	UFUNCTION(BlueprintCallable)
@@ -86,6 +103,10 @@ private:
 	/**************************************************************************************************/
 	// 이팩트
 
+	/** 리로드 파티클 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Boss|Particles", meta = (AllowPrivateAccess=true))
+	class UParticleSystem* ReloadParticles;
+	
 	/**************************************************************************************************/
 	
 };

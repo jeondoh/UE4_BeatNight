@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ItemType.h"
 #include "Engine/StaticMeshActor.h"
 #include "Item.generated.h"
 
@@ -34,6 +35,21 @@ protected:
 	UPROPERTY(EditAnywhere, Category="ItemComp|Rotate", meta=(AllowPrivateAccess=true))
 	int32 RotateSpeed;
 
+	/** 아이템 정보 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	EItemType ItemType;
+
+	/** 아이템을 사기 위한 코인 개수 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="ItemComp|Props", meta=(AllowPrivateAccess=true))
+	uint8 ItemCoin;
+
+	/** 플레이어 */
+	UPROPERTY()
+	class ABeatNightPlayer* CastPlayer;
+
+	UFUNCTION(BlueprintCallable)
+	bool BuyItem(EItemType Type);
+
 	/** 아이템 회전 여부에 따라 회전 */
 	void ItemRotate(float DeltaTime);
 
@@ -41,6 +57,15 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	/** BoxCollision 오버랩 */
+	UFUNCTION()
+	virtual void BoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	
+	UFUNCTION()
+	virtual void BoxCollisionEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, 
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	
 	/** AreaSphere범위 오버랩 */
 	UFUNCTION()
 	virtual void AreaSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -64,4 +89,7 @@ private:
 	class USphereComponent* AreaSphere;
 	
 	/**************************************************************************************************/
+
+public:
+	FORCEINLINE	uint8 GetItemCoin() const {return ItemCoin;}
 };

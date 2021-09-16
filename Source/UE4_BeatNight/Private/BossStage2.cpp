@@ -3,11 +3,13 @@
 #include "BossStage2.h"
 
 #include "BeatNightPlayer.h"
-#include "DrawDebugHelpers.h"
 #include "EnemyAIController.h"
 #include "EnemyBullet.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
+#include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystem.h"
+#include "Particles/ParticleSystemComponent.h"
 
 ABossStage2::ABossStage2()
 {
@@ -33,21 +35,53 @@ void ABossStage2::PlayAttackToTargetMontage(FName Section)
 			EnemyController->GetBlackboardComponent()->SetValueAsFloat(TEXT("DelayTime"), DelayTime);
 		}	
 	}
+	if(bCanAttack)
+	{
+		PlayAttackMontage(Section);
+	}
+}
+
+void ABossStage2::PlayAttackMontage(FName Section)
+{
+	// 총알 없을 때 return
+	if(LastAmmo <= 0)
+	{
+		bCanAttack = false;
+		return;
+	}
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if(AnimInstance && AttackMontage)
 	{
 		AnimInstance->Montage_Play(AttackMontage);
 		AnimInstance->Montage_JumpToSection(Section, AttackMontage);
 	}
-	// 총알이 없을 경우 Reload몽타주 실행
-	if(LastAmmo <= 0)
+}
+
+void ABossStage2::PlayReloadMontage()
+{
+	// Reload 몽타주 길이만큼 Delay 시켜줘야함
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if(AnimInstance && ReloadMontage)
 	{
-		// TODO Attack 이후 총알 없으면 Reload 몽타주 실행하게 구현
-		// Reload 몽타주 길이만큼 Delay 시켜줘야함
+		AnimInstance->Montage_Play(ReloadMontage);
 		LastAmmo = AmmoCount; // 남은 총알 초기화
 	}
 }
 
+void ABossStage2::PlayReloadParticle()
+{
+	// 리로드 파티클 생성
+	if(ReloadParticles)
+	{
+		/*
+		const USkeletalMeshSocket* ParticleSocket = GetMesh()->GetSocketByName("FX_Gun_Barrel");
+		const FTransform SocketTransForm = ParticleSocket->GetSocketTransform(GetMesh());
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ReloadParticles, SocketTransForm.GetLocation());
+		*/
+	}
+}
+
+/** 사용안함 > 추후 삭제 */
 bool ABossStage2::GetBeamEndLocation(const FVector& MuzzleSocketLocation, FHitResult& OutHitResult)
 {
 	// 라인 추적 : 물체가 총구위치와 끝점을 지정해 충돌여부 확인
@@ -58,7 +92,7 @@ bool ABossStage2::GetBeamEndLocation(const FVector& MuzzleSocketLocation, FHitRe
 	
 	GetWorld()->LineTraceSingleByChannel(OutHitResult, WeaponTraceStart, WeaponTraceEnd, ECollisionChannel::ECC_Visibility);
 
-	DrawDebugLine(GetWorld(), WeaponTraceStart, WeaponTraceEnd, FColor::Red, false, 2.0f, 0, 1.0f);
+	// DrawDebugLine(GetWorld(), WeaponTraceStart, WeaponTraceEnd, FColor::Red, false, 2.0f, 0, 1.0f);
 	// 라인 추적 사이에 Actor가 존재하면
 	if(OutHitResult.bBlockingHit)
 	{
@@ -109,6 +143,19 @@ void ABossStage2::BossGunShot()
 			SocketTransForm.GetLocation(), GetActorRotation(), Params);
 
 		Bullet->SetBulletInfos(this, BulletSpeed);
+		--LastAmmo; // 총알 수 줄어듬
+	}
+}
+
+void ABossStage2::BossFinishGunShot()
+{
+	// 총알이 없을 경우 Reload몽타주 실행
+	if(LastAmmo <= 0)
+	{
+		bCanAttack = false;
+		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+		AnimInstance->Montage_Stop(0.f, AttackMontage);
+		PlayReloadMontage(); // 리로드 몽타주 실행
 	}
 }
 
@@ -144,7 +191,6 @@ FName ABossStage2::GetAttackSectionName()
 	{
 		// 40%
 		SectionName = AttackSlow;
-		LastAmmo--;	// 총알 수 줄어듬
 		BulletSpeed = 1800.f; // 총알 속도
 		DelayTime = 1.5f; // 대기시간
 		EnemyDamage = 15.f; // 데미지
@@ -153,7 +199,6 @@ FName ABossStage2::GetAttackSectionName()
 	{
 		// 40%
 		SectionName = AttackFast;
-		LastAmmo--; // 총알 수 줄어듬
 		BulletSpeed = 2000.f; // 총알 속도
 		DelayTime = 1.2f; // 대기시간
 		EnemyDamage = 20.f; // 데미지

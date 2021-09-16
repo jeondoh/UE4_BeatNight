@@ -3,6 +3,7 @@
 
 #include "Item.h"
 
+#include "BeatNightPlayer.h"
 #include "Components/BoxComponent.h"
 #include "Components/SphereComponent.h"
 
@@ -23,6 +24,8 @@ AItem::AItem()
 	// INIT
 	BItemRotate = false; // 아이템 회전 여부
 	RotateSpeed = 35.f; // 아이템 회전 속도
+	ItemType = EItemType::EIT_Normal; // 아이템 타입
+	ItemCoin = 0; // 아이템을 사기 위한 코인 개수
 }
 
 // Called when the game starts or when spawned
@@ -30,6 +33,8 @@ void AItem::BeginPlay()
 {
 	Super::BeginPlay();
 
+	CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &AItem::BoxCollisionBeginOverlap);
+	CollisionBox->OnComponentEndOverlap.AddDynamic(this, &AItem::BoxCollisionEndOverlap);
 	AreaSphere->OnComponentBeginOverlap.AddDynamic(this, &AItem::AreaSphereBeginOverlap);
 	AreaSphere->OnComponentEndOverlap.AddDynamic(this, &AItem::AreaSphereEndOverlap);
 }
@@ -43,8 +48,25 @@ void AItem::Tick(float DeltaTime)
 	ItemRotate(DeltaTime);
 }
 
-void AItem::AreaSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+void AItem::BoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if(OtherActor == nullptr) return;
+	ABeatNightPlayer* CPlayer = Cast<ABeatNightPlayer>(OtherActor);
+	if(CPlayer)
+	{
+		CastPlayer = CPlayer;
+	}
+}
+
+void AItem::BoxCollisionEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	CastPlayer = nullptr;
+}
+
+void AItem::AreaSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+                                   UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if(OtherActor == nullptr) return;
 }
@@ -52,6 +74,24 @@ void AItem::AreaSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AAc
 void AItem::AreaSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
+}
+
+bool AItem::BuyItem(EItemType Type)
+{
+	if(Type == EItemType::EIT_Normal)
+	{
+		return true;
+	}
+	if(CastPlayer && Type == EItemType::EIT_Store)
+	{
+		uint8 PlayerCoin = CastPlayer->GetItemCoins();
+		if(PlayerCoin >= ItemCoin)
+		{
+			CastPlayer->SetItemCoins(PlayerCoin - ItemCoin);
+			return true;
+		}
+	}
+	return false;
 }
 
 void AItem::ItemRotate(float DeltaTime)

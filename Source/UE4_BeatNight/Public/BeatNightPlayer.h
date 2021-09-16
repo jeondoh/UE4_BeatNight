@@ -47,6 +47,8 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Char|Props", meta=(AllowPrivateAccess=true))
 	float Defense;
 
+	void Die();
+	
 	/**************************************************************************************************/
 	// 아이템
 	
@@ -56,10 +58,9 @@ private:
 	/** 열쇠 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Char|Items", meta=(AllowPrivateAccess=true))
 	uint8 Item_Keys;
-
+	
 	/**************************************************************************************************/
 
-	void Die();
 
 public:
 	FORCEINLINE float GetMaxHealth() const {return MaxHealth;}
