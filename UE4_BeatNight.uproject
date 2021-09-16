@@ -30,6 +30,10 @@
 		{
 			"Name": "OnlineSubsystemOculus",
 			"Enabled": true
+		},
+		{
+			"Name": "UdpMessaging",
+			"Enabled": false
 		}
 	],
 	"TargetPlatforms": [

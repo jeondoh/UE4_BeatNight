@@ -24,7 +24,13 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Anim|Info", meta=(AllowPrivateAccess=true))
 	class ABossStage2* Boss;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Anim|Speed", meta=(AllowPrivateAccess=true))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Anim|Info", meta=(AllowPrivateAccess=true))
 	float Speed;
-	
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Anim|Info", meta=(AllowPrivateAccess=true))
+	bool bCanAttack;
+
+	/** Reload 완료 > 노티파이 */
+	UFUNCTION(BlueprintCallable)
+	void ReloadFinish();
 };
