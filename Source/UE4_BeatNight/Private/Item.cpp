@@ -52,6 +52,8 @@ void AItem::BoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, A
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if(OtherActor == nullptr) return;
+	if(ItemType == EItemType::EIT_Normal) return;
+	
 	ABeatNightPlayer* CPlayer = Cast<ABeatNightPlayer>(OtherActor);
 	if(CPlayer)
 	{
@@ -76,13 +78,9 @@ void AItem::AreaSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 {
 }
 
-bool AItem::BuyItem(EItemType Type)
+bool AItem::BuyItem()
 {
-	if(Type == EItemType::EIT_Normal)
-	{
-		return true;
-	}
-	if(CastPlayer && Type == EItemType::EIT_Store)
+	if(CastPlayer && ItemType == EItemType::EIT_Store)
 	{
 		uint8 PlayerCoin = CastPlayer->GetItemCoins();
 		if(PlayerCoin >= ItemCoin)

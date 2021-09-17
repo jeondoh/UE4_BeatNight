@@ -24,23 +24,23 @@ protected:
 	// 아이템 속성 
 
 	/** 아이템 외형 파티클 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ItemComp|Props", meta=(AllowPrivateAccess=true))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ItemComp|Props")
 	class UParticleSystem* ItemParticle;
 	
 	/** 아이템 회전 여부 */
-	UPROPERTY(EditAnywhere, Category="ItemComp|Rotate", meta=(AllowPrivateAccess=true))
+	UPROPERTY(EditAnywhere, Category="ItemComp|Rotate")
 	bool BItemRotate;
 
 	/** 아이템 회전 속도 */
-	UPROPERTY(EditAnywhere, Category="ItemComp|Rotate", meta=(AllowPrivateAccess=true))
+	UPROPERTY(EditAnywhere, Category="ItemComp|Rotate")
 	int32 RotateSpeed;
 
 	/** 아이템 정보 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ItemComp|Props")
 	EItemType ItemType;
 
 	/** 아이템을 사기 위한 코인 개수 */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="ItemComp|Props", meta=(AllowPrivateAccess=true))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="ItemComp|Props")
 	uint8 ItemCoin;
 
 	/** 플레이어 */
@@ -48,7 +48,7 @@ protected:
 	class ABeatNightPlayer* CastPlayer;
 
 	UFUNCTION(BlueprintCallable)
-	bool BuyItem(EItemType Type);
+	bool BuyItem();
 
 	/** 아이템 회전 여부에 따라 회전 */
 	void ItemRotate(float DeltaTime);
@@ -87,7 +87,7 @@ private:
 	/** 아이템 범위 Collision */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="ItemComp|Props", meta=(AllowPrivateAccess=true))
 	class USphereComponent* AreaSphere;
-	
+
 	/**************************************************************************************************/
 
 public:

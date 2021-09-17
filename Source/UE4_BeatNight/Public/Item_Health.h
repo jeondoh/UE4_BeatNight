@@ -21,6 +21,9 @@ public:
 private:
 	virtual void AreaSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
+
+	virtual void BoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
 	
 	/**************************************************************************************************/
 	// 이팩트
@@ -35,5 +38,12 @@ private:
 	/** 회복량 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health|Props", meta=(AllowPrivateAccess=true, MakeEditWidget=true))
 	float HealthAmount;
+
+	/**************************************************************************************************/
+	// 기능
+
+	/** 캐릭터 회복 */
+	UFUNCTION()
+	void HealPlayer(class ABeatNightPlayer* Player);
 	
 };
