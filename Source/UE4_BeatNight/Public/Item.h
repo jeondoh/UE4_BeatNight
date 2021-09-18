@@ -8,7 +8,7 @@
 #include "Item.generated.h"
 
 UCLASS()
-class UE4_BEATNIGHT_API AItem : public AStaticMeshActor
+class UE4_BEATNIGHT_API AItem : public AActor
 {
 	GENERATED_BODY()
 	
@@ -19,6 +19,13 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	/**************************************************************************************************/
+	// 컴포넌트
+
+	/** 스테틱 메시 */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="ItemComp|Props")
+	class UStaticMeshComponent* StaticMeshComponent;
 
 	/**************************************************************************************************/
 	// 아이템 속성 

@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Item.h"
 #include "WeaponType.h"
-#include "ItemType.h"
 #include "Weapon.generated.h"
 
 UCLASS()
@@ -20,27 +19,29 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
+	/**************************************************************************************************/
+	// 무기 속성
+	
+	/** 무기 종류 열거형 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon|Type")
+	EWeaponType WeaponType;
+
+	/** 무기 데미지 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon|Props")
+	int32 WeaponDamage;
+
+	/** 무기(총) 총알 수 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon|Props")
+	int32 GunAmmo;
+	
+	/**************************************************************************************************/
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	/**************************************************************************************************/
-	// 무기 속성
-	
-	/** 무기 종류 열거형 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon|Type", meta=(AllowPrivateAccess=true))
-	EWeaponType WeaponType;
-
-	/** 무기 데미지 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon|Props", meta=(AllowPrivateAccess=true))
-	int32 WeaponDamage;
-
-	/** 무기(총) 총알 수 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon|Props", meta=(AllowPrivateAccess=true))
-	int32 GunAmmo;
-	
 	/**************************************************************************************************/
 	// 무기 효과
 

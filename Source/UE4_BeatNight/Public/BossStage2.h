@@ -88,7 +88,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Boss|Props", meta=(AllowPrivateAccess=true))
 	float BulletSpeed;
 
-	/** 데미지 수치 */
+	/** 몬스터 패턴 유도탄 > 커브 */
+	UPROPERTY(EditAnywhere, Category="Boss|Props", meta=(AllowPrivateAccess=true))
+	UCurveFloat* GuidedAttackCurve;
 	
 	/** 몽타주 섹션 이름 */
 	FName AttackSlow;

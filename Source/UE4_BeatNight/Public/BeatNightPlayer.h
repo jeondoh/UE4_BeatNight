@@ -47,6 +47,10 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Char|Props", meta=(AllowPrivateAccess=true))
 	float Defense;
 
+	/** 캐릭터 인벤토리(임시) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Char|Inventory", meta=(AllowPrivateAccess=true))
+	TArray<class AWeapon*> Inventory;
+
 	void Die();
 	
 	/**************************************************************************************************/
@@ -76,4 +80,6 @@ public:
 
 	FORCEINLINE uint8 GetDefense() const {return Defense;}
 	FORCEINLINE void SetDefense(float Amount) {Defense = Amount;}
+
+	FORCEINLINE TArray<class AWeapon*> GetInventory() const {return Inventory;}
 };
