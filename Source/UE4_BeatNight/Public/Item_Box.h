@@ -13,5 +13,14 @@ UCLASS()
 class UE4_BEATNIGHT_API AItem_Box : public AItem
 {
 	GENERATED_BODY()
-	
+
+public:
+	AItem_Box();
+
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Gacha", meta=(AllowPrivateAccess=true))
+	TSubclassOf<class AItem> GachaItem;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Gacha", meta=(AllowPrivateAccess=true))
+	FVector SpawnLocation;
 };

@@ -3,3 +3,6 @@
 
 #include "Item_Box.h"
 
+AItem_Box::AItem_Box()
+{
+}

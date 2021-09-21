@@ -35,7 +35,7 @@ protected:
 	class UParticleSystem* ItemParticle;
 	
 	/** 아이템 회전 여부 */
-	UPROPERTY(EditAnywhere, Category="ItemComp|Rotate")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ItemComp|Rotate")
 	bool BItemRotate;
 
 	/** 아이템 회전 속도 */

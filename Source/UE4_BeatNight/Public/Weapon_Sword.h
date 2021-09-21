@@ -39,6 +39,7 @@ public:
 	virtual void OnConstruction(const FTransform& Transform) override;
 
 	/** 데이터 테이블 세팅 */
+	UFUNCTION(BlueprintCallable)
 	void SetWeaponDataTable();
 
 private:
