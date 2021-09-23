@@ -76,6 +76,10 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Boss|Props", meta=(AllowPrivateAccess=true))
 	TSubclassOf<class AEnemyBullet> SpawnBulletUltimate;
 
+	/** 유도탄 스폰 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Boss|Props", meta=(AllowPrivateAccess=true))
+	TSubclassOf<class AEnemyBullet> SpawnGuidedBullet;
+
 	/** 보스 탄창 수(재장전 위함) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Boss|Props", meta=(AllowPrivateAccess=true))
 	float AmmoCount;
@@ -87,10 +91,6 @@ private:
 	/** 총알 속도 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Boss|Props", meta=(AllowPrivateAccess=true))
 	float BulletSpeed;
-
-	/** 몬스터 패턴 유도탄 > 커브 */
-	UPROPERTY(EditAnywhere, Category="Boss|Props", meta=(AllowPrivateAccess=true))
-	UCurveFloat* GuidedAttackCurve;
 	
 	/** 몽타주 섹션 이름 */
 	FName AttackSlow;

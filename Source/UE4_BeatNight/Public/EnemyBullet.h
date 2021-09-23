@@ -27,6 +27,9 @@ public:
 	UFUNCTION()
 	void SetBulletInfos(class AEnemy* Enemy, float Speed);
 
+	UFUNCTION()
+	void StartCurveBullet();
+
 private:
 
 	/**************************************************************************************************/
@@ -56,9 +59,31 @@ private:
 	/** 속성값이 세팅되었을때 True */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Bullet|Props", meta=(AllowPrivateAccess=true))
 	bool CanMove;
+	/** GuidedBullet 소환시 True */
+	UPROPERTY(VisibleAnywhere, Category="Bullet|Props", meta=(AllowPrivateAccess=true))
+	bool CanGuided;
 	/** Enemy 클래스 */
 	UPROPERTY()
 	class AEnemy* Enemy;
+	/** 유도탄 커브 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Bullet|Props", meta=(AllowPrivateAccess=true))
+	UCurveFloat* BulletCurve;
+	/** Interp 타이머 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Bullet|Props", meta=(AllowPrivateAccess=true))
+	FTimerHandle ItemInerpTimer;
+	/** BeginPlay시 총알 위치 */
+	UPROPERTY()
+	FVector BulletLocation;
+	/** BeginPlay시 캐릭터 위치 */
+	UPROPERTY()
+	FVector PlayerLocation;
+	/** 유도탄 커브 타이머 시간 */
+	UPROPERTY()
+	float CurveTime;
+	UFUNCTION()
+	void GuidedLocation(float DeltaTime);
+	UFUNCTION()
+	void FinishGuided();
 	
 	/**************************************************************************************************/
 	// 이팩트
@@ -67,7 +92,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Bullet|Particles", meta = (AllowPrivateAccess=true))
 	class UParticleSystem* PlayerBulletParticles;
 	
-	/** 총알 이팩트 (총알이 캐릭터에 맞으면) */
+	/** 총알 이팩트 (총알이 캐릭터에 맞지 않고 다른 mesh에 맞을때) */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Bullet|Particles", meta = (AllowPrivateAccess=true))
 	class UParticleSystem* OtherBulletParticles;
 
@@ -80,5 +105,4 @@ private:
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	/**************************************************************************************************/
-
 };

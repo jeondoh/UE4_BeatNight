@@ -27,6 +27,8 @@ AEnemyBullet::AEnemyBullet()
 	
 	BulletSpeed = 1800.f; // 총알속도
 	CanMove = false;
+	CanGuided = false;
+	CurveTime = 1.2f;
 }
 
 // Called when the game starts or when spawned
@@ -40,7 +42,10 @@ void AEnemyBullet::BeginPlay()
 	ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(FindActor);
 	if(Player)
 	{
-		FVector NewLocation = Player->GetActorLocation() - GetActorLocation();
+		BulletLocation = GetActorLocation();
+		PlayerLocation = Player->GetActorLocation();
+
+		FVector NewLocation = PlayerLocation - GetActorLocation();
 		NewLocation.Normalize();
 		Direction = NewLocation;
 	}
@@ -50,12 +55,19 @@ void AEnemyBullet::BeginPlay()
 void AEnemyBullet::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	// 총알 Player에게
+	
 	if(CanMove)
 	{
-		FVector Location = Direction * BulletSpeed;
-		SetActorLocation(GetActorLocation() + Location * DeltaTime);
+		if(CanGuided)
+		{
+			GuidedLocation(DeltaTime);
+		}
+		else
+		{
+			// 총알 플레이어에게
+			FVector Location = Direction * BulletSpeed;
+			SetActorLocation(GetActorLocation() + Location * DeltaTime);
+		}
 	}
 
 }
@@ -95,5 +107,43 @@ void AEnemyBullet::BoxCompBeginOverlap(UPrimitiveComponent* OverlappedComponent,
 		Destroy();
 	}
 	
+}
+
+void AEnemyBullet::StartCurveBullet()
+{
+	CanGuided = true;
+	GetWorldTimerManager().ClearTimer(ItemInerpTimer);
+	GetWorldTimerManager().SetTimer(ItemInerpTimer, this, &AEnemyBullet::FinishGuided, CurveTime);
+}
+
+void AEnemyBullet::GuidedLocation(float DeltaTime)
+{
+	if(BulletCurve)
+	{
+		// 타이머의 경과 시간을 반환함, 타이머 핸들이 유효하지 않은 경우 -1을 반환
+		const float ElapsedTime = GetWorldTimerManager().GetTimerElapsed(ItemInerpTimer);
+		// 경과시간에 따른 커브값
+		const float CurveValue = BulletCurve->GetFloatValue(ElapsedTime);
+		// 총알 위치
+		FVector InitLocoation = BulletLocation;
+		// 총알과 캐릭터의 Z좌표 차이
+		const FVector BulletToPlayer{FVector(0.f, 0.f, (PlayerLocation - InitLocoation).Z)};
+		const float DeltaZ = BulletToPlayer.Size();
+		const FVector CurrentLocation{ GetActorLocation() };
+		
+		const float InterpXValue = FMath::FInterpTo(CurrentLocation.X, PlayerLocation.X, DeltaTime, 4.0f);
+		const float InterpYValue = FMath::FInterpTo(CurrentLocation.Y, PlayerLocation.Y, DeltaTime, 4.0f);
+
+		InitLocoation.X = InterpXValue;
+		InitLocoation.Y = InterpYValue;
+		InitLocoation.Z += CurveValue * DeltaZ;
+		SetActorLocation(InitLocoation);
+	}
+}
+
+
+void AEnemyBullet::FinishGuided()
+{
+	CanGuided = false;
 }
 

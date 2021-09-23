@@ -9,7 +9,6 @@
 #include "Engine/SkeletalMeshSocket.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystem.h"
-#include "Particles/ParticleSystemComponent.h"
 
 ABossStage2::ABossStage2()
 {
@@ -179,7 +178,34 @@ void ABossStage2::BossUltimateAttack()
 
 void ABossStage2::BossGuidedMissile()
 {
-	
+	// Boss Enemy 유도탄 발사 위치 소켓 가져오기
+	const USkeletalMeshSocket* MuzzleSocket = GetMesh()->GetSocketByName("Muzzle_04");
+	const FTransform SocketTransForm = MuzzleSocket->GetSocketTransform(GetMesh());
+	// 총알스폰
+	FActorSpawnParameters Params;
+	Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	if(SpawnGuidedBullet)
+	{
+		// 유도탄 6개 소환
+		for(int i=0; i<6; i++)
+		{
+			FVector SocketLocation = SocketTransForm.GetLocation();
+
+			float RandomFloat = FMath::RandRange(-500, 500);
+			FVector RandomLocation = FVector(
+				SocketLocation.X,
+				SocketLocation.Y + RandomFloat,
+				SocketLocation.Z
+				);
+			
+			AEnemyBullet* Bullet = GetWorld()->SpawnActor<AEnemyBullet>(SpawnGuidedBullet,
+				RandomLocation, GetActorRotation(), Params);
+			
+			Bullet->SetBulletInfos(this, 0);
+			Bullet->StartCurveBullet();
+		}
+	}
 }
 
 FName ABossStage2::GetAttackSectionName()
@@ -219,46 +245,3 @@ FName ABossStage2::GetAttackSectionName()
 	}
 	return SectionName;
 }
-
-/*
- * 테스트용
-FName ABossStage2::GetAttackSectionName()
-{
-	FName SectionName;
-	const int32 Section{FMath::RandRange(1, 4)};
-
-	if(Section == 1)
-	{
-		// 40%
-		SectionName = AttackSlow;
-		LastAmmo--;	// 총알 수 줄어듬
-		BulletSpeed = 1800.f; // 총알 속도
-		DelayTime = 1.5f; // 대기시간
-		EnemyDamage = 15.f; // 데미지
-	}
-	else if(Section == 2)
-	{
-		// 40%
-		SectionName = AttackFast;
-		LastAmmo--; // 총알 수 줄어듬
-		BulletSpeed = 2000.f; // 총알 속도
-		DelayTime = 1.2f; // 대기시간
-		EnemyDamage = 20.f; // 데미지
-	}
-	else if(Section == 3)
-	{
-		// 15%
-		SectionName = AttackGuided;
-		DelayTime = 3.5f; // 대기시간
-	}
-	else
-	{
-		// 5%
-		SectionName = AttackUlitmate;
-		DelayTime = 3.5f; // 대기시간
-		BulletSpeed = 2200.f; // 총알 속도
-		EnemyDamage = 50.f; // 데미지
-	}
-	return SectionName;
-}
-*/
