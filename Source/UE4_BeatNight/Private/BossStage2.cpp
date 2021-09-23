@@ -234,6 +234,7 @@ FName ABossStage2::GetAttackSectionName()
 		// 15%
 		SectionName = AttackGuided;
 		DelayTime = 3.5f; // 대기시간
+		EnemyDamage = 15.f; // 데미지
 	}
 	else
 	{
