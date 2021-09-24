@@ -63,6 +63,9 @@ protected:
 	/** 공격가능여부(AnimInstance에서 사용) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
 	bool bCanAttack;
+	/** 공격 전 딜레이 시간 (각 섹션마다 대기시간 다름) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Boss|Props", meta=(AllowPrivateAccess=true))
+	float DelayTime;
 
 	/**************************************************************************************************/
 	

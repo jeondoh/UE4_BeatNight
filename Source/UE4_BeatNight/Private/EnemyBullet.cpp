@@ -45,7 +45,7 @@ void AEnemyBullet::BeginPlay()
 		BulletLocation = GetActorLocation();
 		PlayerLocation = Player->GetActorLocation();
 
-		FVector NewLocation = PlayerLocation - GetActorLocation();
+		FVector NewLocation = PlayerLocation - BulletLocation;
 		NewLocation.Normalize();
 		Direction = NewLocation;
 	}

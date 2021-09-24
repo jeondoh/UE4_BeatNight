@@ -22,6 +22,12 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	
-	
+	UFUNCTION(BlueprintCallable)
+	void PlayAttackMontage();
+
+	UFUNCTION(BlueprintCallable)
+	void RatAttack();
+
+	UPROPERTY()
+	bool RatAttackRange;
 };

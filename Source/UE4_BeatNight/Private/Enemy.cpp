@@ -97,6 +97,7 @@ void AEnemy::SetEnemyAIController()
 		// ValueAs '' = 해당 타입의 변수값 Set
 		EnemyController->GetBlackboardComponent()->SetValueAsVector(TEXT("PatrolPoint"), WorldPatorlPoint);
 		EnemyController->GetBlackboardComponent()->SetValueAsVector(TEXT("PatrolPoint2"), WorldPatorlPoint2);
+		EnemyController->GetBlackboardComponent()->SetValueAsBool(TEXT("EndAttack"), true);
 		EnemyController->RunBehaviorTree(BehaviorTree); // 루트노드에서 순차실행함.
 	}
 }
@@ -105,7 +106,7 @@ void AEnemy::AgroSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AA
     UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if(OtherActor == nullptr) return;
-
+	
 	ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(OtherActor);
 	if(Player)
 	{
