@@ -146,10 +146,27 @@ FName ASpider::GetAttackSectionName()
 	{
 		if(EnemyController->GetBlackboardComponent())
 		{
+			// 공격 이후 DelayTime
 			EnemyController->GetBlackboardComponent()->SetValueAsFloat(TEXT("DelayTime"), DelayTime);
+			// DelayTime 이후에 움직임 가능하게 설정
+			EnemyController->GetBlackboardComponent()->SetValueAsBool(TEXT("CanMove"), false);
+			GetWorldTimerManager().SetTimer(CanMoveHandler, this, &ASpider::SetCanMove, DelayTime);
 		}	
 	}
 	return Section;
+}
+
+void ASpider::SetCanMove()
+{
+	if(EnemyController)
+	{
+		if(EnemyController->GetBlackboardComponent())
+		{
+			// DelayTime 이후에 움직임 가능하게 설정
+			EnemyController->GetBlackboardComponent()->SetValueAsBool(TEXT("CanMove"), true);
+			GetWorldTimerManager().ClearTimer(CanMoveHandler);
+		}	
+	}
 }
 
 FName ASpider::GetAttackJumpAttack()

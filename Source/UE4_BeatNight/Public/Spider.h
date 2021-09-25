@@ -87,10 +87,19 @@ private:
 	/** 캐릭터가 느려지는 시간(WebAttack) */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Spider|Attack", meta=(AllowPrivateAccess=true))
 	float WebTime;
-	/** WebAttack일시 캐릭터가 일정 시간동안 느려지게 */
+	/** WebAttack일시 캐릭터가 일정 시간동안 느려지게 한후 원복 */
 	UFUNCTION()
 	void WebToPlayerSlow();
-
+	/** CanMove 타이머 */
+	UPROPERTY()
+	FTimerHandle CanMoveHandler;
+	/** 공격 이후 움직일 수 있는 시간 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Spider|Attack", meta=(AllowPrivateAccess=true))
+	float CanMoveTime;
+	/** 몬스터 공격 이후 움직일 수 있게 */
+	UFUNCTION()
+	void SetCanMove();
+	
 	UFUNCTION(BlueprintCallable)
 	void StartAttack();
 	

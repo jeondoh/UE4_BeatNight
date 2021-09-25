@@ -98,6 +98,7 @@ void AEnemy::SetEnemyAIController()
 		EnemyController->GetBlackboardComponent()->SetValueAsVector(TEXT("PatrolPoint"), WorldPatorlPoint);
 		EnemyController->GetBlackboardComponent()->SetValueAsVector(TEXT("PatrolPoint2"), WorldPatorlPoint2);
 		EnemyController->GetBlackboardComponent()->SetValueAsBool(TEXT("EndAttack"), true);
+		EnemyController->GetBlackboardComponent()->SetValueAsBool(TEXT("CanMove"), true);
 		EnemyController->RunBehaviorTree(BehaviorTree); // 루트노드에서 순차실행함.
 	}
 }
