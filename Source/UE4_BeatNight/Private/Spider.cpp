@@ -25,6 +25,8 @@ ASpider::ASpider()
 	WebAttack = TEXT("WebAttack");
 	JumpAttack = TEXT("JumpAttack");
 	idleAttack = TEXT("idleAttack");
+	WebTime = 3.f;
+	PlayerSlowMovement = 0.1f;
 }
 
 void ASpider::BeginPlay()
@@ -101,6 +103,13 @@ void ASpider::PlayAttackMontage(FName Section)
 	}
 }
 
+void ASpider::WebToPlayerSlow()
+{
+	SlowPlayer->SetMovementSpeed(PlayerMovement);
+	SlowPlayer = nullptr;
+	GetWorldTimerManager().ClearTimer(WebHandler);
+}
+
 void ASpider::StartAttack()
 {
 	if(EnemyController)
@@ -160,7 +169,7 @@ FName ASpider::GetAttackIdleAttack()
 FName ASpider::GetAttackWebAttack()
 {
 	EnemyDamage = 0.f;
-	DelayTime = 1.f; // 대기시간
+	DelayTime = 10.f; // 대기시간
 	return WebAttack;
 }
 
@@ -181,10 +190,8 @@ bool ASpider::GetBeamEndLocation(const FVector& MuzzleSocketLocation, FHitResult
 	// 라인 추적 사이에 Actor가 존재하면
 	if(OutHitResult.bBlockingHit)
 	{
-		UE_LOG(LogTemp, Error, TEXT("%s"), *OutHitResult.Actor->GetName());
 		return true;
 	}
-	UE_LOG(LogTemp, Error, TEXT("NOHIT"));
 	return false;
 }
 
@@ -202,7 +209,10 @@ void ASpider::WebToPlayerAttack()
 		{
 		    ABeatNightPlayer* HitPlayer = Cast<ABeatNightPlayer>(BeamHitResult.Actor.Get());
 		    if(HitPlayer){
-		    	UE_LOG(LogTemp, Error, TEXT("HIT Player"));
+		    	SlowPlayer = HitPlayer;
+		    	PlayerMovement = HitPlayer->GetMovementSpeed();
+				HitPlayer->SetMovementSpeed(PlayerSlowMovement);
+		    	GetWorldTimerManager().SetTimer(WebHandler, this, &ASpider::WebToPlayerSlow, WebTime); // 캐릭터 이동속도 복구 
 		    }
 		}
 		// 총알 발사 경로에 이팩트 생성

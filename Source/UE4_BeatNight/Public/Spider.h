@@ -74,6 +74,23 @@ private:
 	UPROPERTY()		
 	FName idleAttack;
 
+	UPROPERTY()
+	class ABeatNightPlayer* SlowPlayer;
+	UPROPERTY()
+	FTimerHandle WebHandler;
+	/** 캐릭터가 느려지기전 원래 속도 */
+	UPROPERTY()
+	float PlayerMovement;
+	/** 캐릭터가 느려지는 이동속도 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Spider|Attack", meta=(AllowPrivateAccess=true))
+	float PlayerSlowMovement;
+	/** 캐릭터가 느려지는 시간(WebAttack) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Spider|Attack", meta=(AllowPrivateAccess=true))
+	float WebTime;
+	/** WebAttack일시 캐릭터가 일정 시간동안 느려지게 */
+	UFUNCTION()
+	void WebToPlayerSlow();
+
 	UFUNCTION(BlueprintCallable)
 	void StartAttack();
 	

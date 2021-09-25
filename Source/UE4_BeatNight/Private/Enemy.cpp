@@ -126,7 +126,6 @@ void AEnemy::AgroSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AA
 	}
 }
 
-
 void AEnemy::AgroSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {

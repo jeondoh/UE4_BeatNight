@@ -51,6 +51,10 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Char|Inventory", meta=(AllowPrivateAccess=true))
 	TArray<class AWeapon*> Inventory;
 
+	/** 캐릭터 이동속도 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Char|Props", meta=(AllowPrivateAccess=true))
+	float MovementSpeed;
+
 	void Die();
 	
 	/**************************************************************************************************/
@@ -80,6 +84,9 @@ public:
 
 	FORCEINLINE uint8 GetDefense() const {return Defense;}
 	FORCEINLINE void SetDefense(float Amount) {Defense = Amount;}
+
+	FORCEINLINE float GetMovementSpeed() const {return MovementSpeed;}
+	FORCEINLINE void SetMovementSpeed(float Speed) {MovementSpeed = Speed;}
 
 	FORCEINLINE TArray<class AWeapon*> GetInventory() const {return Inventory;}
 };
