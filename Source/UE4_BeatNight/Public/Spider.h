@@ -52,7 +52,7 @@ private:
 	// 속성
 
 	/** 몬스터명(공격시 함수 Section명 불러올때 사용) */
-	UPROPERTY(EditAnywhere, Category="Spider|Props", meta=(AllowPrivateAccess=true))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Spider|Props", meta=(AllowPrivateAccess=true))
 	FName SpiderName;
 
 	UFUNCTION(BlueprintCallable)

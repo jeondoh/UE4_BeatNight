@@ -64,6 +64,7 @@ void AEnemy::InitalizedData()
 	Health = 100.f; // 체력
 	EnemyDamage = 10.f; // 데미지
 	bCanAttack = false; // 공격가능여부
+	MoveToTargetRange = 70.f; // Move 범위
 }
 
 void AEnemy::DropItem()

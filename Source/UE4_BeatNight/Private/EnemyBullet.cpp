@@ -141,7 +141,6 @@ void AEnemyBullet::GuidedLocation(float DeltaTime)
 	}
 }
 
-
 void AEnemyBullet::FinishGuided()
 {
 	CanGuided = false;

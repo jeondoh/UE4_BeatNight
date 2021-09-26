@@ -66,6 +66,9 @@ protected:
 	/** 공격 전 딜레이 시간 (각 섹션마다 대기시간 다름) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Boss|Props", meta=(AllowPrivateAccess=true))
 	float DelayTime;
+	/** 대상이 어그로 범위 안으로 들어왔을때 Move 범위 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Boss|Props", meta=(AllowPrivateAccess=true))
+	float MoveToTargetRange;
 
 	/**************************************************************************************************/
 	
