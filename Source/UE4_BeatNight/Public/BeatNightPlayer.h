@@ -66,6 +66,16 @@ private:
 	/** 열쇠 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Char|Items", meta=(AllowPrivateAccess=true))
 	uint8 Item_Keys;
+
+	/**************************************************************************************************/
+	// VR
+
+	/** VR 왼손 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Char|VR", meta=(AllowPrivateAccess=true))
+	class AMontionActor* LeftController;
+	/** VR 오른손 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Char|VR", meta=(AllowPrivateAccess=true))
+	class AMontionActor* RightController;
 	
 	/**************************************************************************************************/
 
