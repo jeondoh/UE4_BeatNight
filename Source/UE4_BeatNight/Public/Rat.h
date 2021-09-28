@@ -28,6 +28,17 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void RatAttack();
 
+	/** 공격 인정 범위 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Component", meta=(AllowPrivateAccess=true))
+	class USphereComponent* RatAttackSphere;
+
+	UFUNCTION()
+	void RatAttackSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+			UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION()
+	void RatAttackSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	
 	UPROPERTY()
 	bool RatAttackRange;
 };

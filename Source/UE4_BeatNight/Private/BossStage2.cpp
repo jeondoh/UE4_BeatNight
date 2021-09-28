@@ -25,6 +25,11 @@ void ABossStage2::BeginPlay()
 	Super::BeginPlay();
 }
 
+void ABossStage2::FinishDeath()
+{
+	Super::FinishDeath();
+}
+
 void ABossStage2::PlayAttackToTargetMontage(FName Section)
 {
 	if(EnemyController)

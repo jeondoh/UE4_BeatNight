@@ -107,7 +107,6 @@ void ASpider::WebToPlayerSlow()
 {
 	SlowPlayer->SetMovementSpeed(PlayerMovement);
 	SlowPlayer = nullptr;
-	GetWorldTimerManager().ClearTimer(WebHandler);
 }
 
 void ASpider::StartAttack()

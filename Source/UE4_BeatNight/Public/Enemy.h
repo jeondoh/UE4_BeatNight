@@ -40,10 +40,12 @@ protected:
 	/** 공격 몽타주 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Anim", meta=(AllowPrivateAccess=true))
 	UAnimMontage* AttackMontage;
-
 	/** HP x% 이하일때 공격 몽타주 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Anim", meta=(AllowPrivateAccess=true))
 	UAnimMontage* AttackHpDwonMontage;
+	/** 사망 몽타주 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Anim", meta=(AllowPrivateAccess=true))
+	UAnimMontage* DeathMontage;
 
 	/**************************************************************************************************/
 	// 몬스터 상태
@@ -64,11 +66,27 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
 	bool bCanAttack;
 	/** 공격 전 딜레이 시간 (각 섹션마다 대기시간 다름) */
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Boss|Props", meta=(AllowPrivateAccess=true))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
 	float DelayTime;
+	/** 사망여부 */
+	UPROPERTY(VisibleAnywhere, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
+	bool bDying;
 	/** 대상이 어그로 범위 안으로 들어왔을때 Move 범위 */
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Boss|Props", meta=(AllowPrivateAccess=true))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
 	float MoveToTargetRange;
+	/** 죽은이후 일정 시간 이후 destory */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
+	float DeathTime;
+	FTimerHandle DeathTimer;
+	/** 플레이어에게 데미지 받을때 */
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	/** 사망 */
+	void Die();
+	/** 사망이후 애니메이션 멈춤 */
+	UFUNCTION(BlueprintCallable)
+	virtual void FinishDeath();
+	/** 사망이후 애니메이션 멈춤 */
+	void DestoryEnemy();
 
 	/**************************************************************************************************/
 	
@@ -156,7 +174,7 @@ private:
 	void GetLookAtRotation(FVector TargetLocation);
 
 	float RandomizationDamage(float Damage);
-	
+
 	/**************************************************************************************************/
 
 // Getter & Setter

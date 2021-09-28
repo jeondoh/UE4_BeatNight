@@ -76,7 +76,14 @@ private:
 	/** VR 오른손 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Char|VR", meta=(AllowPrivateAccess=true))
 	class AMontionActor* RightController;
-	
+
+	/**************************************************************************************************/
+	// Enemy 상호작용
+
+	/** Blueprint FireWeapon 이후 적에게 데미지 입힘 */
+	UFUNCTION(BlueprintCallable)
+	void TraceEnemyToDamage(FVector StartLocation, FVector EndLocation, float WeaponDamage);
+
 	/**************************************************************************************************/
 
 

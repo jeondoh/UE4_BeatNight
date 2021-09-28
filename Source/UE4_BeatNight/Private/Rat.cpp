@@ -3,17 +3,23 @@
 
 #include "Rat.h"
 
+#include "BeatNightPlayer.h"
 #include "EnemyAIController.h"
-#include "BehaviorTree/BlackboardComponent.h"
+#include "Components/SphereComponent.h"
 
 ARat::ARat()
 {
 	RatAttackRange = false;
+	RatAttackSphere = CreateDefaultSubobject<USphereComponent>(TEXT("RatAttackSphere"));
+	RatAttackSphere->SetupAttachment(GetRootComponent());
 }
 
 void ARat::BeginPlay()
 {
 	Super::BeginPlay();
+
+	RatAttackSphere->OnComponentBeginOverlap.AddDynamic(this, &ARat::RatAttackSphereBeginOverlap);
+	RatAttackSphere->OnComponentEndOverlap.AddDynamic(this, &ARat::RatAttackSphereEndOverlap);
 }
 
 void ARat::PlayAttackMontage()
@@ -25,14 +31,36 @@ void ARat::PlayAttackMontage()
 	}
 }
 
-void ARat::RatAttack()
+void ARat::RatAttackSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if(EnemyController)
+	if(OtherActor==nullptr) return;
+	
+	ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(OtherActor);
+	if(Player)
 	{
-		RatAttackRange = EnemyController->GetBlackboardComponent()->GetValueAsBool("InAttackRange");
-		if(RatAttackRange)
-		{
-			DoDamage(BeatNightPlayer);			
-		}
+		RatAttackRange = true;
 	}
 }
+
+void ARat::RatAttackSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if(OtherActor==nullptr) return;
+	
+	ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(OtherActor);
+	if(Player)
+	{
+		RatAttackRange = false;
+	}
+}
+
+void ARat::RatAttack()
+{
+	if(RatAttackRange)
+	{
+		DoDamage(BeatNightPlayer);			
+	}
+}
+
+

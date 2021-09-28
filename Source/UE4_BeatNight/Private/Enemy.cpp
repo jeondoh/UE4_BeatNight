@@ -44,6 +44,51 @@ void AEnemy::DoDamage(ABeatNightPlayer* Player)
 	UGameplayStatics::ApplyDamage(Player, RandomizationDamage(EnemyDamage), EnemyController, this, UDamageType::StaticClass());
 }
 
+float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+	AActor* DamageCauser)
+{
+	Health -= DamageAmount;
+	if(Health <= 0.f)
+	{
+		Health = 0.f;
+		Die();
+	}
+	return DamageAmount;
+}
+
+void AEnemy::Die()
+{
+	if(bDying) return;
+	bDying = true;
+	// TODO 체력바 숨기기
+	// HideHealthBar(); 
+	// 사망 몽타주 실행
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if(AnimInstance && DeathMontage)
+	{
+		AnimInstance->Montage_Play(DeathMontage);
+	}
+	if(EnemyController)
+	{
+		EnemyController->GetBlackboardComponent()->SetValueAsBool(FName("Death"), true);
+		EnemyController->GetBlackboardComponent()->SetValueAsObject(FName("Target"), nullptr);
+		EnemyController->StopMovement();
+	}
+	// 아이템 드롭
+	DropItem();
+}
+
+void AEnemy::FinishDeath()
+{
+	GetMesh()->bPauseAnims = true;
+	GetWorldTimerManager().SetTimer(DeathTimer, this, &AEnemy::DestoryEnemy, DeathTime);
+}
+
+void AEnemy::DestoryEnemy()
+{
+	Destroy();
+}
+
 // Called every frame
 void AEnemy::Tick(float DeltaTime)
 {
@@ -65,6 +110,8 @@ void AEnemy::InitalizedData()
 	EnemyDamage = 10.f; // 데미지
 	bCanAttack = false; // 공격가능여부
 	MoveToTargetRange = 70.f; // Move 범위
+	bDying = false; // 사망여부
+	DeathTime = 2.f; // 사망 후 destroy 간격시간
 }
 
 void AEnemy::DropItem()

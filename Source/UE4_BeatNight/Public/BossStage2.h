@@ -21,6 +21,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
+	virtual void FinishDeath() override;
+	
 private:
 	/**************************************************************************************************/
 	// 몽타주 & 애니메이션
