@@ -32,6 +32,9 @@ void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 
+	AgroSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	AttackSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	
 	// 컴포넌트 오버랩 바인딩
 	AgroSphere->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::AgroSphereBeginOverlap);
 	AgroSphere->OnComponentEndOverlap.AddDynamic(this, &AEnemy::AgroSphereEndOverlap);
@@ -148,6 +151,9 @@ void AEnemy::SetEnemyAIController()
 		EnemyController->GetBlackboardComponent()->SetValueAsBool(TEXT("EndAttack"), true);
 		EnemyController->GetBlackboardComponent()->SetValueAsBool(TEXT("CanMove"), true);
 		EnemyController->RunBehaviorTree(BehaviorTree); // 루트노드에서 순차실행함.
+
+		AgroSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		AttackSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	}
 }
 
