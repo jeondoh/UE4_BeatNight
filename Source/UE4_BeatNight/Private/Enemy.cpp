@@ -50,6 +50,13 @@ void AEnemy::DoDamage(ABeatNightPlayer* Player)
 float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	AActor* DamageCauser)
 {
+	if(bDying) return 0;
+	
+	if(EnemyController)
+	{
+		// 타겟 어그로
+		EnemyController->GetBlackboardComponent()->SetValueAsObject(FName("Target"), DamageCauser);
+	}
 	Health -= DamageAmount;
 	if(Health <= 0.f)
 	{

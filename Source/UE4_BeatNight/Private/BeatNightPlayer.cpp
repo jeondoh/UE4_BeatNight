@@ -41,7 +41,6 @@ void ABeatNightPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 float ABeatNightPlayer::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	AActor* DamageCauser)
 {
-
 	DamageAmount = Defense >= DamageAmount ? 0 : DamageAmount - Defense;
 	Health -= DamageAmount;
 	if(Health <= 0.f)
@@ -82,7 +81,6 @@ void ABeatNightPlayer::TraceEnemyToDamage(FVector StartLocation, FVector EndLoca
 	{
 		if(Result.bBlockingHit)
 		{
-			UE_LOG(LogTemp, Error, TEXT("Trace :: %s"), *Result.Actor->GetName());
 			AEnemy* HitEnemy = Cast<AEnemy>(Result.Actor.Get());
 			if(HitEnemy)
 			{
