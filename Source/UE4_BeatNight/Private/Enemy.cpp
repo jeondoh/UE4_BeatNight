@@ -9,6 +9,7 @@
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "Sound/SoundCue.h"
 
 // Sets default values
@@ -45,6 +46,11 @@ void AEnemy::BeginPlay()
 void AEnemy::DoDamage(ABeatNightPlayer* Player)
 {
 	UGameplayStatics::ApplyDamage(Player, RandomizationDamage(EnemyDamage), EnemyController, this, UDamageType::StaticClass());
+	if(bUlitmateDamaged)
+	{
+		DamagedPlayer = Player;
+		GetWorldTimerManager().SetTimer(BossStage2Timer, this, &AEnemy::SetVisibilityPlayerParticle, UltimateDurationTime);		
+	}
 }
 
 float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
@@ -64,6 +70,13 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 		Die();
 	}
 	return DamageAmount;
+}
+
+void AEnemy::SetVisibilityPlayerParticle()
+{
+	SetUltimateDamaged(false);
+	DamagedPlayer->GetHitUlitmateParticle()->SetVisibility(false);
+	DamagedPlayer->GetHitUlitmateParticle2()->SetVisibility(false);
 }
 
 void AEnemy::Die()
@@ -125,6 +138,7 @@ void AEnemy::InitalizedData()
 	bHPDown = false; // 남은 HP에 따라 변경(bossStage2에서만 사용)
 	bUlitmateDamaged = false; // Player가 Ultimate 데미지를 받았을 경우(BossStage2에서만 사용)
 	UlitmateDamaged = 10.f; // 추가 데미지
+	UltimateDurationTime = 10.f; // BossStage2 Ulitmate 공격 지속시간
 }
 
 void AEnemy::DropItem()

@@ -214,7 +214,7 @@ FName ABossStage2::GetAttackSectionName()
 {
 	FName SectionName;
 	const int32 Section{FMath::RandRange(1, 100)};
-	/*
+
 	if(Section >= 1 && Section <= 40)
 	{
 		// 40%
@@ -246,10 +246,5 @@ FName ABossStage2::GetAttackSectionName()
 		BulletSpeed = 2200.f; // 총알 속도
 		EnemyDamage = bUlitmateDamaged ? 50.f + UlitmateDamaged : 50.f; // 데미지
 	}
-*/
-	SectionName = AttackUlitmate;
-	DelayTime = 3.5f; // 대기시간
-	BulletSpeed = 2200.f; // 총알 속도
-	EnemyDamage = bUlitmateDamaged ? 50.f + UlitmateDamaged : 50.f; // 데미지
 	return SectionName;
 }

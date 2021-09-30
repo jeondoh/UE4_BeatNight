@@ -32,6 +32,8 @@ protected:
 	// 캐릭터(Player)
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Enemy", meta=(AllowPrivateAccess=true))	
 	class ABeatNightPlayer* BeatNightPlayer;
+	UPROPERTY()
+	class ABeatNightPlayer* DamagedPlayer;
 
 	/**************************************************************************************************/
 	// 애니메이션 & 몽타주
@@ -57,7 +59,7 @@ protected:
 	int32 Health;
 	/** 데미지 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
-	int32 EnemyDamage;
+	float EnemyDamage;
 	/** 스테이지에 따른 몬스터명 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
 	FString MonsterName;
@@ -76,6 +78,7 @@ protected:
 	/** 죽은이후 일정 시간 이후 destory */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
 	float DeathTime;
+	UPROPERTY()
 	FTimerHandle DeathTimer;
 	/** Ultimate 추가 데미지 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
@@ -95,6 +98,14 @@ protected:
 	bool bHPDown;
 	/** Player가 Ultimate 데미지를 받았을 경우(BossStage2에서만 사용) */
 	bool bUlitmateDamaged;
+	/** BossStage2 Ultimate 공격 타이머 */
+	UPROPERTY()
+	FTimerHandle BossStage2Timer;
+	/** BossStage2 Ulitmate 공격 지속시간 */
+	UPROPERTY(EditAnywhere, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
+	float UltimateDurationTime;
+	UFUNCTION()
+	void SetVisibilityPlayerParticle();
 
 	/**************************************************************************************************/
 	

@@ -80,12 +80,6 @@ private:
 	/** BeginPlay시 캐릭터 위치 */
 	UPROPERTY()
 	FVector PlayerLocation;
-	UPROPERTY()
-	class ABeatNightPlayer* DamagedPlayer;
-	UPROPERTY()
-	FTimerHandle UlitmateTimer;
-	UFUNCTION()
-	void SetVisibilityPlayerParticle();
 	/** 유도탄 커브 타이머 시간 */
 	UPROPERTY()
 	float CurveTime;

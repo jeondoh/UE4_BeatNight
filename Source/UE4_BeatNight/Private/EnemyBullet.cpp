@@ -98,29 +98,14 @@ void AEnemyBullet::BoxCompBeginOverlap(UPrimitiveComponent* OverlappedComponent,
 			if(bUltimateBullet && Enemy->GetHpDown())
 			{
 				Enemy->SetUltimateDamaged(true);
-				DamagedPlayer = TargetPlayer;
 				TargetPlayer->GetHitUlitmateParticle()->SetVisibility(true);
 				TargetPlayer->GetHitUlitmateParticle2()->SetVisibility(true);
-				UE_LOG(LogTemp, Error, TEXT("asdf"));
-				GetWorld()->GetTimerManager().SetTimer(UlitmateTimer, this, &AEnemyBullet::SetVisibilityPlayerParticle, 2.f);
 			}
 			Enemy->DoDamage(TargetPlayer);
 		}
 		// 총알 제거
 		Destroy();
 	}
-}
-
-void AEnemyBullet::SetVisibilityPlayerParticle()
-{
-	UE_LOG(LogTemp, Error, TEXT("123"));
-	if(Enemy)
-	{
-		Enemy->SetUltimateDamaged(false);
-	}
-	DamagedPlayer->GetHitUlitmateParticle()->SetVisibility(false);
-	DamagedPlayer->GetHitUlitmateParticle2()->SetVisibility(false);
-	
 }
 
 void AEnemyBullet::StartCurveBullet()
