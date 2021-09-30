@@ -22,7 +22,11 @@ protected:
 	virtual void BeginPlay() override;
 	
 	virtual void FinishDeath() override;
+
+	/** 플레이어에게 데미지 받을때 */
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	
+
 private:
 	/**************************************************************************************************/
 	// 몽타주 & 애니메이션
@@ -46,9 +50,6 @@ private:
 
 	/**************************************************************************************************/
 	// 보스 공격
-
-	/** LineTrace 추적 */
-	bool GetBeamEndLocation(const FVector& MuzzleSocketLocation, FHitResult& OutHitResult);
 
 	/** 총(Gun) 공격 > 애니메이션 노티파이 */
 	UFUNCTION(BlueprintCallable)
@@ -89,7 +90,7 @@ private:
 	/** 총알 속도 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Boss|Props", meta=(AllowPrivateAccess=true))
 	float BulletSpeed;
-	
+
 	/** 몽타주 섹션 이름 */
 	FName AttackSlow;
 	FName AttackFast;
@@ -99,6 +100,9 @@ private:
 	/** 몽타주 섹션 이름 랜덤으로 반환 */
 	UFUNCTION(BlueprintCallable)
 	FName GetAttackSectionName();
+
+	/** HP 확인 & 몽타주 변경 */
+	void CheckHP();
 
 	/**************************************************************************************************/
 	// 이팩트

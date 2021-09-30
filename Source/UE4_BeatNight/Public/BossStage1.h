@@ -18,9 +18,65 @@ public:
 	ABossStage1();
 
 protected:
-	
-private:
+	virtual void BeginPlay() override;
 
+private:
+	
+	/** 근접공격 범위 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Boss|Component", meta=(AllowPrivateAccess=true))
+	class USphereComponent* MeleeRangeSphere;
+
+	/** 총알 스폰 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Boss|Props", meta=(AllowPrivateAccess=true))
+	TSubclassOf<class AEnemyBullet> SpawnBullet;
+
+	/** 총알 속도 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Boss|Props", meta=(AllowPrivateAccess=true))
+	float BulletSpeed;
+
+	/** 총알 속도 */
+	bool bCanMeleeAttack;
+
+	/** 오른쪽 다리 콜리전 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Boss|Component", meta=(AllowPrivateAccess=true, MakeEditWidget=true))
+	class UBoxComponent* RightLegCollision;
+
+	UFUNCTION(BlueprintCallable)
+	void ActivateRightLeg();
+	UFUNCTION(BlueprintCallable)
+	void DeactivateRightLeg();
+
+	UFUNCTION(BlueprintCallable)
+	void PlayAttackMontage(FName Section);
+
+	UFUNCTION(BlueprintCallable)
+	void BossFire();
+	
+	UFUNCTION(BlueprintCallable)
+	void SpawnSpider();
+
+	UFUNCTION(BlueprintCallable)
+	FName GetAttackSectionName();
+
+	/** CanMove 타이머 */
+	UPROPERTY()
+	FTimerHandle CanMoveHandler;
+	
+	UFUNCTION()
+	void SetCanMove();
+	
 	virtual void FinishDeath() override;
+
+	UFUNCTION()
+	void RightLegBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void AttackMeleeSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void AttackMeleeSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	
 };

@@ -77,7 +77,6 @@ void ASpider::LeftLegBeginOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 	ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(OtherActor);
 	if(Player)
 	{
-		UE_LOG(LogTemp, Error, TEXT("Hit Left"));
 		DoDamage(Player); // 데미지 입힘
 	}
 }
@@ -88,7 +87,6 @@ void ASpider::RightLegBeginOverlap(UPrimitiveComponent* OverlappedComponent, AAc
 	ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(OtherActor);
 	if(Player)
 	{
-		UE_LOG(LogTemp, Error, TEXT("Hit Right"));
 		DoDamage(Player); // 데미지 입힘
 	}
 }

@@ -31,6 +31,15 @@ public:
 private:
 
 	void InitalizedData();
+
+	/**************************************************************************************************/
+	// 캐릭터 컴포넌트
+
+	UPROPERTY(EditDefaultsOnly, Category="Char|Particle", meta=(AllowPrivateAccess=true))
+	UParticleSystemComponent* HitUlitmateParticle;
+
+	UPROPERTY(EditDefaultsOnly, Category="Char|Particle", meta=(AllowPrivateAccess=true))
+	UParticleSystemComponent* HitUlitmateParticle2;
 	
 	/**************************************************************************************************/
 	// 캐릭터 상태
@@ -106,4 +115,7 @@ public:
 	FORCEINLINE void SetMovementSpeed(float Speed) {MovementSpeed = Speed;}
 
 	FORCEINLINE TArray<class AWeapon*> GetInventory() const {return Inventory;}
+
+	FORCEINLINE UParticleSystemComponent* GetHitUlitmateParticle() const {return HitUlitmateParticle;}
+	FORCEINLINE UParticleSystemComponent* GetHitUlitmateParticle2() const {return HitUlitmateParticle2;}
 };

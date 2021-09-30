@@ -7,6 +7,7 @@
 #include "Enemy.h"
 #include "EnemyAIController.h"
 #include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 ABeatNightPlayer::ABeatNightPlayer()
@@ -15,6 +16,15 @@ ABeatNightPlayer::ABeatNightPlayer()
 	PrimaryActorTick.bCanEverTick = true;
 
 	InitalizedData(); // 초기화
+
+	HitUlitmateParticle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("HitUlitmateParticle"));
+	HitUlitmateParticle2 = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("HitUlitmateParticle2"));
+
+	HitUlitmateParticle->SetupAttachment(GetRootComponent());
+	HitUlitmateParticle2->SetupAttachment(GetRootComponent());
+
+	HitUlitmateParticle->SetVisibility(false);
+	HitUlitmateParticle2->SetVisibility(false);
 }
 
 // Called when the game starts or when spawned

@@ -30,6 +30,41 @@ void ABossStage2::FinishDeath()
 	Super::FinishDeath();
 }
 
+float ABossStage2::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+	AActor* DamageCauser)
+{
+	if(bDying) return 0;
+
+	if(EnemyController)
+	{
+		// 타겟 어그로
+		EnemyController->GetBlackboardComponent()->SetValueAsObject(FName("Target"), DamageCauser);
+	}
+	Health -= DamageAmount;
+	CheckHP();
+	if(Health <= 0.f)
+	{
+		Health = 0.f;
+		Die();
+	}
+	return DamageAmount;
+}
+
+void ABossStage2::CheckHP()
+{
+	if(Health < 0) return;
+	int32 HealthComp = MaxHealth * 0.4;
+	// 피가 40% 미만일 경우 패턴변경 
+	if(HealthComp > Health)
+	{
+		bHPDown = true;
+		if(AttackHpDownMontage)
+		{
+			AttackMontage = nullptr;
+		}
+	}
+}
+
 void ABossStage2::PlayAttackToTargetMontage(FName Section)
 {
 	if(EnemyController)
@@ -54,6 +89,10 @@ void ABossStage2::PlayAttackMontage(FName Section)
 		return;
 	}
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if(AttackMontage == nullptr)
+	{
+		AttackMontage = AttackHpDownMontage;
+	}
 	if(AnimInstance && AttackMontage)
 	{
 		AnimInstance->Montage_Play(AttackMontage);
@@ -63,7 +102,6 @@ void ABossStage2::PlayAttackMontage(FName Section)
 
 void ABossStage2::PlayReloadMontage()
 {
-	// Reload 몽타주 길이만큼 Delay 시켜줘야함
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if(AnimInstance && ReloadMontage)
 	{
@@ -111,6 +149,10 @@ void ABossStage2::BossFinishGunShot()
 	{
 		bCanAttack = false;
 		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+		if(AttackMontage == nullptr)
+		{
+			AttackMontage = AttackHpDownMontage;
+		}
 		AnimInstance->Montage_Stop(0.f, AttackMontage);
 		PlayReloadMontage(); // 리로드 몽타주 실행
 	}
@@ -143,10 +185,12 @@ void ABossStage2::BossGuidedMissile()
 	FActorSpawnParameters Params;
 	Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
+	int GuidedBullet = bHPDown ? 7 : 5; // 유도탄 개수
+	
 	if(SpawnGuidedBullet)
 	{
 		// 유도탄 6개 소환
-		for(int i=0; i<6; i++)
+		for(int i=1; i<=GuidedBullet; i++)
 		{
 			FVector SocketLocation = SocketTransForm.GetLocation();
 
@@ -170,14 +214,14 @@ FName ABossStage2::GetAttackSectionName()
 {
 	FName SectionName;
 	const int32 Section{FMath::RandRange(1, 100)};
-
+	/*
 	if(Section >= 1 && Section <= 40)
 	{
 		// 40%
 		SectionName = AttackSlow;
 		BulletSpeed = 1800.f; // 총알 속도
 		DelayTime = 1.5f; // 대기시간
-		EnemyDamage = 15.f; // 데미지
+		EnemyDamage = bUlitmateDamaged ? 15.f + UlitmateDamaged : 15.f; // 데미지
 	}
 	else if(Section >= 41 && Section <=80)
 	{
@@ -185,22 +229,27 @@ FName ABossStage2::GetAttackSectionName()
 		SectionName = AttackFast;
 		BulletSpeed = 2000.f; // 총알 속도
 		DelayTime = 1.2f; // 대기시간
-		EnemyDamage = 20.f; // 데미지
+		EnemyDamage = bUlitmateDamaged ? 20.f + UlitmateDamaged : 20.f; // 데미지
 	}
-	else if(Section >= 81 && Section <=95)
+	else if(Section >= 81 && Section <=90)
 	{
-		// 15%
+		// 10%
 		SectionName = AttackGuided;
 		DelayTime = 3.5f; // 대기시간
-		EnemyDamage = 15.f; // 데미지
+		EnemyDamage = bUlitmateDamaged ? 15.f + UlitmateDamaged : 15.f; // 데미지
 	}
 	else
 	{
-		// 5%
+		// 10%
 		SectionName = AttackUlitmate;
 		DelayTime = 3.5f; // 대기시간
 		BulletSpeed = 2200.f; // 총알 속도
-		EnemyDamage = 50.f; // 데미지
+		EnemyDamage = bUlitmateDamaged ? 50.f + UlitmateDamaged : 50.f; // 데미지
 	}
+*/
+	SectionName = AttackUlitmate;
+	DelayTime = 3.5f; // 대기시간
+	BulletSpeed = 2200.f; // 총알 속도
+	EnemyDamage = bUlitmateDamaged ? 50.f + UlitmateDamaged : 50.f; // 데미지
 	return SectionName;
 }

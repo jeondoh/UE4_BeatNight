@@ -93,9 +93,6 @@ private:
 	/** CanMove 타이머 */
 	UPROPERTY()
 	FTimerHandle CanMoveHandler;
-	/** 공격 이후 움직일 수 있는 시간 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Spider|Attack", meta=(AllowPrivateAccess=true))
-	float CanMoveTime;
 	/** 몬스터 공격 이후 움직일 수 있게 */
 	UFUNCTION()
 	void SetCanMove();

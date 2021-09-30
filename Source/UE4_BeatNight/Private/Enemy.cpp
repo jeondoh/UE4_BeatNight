@@ -16,7 +16,7 @@ AEnemy::AEnemy()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	
 	// 변수 초기화
 	InitalizedData();
 
@@ -122,6 +122,9 @@ void AEnemy::InitalizedData()
 	MoveToTargetRange = 70.f; // Move 범위
 	bDying = false; // 사망여부
 	DeathTime = 2.f; // 사망 후 destroy 간격시간
+	bHPDown = false; // 남은 HP에 따라 변경(bossStage2에서만 사용)
+	bUlitmateDamaged = false; // Player가 Ultimate 데미지를 받았을 경우(BossStage2에서만 사용)
+	UlitmateDamaged = 10.f; // 추가 데미지
 }
 
 void AEnemy::DropItem()

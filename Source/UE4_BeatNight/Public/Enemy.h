@@ -21,7 +21,6 @@ public:
 	/** Enemy 컨트롤러 */
 	UPROPERTY()
 	class AEnemyAIController* EnemyController;
-
 	/** 데미지 입히기 */
 	UFUNCTION()
 	void DoDamage(class ABeatNightPlayer* Player);
@@ -42,7 +41,7 @@ protected:
 	UAnimMontage* AttackMontage;
 	/** HP x% 이하일때 공격 몽타주 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Anim", meta=(AllowPrivateAccess=true))
-	UAnimMontage* AttackHpDwonMontage;
+	UAnimMontage* AttackHpDownMontage;
 	/** 사망 몽타주 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Anim", meta=(AllowPrivateAccess=true))
 	UAnimMontage* DeathMontage;
@@ -78,6 +77,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
 	float DeathTime;
 	FTimerHandle DeathTimer;
+	/** Ultimate 추가 데미지 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
+	float UlitmateDamaged;
 	/** 플레이어에게 데미지 받을때 */
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	/** 사망 */
@@ -87,6 +89,12 @@ protected:
 	virtual void FinishDeath();
 	/** 사망이후 애니메이션 멈춤 */
 	void DestoryEnemy();
+	/** 데미지 랜덤화 */
+	float RandomizationDamage(float Damage);
+	/** False : HP가 60% 이상일때 True : HP가 40%미만일때 */
+	bool bHPDown;
+	/** Player가 Ultimate 데미지를 받았을 경우(BossStage2에서만 사용) */
+	bool bUlitmateDamaged;
 
 	/**************************************************************************************************/
 	
@@ -173,8 +181,6 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void GetLookAtRotation(FVector TargetLocation);
 
-	float RandomizationDamage(float Damage);
-
 	/**************************************************************************************************/
 
 // Getter & Setter
@@ -192,5 +198,12 @@ public:
 
 	FORCEINLINE float GetEnemyDamage() const {return EnemyDamage;}
 	FORCEINLINE void SetEnemyDamage(float Damage) {EnemyDamage = Damage;}
+
+	FORCEINLINE AEnemyAIController* GetEnemyController() {return EnemyController;}
+
+	FORCEINLINE bool GetHpDown() const {return bHPDown;}
+
+	FORCEINLINE bool GetUltimateDamaged() const {return bUlitmateDamaged;}
+	FORCEINLINE void SetUltimateDamaged(bool bDmaged) {bUlitmateDamaged = bDmaged;}
 	
 };
