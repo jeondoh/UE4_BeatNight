@@ -21,7 +21,6 @@ public:
 	/** Enemy 컨트롤러 */
 	UPROPERTY()
 	class AEnemyAIController* EnemyController;
-
 	/** 데미지 입히기 */
 	UFUNCTION()
 	void DoDamage(class ABeatNightPlayer* Player);
@@ -33,6 +32,8 @@ protected:
 	// 캐릭터(Player)
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Enemy", meta=(AllowPrivateAccess=true))	
 	class ABeatNightPlayer* BeatNightPlayer;
+	UPROPERTY()
+	class ABeatNightPlayer* DamagedPlayer;
 
 	/**************************************************************************************************/
 	// 애니메이션 & 몽타주
@@ -40,10 +41,12 @@ protected:
 	/** 공격 몽타주 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Anim", meta=(AllowPrivateAccess=true))
 	UAnimMontage* AttackMontage;
-
 	/** HP x% 이하일때 공격 몽타주 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Anim", meta=(AllowPrivateAccess=true))
-	UAnimMontage* AttackHpDwonMontage;
+	UAnimMontage* AttackHpDownMontage;
+	/** 사망 몽타주 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Anim", meta=(AllowPrivateAccess=true))
+	UAnimMontage* DeathMontage;
 
 	/**************************************************************************************************/
 	// 몬스터 상태
@@ -56,13 +59,53 @@ protected:
 	int32 Health;
 	/** 데미지 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
-	int32 EnemyDamage;
+	float EnemyDamage;
 	/** 스테이지에 따른 몬스터명 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
 	FString MonsterName;
 	/** 공격가능여부(AnimInstance에서 사용) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
 	bool bCanAttack;
+	/** 공격 전 딜레이 시간 (각 섹션마다 대기시간 다름) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
+	float DelayTime;
+	/** 사망여부 */
+	UPROPERTY(VisibleAnywhere, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
+	bool bDying;
+	/** 대상이 어그로 범위 안으로 들어왔을때 Move 범위 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
+	float MoveToTargetRange;
+	/** 죽은이후 일정 시간 이후 destory */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
+	float DeathTime;
+	UPROPERTY()
+	FTimerHandle DeathTimer;
+	/** Ultimate 추가 데미지 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
+	float UlitmateDamaged;
+	/** 플레이어에게 데미지 받을때 */
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	/** 사망 */
+	void Die();
+	/** 사망이후 애니메이션 멈춤 */
+	UFUNCTION(BlueprintCallable)
+	virtual void FinishDeath();
+	/** 사망이후 애니메이션 멈춤 */
+	void DestoryEnemy();
+	/** 데미지 랜덤화 */
+	float RandomizationDamage(float Damage);
+	/** False : HP가 60% 이상일때 True : HP가 40%미만일때 */
+	bool bHPDown;
+	/** Player가 Ultimate 데미지를 받았을 경우(BossStage2에서만 사용) */
+	bool bUlitmateDamaged;
+	/** BossStage2 Ultimate 공격 타이머 */
+	UPROPERTY()
+	FTimerHandle BossStage2Timer;
+	/** BossStage2 Ulitmate 공격 지속시간 */
+	UPROPERTY(EditAnywhere, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
+	float UltimateDurationTime;
+	UFUNCTION()
+	void SetVisibilityPlayerParticle();
 
 	/**************************************************************************************************/
 	
@@ -149,8 +192,6 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void GetLookAtRotation(FVector TargetLocation);
 
-	float RandomizationDamage(float Damage);
-	
 	/**************************************************************************************************/
 
 // Getter & Setter
@@ -168,5 +209,12 @@ public:
 
 	FORCEINLINE float GetEnemyDamage() const {return EnemyDamage;}
 	FORCEINLINE void SetEnemyDamage(float Damage) {EnemyDamage = Damage;}
+
+	FORCEINLINE AEnemyAIController* GetEnemyController() {return EnemyController;}
+
+	FORCEINLINE bool GetHpDown() const {return bHPDown;}
+
+	FORCEINLINE bool GetUltimateDamaged() const {return bUlitmateDamaged;}
+	FORCEINLINE void SetUltimateDamaged(bool bDmaged) {bUlitmateDamaged = bDmaged;}
 	
 };

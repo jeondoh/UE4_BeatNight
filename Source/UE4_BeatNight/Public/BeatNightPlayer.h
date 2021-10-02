@@ -31,6 +31,15 @@ public:
 private:
 
 	void InitalizedData();
+
+	/**************************************************************************************************/
+	// 캐릭터 컴포넌트
+
+	UPROPERTY(EditDefaultsOnly, Category="Char|Particle", meta=(AllowPrivateAccess=true))
+	UParticleSystemComponent* HitUlitmateParticle;
+
+	UPROPERTY(EditDefaultsOnly, Category="Char|Particle", meta=(AllowPrivateAccess=true))
+	UParticleSystemComponent* HitUlitmateParticle2;
 	
 	/**************************************************************************************************/
 	// 캐릭터 상태
@@ -51,6 +60,10 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Char|Inventory", meta=(AllowPrivateAccess=true))
 	TArray<class AWeapon*> Inventory;
 
+	/** 캐릭터 이동속도 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Char|Props", meta=(AllowPrivateAccess=true))
+	float MovementSpeed;
+
 	void Die();
 	
 	/**************************************************************************************************/
@@ -62,7 +75,24 @@ private:
 	/** 열쇠 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Char|Items", meta=(AllowPrivateAccess=true))
 	uint8 Item_Keys;
-	
+
+	/**************************************************************************************************/
+	// VR
+
+	/** VR 왼손 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Char|VR", meta=(AllowPrivateAccess=true))
+	class AMontionActor* LeftController;
+	/** VR 오른손 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Char|VR", meta=(AllowPrivateAccess=true))
+	class AMontionActor* RightController;
+
+	/**************************************************************************************************/
+	// Enemy 상호작용
+
+	/** Blueprint FireWeapon 이후 적에게 데미지 입힘 */
+	UFUNCTION(BlueprintCallable)
+	void TraceEnemyToDamage(FVector StartLocation, FVector EndLocation, float WeaponDamage);
+
 	/**************************************************************************************************/
 
 
@@ -81,5 +111,11 @@ public:
 	FORCEINLINE uint8 GetDefense() const {return Defense;}
 	FORCEINLINE void SetDefense(float Amount) {Defense = Amount;}
 
+	FORCEINLINE float GetMovementSpeed() const {return MovementSpeed;}
+	FORCEINLINE void SetMovementSpeed(float Speed) {MovementSpeed = Speed;}
+
 	FORCEINLINE TArray<class AWeapon*> GetInventory() const {return Inventory;}
+
+	FORCEINLINE UParticleSystemComponent* GetHitUlitmateParticle() const {return HitUlitmateParticle;}
+	FORCEINLINE UParticleSystemComponent* GetHitUlitmateParticle2() const {return HitUlitmateParticle2;}
 };

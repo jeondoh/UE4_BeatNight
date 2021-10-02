@@ -29,6 +29,7 @@ AEnemyBullet::AEnemyBullet()
 	CanMove = false;
 	CanGuided = false;
 	CurveTime = 1.2f;
+	bUltimateBullet = false;
 }
 
 // Called when the game starts or when spawned
@@ -45,10 +46,12 @@ void AEnemyBullet::BeginPlay()
 		BulletLocation = GetActorLocation();
 		PlayerLocation = Player->GetActorLocation();
 
-		FVector NewLocation = PlayerLocation - GetActorLocation();
+		FVector NewLocation = PlayerLocation - BulletLocation;
 		NewLocation.Normalize();
 		Direction = NewLocation;
 	}
+	// 3초뒤 엑터가 존재하면 소멸
+	GetWorld()->GetTimerManager().SetTimer(DestoryHandler, this, &AEnemyBullet::DestroyBullet, 3.f);
 }
 
 // Called every frame
@@ -91,22 +94,18 @@ void AEnemyBullet::BoxCompBeginOverlap(UPrimitiveComponent* OverlappedComponent,
 		// Player에게 데미지 입힘
 		if(Enemy)
 		{
+			// BossStage2 에서만 사용
+			if(bUltimateBullet && Enemy->GetHpDown())
+			{
+				Enemy->SetUltimateDamaged(true);
+				TargetPlayer->GetHitUlitmateParticle()->SetVisibility(true);
+				TargetPlayer->GetHitUlitmateParticle2()->SetVisibility(true);
+			}
 			Enemy->DoDamage(TargetPlayer);
 		}
 		// 총알 제거
 		Destroy();
 	}
-
-	AEnemy* TargetEnemy = Cast<AEnemy>(OtherActor);
-	AEnemyBullet* TargetThis = Cast<AEnemyBullet>(OtherActor);
-
-	if(!TargetEnemy && !TargetThis && !TargetPlayer)
-	{
-		// 총 맞는 위치에 파티클 생성
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), OtherBulletParticles, GetActorTransform());
-		Destroy();
-	}
-	
 }
 
 void AEnemyBullet::StartCurveBullet()
@@ -141,9 +140,13 @@ void AEnemyBullet::GuidedLocation(float DeltaTime)
 	}
 }
 
-
 void AEnemyBullet::FinishGuided()
 {
 	CanGuided = false;
+}
+
+void AEnemyBullet::DestroyBullet()
+{
+	if(this) Destroy();
 }
 

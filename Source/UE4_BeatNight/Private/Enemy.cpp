@@ -9,6 +9,7 @@
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "Sound/SoundCue.h"
 
 // Sets default values
@@ -16,7 +17,7 @@ AEnemy::AEnemy()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	
 	// 변수 초기화
 	InitalizedData();
 
@@ -32,6 +33,9 @@ void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 
+	AgroSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	AttackSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	
 	// 컴포넌트 오버랩 바인딩
 	AgroSphere->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::AgroSphereBeginOverlap);
 	AgroSphere->OnComponentEndOverlap.AddDynamic(this, &AEnemy::AgroSphereEndOverlap);
@@ -42,6 +46,70 @@ void AEnemy::BeginPlay()
 void AEnemy::DoDamage(ABeatNightPlayer* Player)
 {
 	UGameplayStatics::ApplyDamage(Player, RandomizationDamage(EnemyDamage), EnemyController, this, UDamageType::StaticClass());
+	if(bUlitmateDamaged)
+	{
+		DamagedPlayer = Player;
+		GetWorldTimerManager().SetTimer(BossStage2Timer, this, &AEnemy::SetVisibilityPlayerParticle, UltimateDurationTime);		
+	}
+}
+
+float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+	AActor* DamageCauser)
+{
+	if(bDying) return 0;
+	
+	if(EnemyController)
+	{
+		// 타겟 어그로
+		EnemyController->GetBlackboardComponent()->SetValueAsObject(FName("Target"), DamageCauser);
+	}
+	Health -= DamageAmount;
+	if(Health <= 0.f)
+	{
+		Health = 0.f;
+		Die();
+	}
+	return DamageAmount;
+}
+
+void AEnemy::SetVisibilityPlayerParticle()
+{
+	SetUltimateDamaged(false);
+	DamagedPlayer->GetHitUlitmateParticle()->SetVisibility(false);
+	DamagedPlayer->GetHitUlitmateParticle2()->SetVisibility(false);
+}
+
+void AEnemy::Die()
+{
+	if(bDying) return;
+	bDying = true;
+	// TODO 체력바 숨기기
+	// HideHealthBar(); 
+	// 사망 몽타주 실행
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if(AnimInstance && DeathMontage)
+	{
+		AnimInstance->Montage_Play(DeathMontage);
+	}
+	if(EnemyController)
+	{
+		EnemyController->GetBlackboardComponent()->SetValueAsBool(FName("Death"), true);
+		EnemyController->GetBlackboardComponent()->SetValueAsObject(FName("Target"), nullptr);
+		EnemyController->StopMovement();
+	}
+	// 아이템 드롭
+	DropItem();
+}
+
+void AEnemy::FinishDeath()
+{
+	GetMesh()->bPauseAnims = true;
+	GetWorldTimerManager().SetTimer(DeathTimer, this, &AEnemy::DestoryEnemy, DeathTime);
+}
+
+void AEnemy::DestoryEnemy()
+{
+	Destroy();
 }
 
 // Called every frame
@@ -64,6 +132,13 @@ void AEnemy::InitalizedData()
 	Health = 100.f; // 체력
 	EnemyDamage = 10.f; // 데미지
 	bCanAttack = false; // 공격가능여부
+	MoveToTargetRange = 70.f; // Move 범위
+	bDying = false; // 사망여부
+	DeathTime = 2.f; // 사망 후 destroy 간격시간
+	bHPDown = false; // 남은 HP에 따라 변경(bossStage2에서만 사용)
+	bUlitmateDamaged = false; // Player가 Ultimate 데미지를 받았을 경우(BossStage2에서만 사용)
+	UlitmateDamaged = 10.f; // 추가 데미지
+	UltimateDurationTime = 10.f; // BossStage2 Ulitmate 공격 지속시간
 }
 
 void AEnemy::DropItem()
@@ -97,7 +172,12 @@ void AEnemy::SetEnemyAIController()
 		// ValueAs '' = 해당 타입의 변수값 Set
 		EnemyController->GetBlackboardComponent()->SetValueAsVector(TEXT("PatrolPoint"), WorldPatorlPoint);
 		EnemyController->GetBlackboardComponent()->SetValueAsVector(TEXT("PatrolPoint2"), WorldPatorlPoint2);
+		EnemyController->GetBlackboardComponent()->SetValueAsBool(TEXT("EndAttack"), true);
+		EnemyController->GetBlackboardComponent()->SetValueAsBool(TEXT("CanMove"), true);
 		EnemyController->RunBehaviorTree(BehaviorTree); // 루트노드에서 순차실행함.
+
+		AgroSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		AttackSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	}
 }
 
@@ -105,7 +185,7 @@ void AEnemy::AgroSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AA
     UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if(OtherActor == nullptr) return;
-
+	
 	ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(OtherActor);
 	if(Player)
 	{
@@ -124,7 +204,6 @@ void AEnemy::AgroSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AA
 		}
 	}
 }
-
 
 void AEnemy::AgroSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)

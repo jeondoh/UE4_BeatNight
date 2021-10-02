@@ -71,6 +71,9 @@ private:
 	/** Interp 타이머 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Bullet|Props", meta=(AllowPrivateAccess=true))
 	FTimerHandle ItemInerpTimer;
+	/** Ulitmate 총알일시 TRUE */
+	UPROPERTY(EditAnywhere, Category="Bullet|Props", meta=(AllowPrivateAccess=true))
+	bool bUltimateBullet;
 	/** BeginPlay시 총알 위치 */
 	UPROPERTY()
 	FVector BulletLocation;
@@ -103,6 +106,12 @@ private:
 	UFUNCTION()
 	void BoxCompBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UPROPERTY()
+	FTimerHandle DestoryHandler;
+
+	UFUNCTION()
+	void DestroyBullet();
 
 	/**************************************************************************************************/
 };
