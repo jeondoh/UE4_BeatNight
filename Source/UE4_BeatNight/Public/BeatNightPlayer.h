@@ -64,6 +64,10 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Char|Props", meta=(AllowPrivateAccess=true))
 	float MovementSpeed;
 
+	/** 스테이지 정보 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Char|Props", meta=(AllowPrivateAccess=true))
+	FName PlayerStageName;
+
 	void Die();
 	
 	/**************************************************************************************************/
@@ -98,6 +102,9 @@ private:
 
 public:
 	FORCEINLINE float GetMaxHealth() const {return MaxHealth;}
+
+	FORCEINLINE FName GetPlayerStageName() const {return PlayerStageName;}
+	FORCEINLINE void SetPlayerStageName(FName Name) {PlayerStageName = Name;}
 	
 	FORCEINLINE float GetHealth() const {return Health;}
 	FORCEINLINE void SetHealth(float Amount) {Health = Amount;}
