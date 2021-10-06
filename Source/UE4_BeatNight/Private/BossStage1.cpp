@@ -95,6 +95,7 @@ void ABossStage1::SpawnSpider()
 		for(int i = 0; i < Arr.Num(); ++i)
 		{
 			ASpawnSpiderEnemy* FindSpawnActor = dynamic_cast<ASpawnSpiderEnemy*>(Arr[i]);
+			FindSpawnActor->bDropItem = false;
 			FindSpawnActor->SpawnEnemy();
 		}	
 	}

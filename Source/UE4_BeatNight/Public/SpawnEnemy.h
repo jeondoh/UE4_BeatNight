@@ -20,25 +20,23 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UFUNCTION()
+	void SpawnEnemy();
 
 private:
+	/** 태그명 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="EnemySpawn", meta=(AllowPrivateAccess=true))
+	FName TagName;
+	
 	/**************************************************************************************************/
 	// Enemy 스폰
 
-	/** 스폰 타이머 */
-	UPROPERTY(meta=(AllowPrivateAccess=true))
-	FTimerHandle SpawnTimerHandle;
-	/** 스폰 딜레이 시간 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="EnemySpawn", meta=(AllowPrivateAccess=true))
-	int32 SpawnDelayTime;
 	/** 스폰 타입 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="EnemySpawn", meta=(AllowPrivateAccess=true))
 	TSubclassOf<class AEnemy> SpawnEnemyType;
-	/** 스폰시 지정할 몬스터 이름 */
+	/** 스폰시 지정할 몬스터.명 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="EnemySpawn", meta=(AllowPrivateAccess=true))
-	FString SpawnMonsterName;
+	FName SpawnMonsterName;
 	/** 적이 이동할 지점
 	* MakeEditWidget = 해당 엑터의 위치를 중심으로 한 로컬 위치
 	*/
@@ -47,11 +45,5 @@ private:
 	UPROPERTY(EditAnywhere, Category="EnemySpawn", meta=(AllowPrivateAccess=true, MakeEditWidget=true))
 	FVector PatrolPoint2;
 
-	UFUNCTION()
-	void SpawnEnemyToDelay();
-
-	UFUNCTION()
-	void SpawnEnemy();
-	
 	/**************************************************************************************************/
 };

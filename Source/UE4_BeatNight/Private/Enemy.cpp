@@ -5,6 +5,7 @@
 #include "Item.h"
 #include "BeatNightPlayer.h"
 #include "EnemyAIController.h"
+#include "PotalActor.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -16,7 +17,7 @@
 AEnemy::AEnemy()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	
 	// 변수 초기화
 	InitalizedData();
@@ -26,6 +27,8 @@ AEnemy::AEnemy()
 	
 	AttackSphere = CreateDefaultSubobject<USphereComponent>(TEXT("AttackSphere"));
 	AttackSphere->SetupAttachment(GetRootComponent());
+	// 태그 추가
+	Tags.Add(TagName);
 }
 
 // Called when the game starts or when spawned
@@ -104,19 +107,64 @@ void AEnemy::Die()
 void AEnemy::FinishDeath()
 {
 	GetMesh()->bPauseAnims = true;
-	GetWorldTimerManager().SetTimer(DeathTimer, this, &AEnemy::DestoryEnemy, DeathTime);
+	GetWorldTimerManager().SetTimer(DeathTimer, this, &AEnemy::DestroyEnemy, DeathTime);
 }
 
-void AEnemy::DestoryEnemy()
+void AEnemy::DestroyEnemy()
 {
+	CheckDestroyEnemy(); // SpawnEnemy 엑터삭제
 	Destroy();
 }
 
-// Called every frame
-void AEnemy::Tick(float DeltaTime)
+void AEnemy::CheckDestroyEnemy()
 {
-	Super::Tick(DeltaTime);
-
+	TArray<AActor*> arrOutActors;
+	// BossStage1일 경우 
+	if(MonsterName.IsEqual(TEXT("BossStage1")))
+	{
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemy::StaticClass(), arrOutActors);
+		if(arrOutActors.IsValidIndex(0))
+		{
+			// 월드에 남아있는 몬스터 전부 제거
+			for(int i = 0; i < arrOutActors.Num(); ++i)
+			{
+				AEnemy* FindSpawnEnemy = dynamic_cast<AEnemy*>(arrOutActors[i]);
+				if(FindSpawnEnemy)
+				{
+					FindSpawnEnemy->Destroy();
+				}
+			}
+		}
+	}
+	else
+	{
+		// 월드에 남아있는 몬스터 확인
+		UGameplayStatics::GetAllActorsWithTag(GetWorld(), TagName, arrOutActors);
+		int MonsterNum = 0;
+		if(arrOutActors.IsValidIndex(0))
+		{
+			for(int i = 0; i < arrOutActors.Num(); ++i)
+			{
+				AEnemy* FindSpawnEnemy = dynamic_cast<AEnemy*>(arrOutActors[i]);
+				if(FindSpawnEnemy)
+				{
+					MonsterNum++;					
+				}
+			}
+		}
+		// 월드에 남아있는 몬스터가 없을 경우 포탈 작동하게
+		if(MonsterNum==0){
+			for(int i = 0; i < arrOutActors.Num(); ++i)
+			{
+				APotalActor* FindPotal = dynamic_cast<APotalActor*>(arrOutActors[i]);
+				if(FindPotal)
+				{
+					FindPotal->SetbCanMove(true);
+					FindPotal->GetPortalParticle()->SetVisibility(true);
+				}
+			}
+		}
+	}
 }
 
 // Called to bind functionality to input
@@ -134,7 +182,7 @@ void AEnemy::InitalizedData()
 	bCanAttack = false; // 공격가능여부
 	MoveToTargetRange = 70.f; // Move 범위
 	bDying = false; // 사망여부
-	DeathTime = 2.f; // 사망 후 destroy 간격시간
+	DeathTime = 1.f; // 사망 후 destroy 간격시간
 	bHPDown = false; // 남은 HP에 따라 변경(bossStage2에서만 사용)
 	bUlitmateDamaged = false; // Player가 Ultimate 데미지를 받았을 경우(BossStage2에서만 사용)
 	UlitmateDamaged = 10.f; // 추가 데미지

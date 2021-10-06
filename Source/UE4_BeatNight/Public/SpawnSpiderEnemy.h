@@ -19,10 +19,11 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
+public:
+	/** 죽을때 드롭여부 */
+	UPROPERTY()
+	bool bDropItem;
+	
 	UFUNCTION()
 	void SpawnEnemy();
 
@@ -35,7 +36,8 @@ private:
 	TSubclassOf<class AEnemy> SpawnEnemyType;
 	/** 스폰시 지정할 몬스터 이름 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="EnemySpawn", meta=(AllowPrivateAccess=true))
-	FString SpawnMonsterName;
+	FName SpawnMonsterName;
 
 	/**************************************************************************************************/
+
 };

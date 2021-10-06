@@ -60,9 +60,12 @@ protected:
 	/** 데미지 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
 	float EnemyDamage;
+	/** 스테이지에 따른 몬스터 태그명 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
+	FName TagName;
 	/** 스테이지에 따른 몬스터명 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
-	FString MonsterName;
+	FName MonsterName;
 	/** 공격가능여부(AnimInstance에서 사용) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
 	bool bCanAttack;
@@ -91,7 +94,9 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	virtual void FinishDeath();
 	/** 사망이후 애니메이션 멈춤 */
-	void DestoryEnemy();
+	void DestroyEnemy();
+	/** 사망이후 SpawnEnemy까지 삭제 */
+	void CheckDestroyEnemy();
 	/** 데미지 랜덤화 */
 	float RandomizationDamage(float Damage);
 	/** False : HP가 60% 이상일때 True : HP가 40%미만일때 */
@@ -110,9 +115,6 @@ protected:
 	/**************************************************************************************************/
 	
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -196,8 +198,10 @@ private:
 
 // Getter & Setter
 public:
-	FORCEINLINE FString GetMonsterName() const {return MonsterName;}
-	FORCEINLINE void SetMonsterName(FString Name) {MonsterName = Name;}
+	FORCEINLINE void SetMonsterName(FName Name) {MonsterName = Name;}
+	
+	FORCEINLINE FName GetMonsterTagName() const {return TagName;}
+	FORCEINLINE void SetMonsterTagName(FName Name) {TagName = Name;}
 
 	FORCEINLINE UBehaviorTree* GetBehaviorTree() const {return BehaviorTree;}
 
@@ -213,6 +217,8 @@ public:
 	FORCEINLINE AEnemyAIController* GetEnemyController() {return EnemyController;}
 
 	FORCEINLINE bool GetHpDown() const {return bHPDown;}
+
+	FORCEINLINE void SetbDropItem(bool Drop) {bDropItem = Drop;}
 
 	FORCEINLINE bool GetUltimateDamaged() const {return bUlitmateDamaged;}
 	FORCEINLINE void SetUltimateDamaged(bool bDmaged) {bUlitmateDamaged = bDmaged;}

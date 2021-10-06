@@ -8,9 +8,7 @@
 ASpawnEnemy::ASpawnEnemy()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
-	SpawnDelayTime = 1.0f; // 스폰 딜레이 시간
+	PrimaryActorTick.bCanEverTick = false;
 }
 
 // Called when the game starts or when spawned
@@ -18,33 +16,7 @@ void ASpawnEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SpawnEnemyToDelay(); // Enemy 스폰
-}
-
-// Called every frame
-void ASpawnEnemy::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-	// 스테이지 몬스터 존재 확인(추후 스테이지 작업시 사용)
-	/*
-	TArray<AActor*> arrOutActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemy::StaticClass(), arrOutActors);
-
-	if(arrOutActors.IsValidIndex(0))
-	{
-		for(int i = 0; i < arrOutActors.Num(); ++i)
-		{
-			AEnemy* FindEnemy = dynamic_cast<AEnemy*>(arrOutActors[i]);
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *FindEnemy->GetMonsterName());
-		}	
-	}
-	*/
-}
-
-void ASpawnEnemy::SpawnEnemyToDelay()
-{
-	GetWorld()->GetTimerManager().SetTimer(SpawnTimerHandle, this, &ASpawnEnemy::SpawnEnemy, SpawnDelayTime);
+	Tags.Add(TagName);
 }
 
 void ASpawnEnemy::SpawnEnemy()
@@ -61,10 +33,10 @@ void ASpawnEnemy::SpawnEnemy()
 	if(CastEnemy)
 	{
 		CastEnemy->SetMonsterName(SpawnMonsterName); // 스테이지 구별을 위해 몬스터명 지정
+		CastEnemy->SetMonsterTagName(TagName); // 스테이지 구별을 위해 몬스터명 지정
 		CastEnemy->SetPatrolPoint(PatrolPoint); // 정찰 포인트1
 		CastEnemy->SetPatrolPoint2(PatrolPoint2); // 정찰 포인트2
 		// Enemy의 BehaviorTree설정 (AI 동작)
 		CastEnemy->SetEnemyAIController();
 	}
-	GetWorld()->GetTimerManager().ClearTimer(SpawnTimerHandle);
 }
