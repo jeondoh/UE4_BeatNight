@@ -33,7 +33,7 @@ void ASpawnEnemy::SpawnEnemy()
 	if(CastEnemy)
 	{
 		CastEnemy->SetMonsterName(SpawnMonsterName); // 스테이지 구별을 위해 몬스터명 지정
-		CastEnemy->SetMonsterTagName(SpawnMonsterTagName); // 스테이지 구별을 위해 몬스터명 지정
+		CastEnemy->SetMonsterTagName(TagName); // 스테이지 구별을 위해 몬스터명 지정
 		CastEnemy->SetPatrolPoint(PatrolPoint); // 정찰 포인트1
 		CastEnemy->SetPatrolPoint2(PatrolPoint2); // 정찰 포인트2
 		// Enemy의 BehaviorTree설정 (AI 동작)
