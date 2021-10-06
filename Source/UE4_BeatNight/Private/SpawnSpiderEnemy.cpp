@@ -13,22 +13,14 @@
 ASpawnSpiderEnemy::ASpawnSpiderEnemy()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
+	PrimaryActorTick.bCanEverTick = false;
+	bDropItem = true;
 }
 
 // Called when the game starts or when spawned
 void ASpawnSpiderEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void ASpawnSpiderEnemy::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 
 void ASpawnSpiderEnemy::SpawnEnemy()
@@ -43,6 +35,7 @@ void ASpawnSpiderEnemy::SpawnEnemy()
 	AEnemy* CastEnemy = GetWorld()->SpawnActor<AEnemy>(SpawnEnemyType, GetActorLocation(), GetActorRotation(), Param);
 	if(CastEnemy)
 	{
+		CastEnemy->SetbDropItem(bDropItem);
 		CastEnemy->SetMonsterName(SpawnMonsterName); // 스테이지 구별을 위해 몬스터명 지정
 		CastEnemy->SetEnemyAIController(); // Enemy의 BehaviorTree설정 (AI 동작)
 		// 소환된 거미가 바로 캐릭터에게 이동(공격)할 수 있도록

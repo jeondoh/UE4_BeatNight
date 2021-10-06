@@ -19,10 +19,11 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
+public:
+	/** 죽을때 드롭여부 */
+	UPROPERTY()
+	bool bDropItem;
+	
 	UFUNCTION()
 	void SpawnEnemy();
 
@@ -38,4 +39,5 @@ private:
 	FName SpawnMonsterName;
 
 	/**************************************************************************************************/
+
 };

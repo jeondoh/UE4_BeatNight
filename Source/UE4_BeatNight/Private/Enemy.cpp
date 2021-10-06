@@ -17,7 +17,7 @@
 AEnemy::AEnemy()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	
 	// 변수 초기화
 	InitalizedData();
@@ -132,8 +132,6 @@ void AEnemy::CheckDestroyEnemy()
 				if(FindSpawnEnemy)
 				{
 					FindSpawnEnemy->Destroy();
-					// 아이템 드롭
-					DropItem();	
 				}
 			}
 		}
@@ -167,13 +165,6 @@ void AEnemy::CheckDestroyEnemy()
 			}
 		}
 	}
-}
-
-// Called every frame
-void AEnemy::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input

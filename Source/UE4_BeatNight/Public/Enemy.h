@@ -115,9 +115,6 @@ protected:
 	/**************************************************************************************************/
 	
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -220,6 +217,8 @@ public:
 	FORCEINLINE AEnemyAIController* GetEnemyController() {return EnemyController;}
 
 	FORCEINLINE bool GetHpDown() const {return bHPDown;}
+
+	FORCEINLINE void SetbDropItem(bool Drop) {bDropItem = Drop;}
 
 	FORCEINLINE bool GetUltimateDamaged() const {return bUlitmateDamaged;}
 	FORCEINLINE void SetUltimateDamaged(bool bDmaged) {bUlitmateDamaged = bDmaged;}
