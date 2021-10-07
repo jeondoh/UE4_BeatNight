@@ -37,25 +37,24 @@ void APotalActor::BeginPlay()
 
 	const FVector ArrowLocation{Arrow->GetForwardVector()};
 	MoveToLocation = GetActorLocation() + ArrowLocation * -500;
-
+	
+	Tags.Add(TagName);
+	
 	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &APotalActor::BoxCompBeginOverlap);
 	BoxComponent->OnComponentEndOverlap.AddDynamic(this, &APotalActor::BoxCompEndOverlap);
-
-	Tags.Add(TagName);
 }
 
 void APotalActor::BoxCompBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if(OtherActor) return;
-	
+	if(OtherActor == nullptr) return;
+
 	if(bCanMove)
 	{
 		ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(OtherActor);
 		if(Player)
 		{
-			Player->SetActorLocation(MoveToLocation);
-			bCanMove = false;
+			PlayLevelSeq(Player);
 		}
 	}
 }
@@ -63,7 +62,7 @@ void APotalActor::BoxCompBeginOverlap(UPrimitiveComponent* OverlappedComponent, 
 void APotalActor::BoxCompEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	if(OtherActor) return;
+	if(OtherActor  == nullptr) return;
 	
 	ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(OtherActor);
 	if(Player)

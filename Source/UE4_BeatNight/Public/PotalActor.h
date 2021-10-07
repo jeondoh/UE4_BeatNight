@@ -14,6 +14,9 @@ class UE4_BEATNIGHT_API APotalActor : public AActor
 public:	
 	// Sets default values for this actor's properties
 	APotalActor();
+	/** 레벨 시퀀스 실행 */
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayLevelSeq(class ABeatNightPlayer* Player);
 
 protected:
 	// Called when the game starts or when spawned
@@ -33,10 +36,10 @@ private:
 	UPROPERTY(VisibleAnywhere, Category="Component", meta=(AllowPrivateAccess=true))
 	class UParticleSystemComponent* PortalParticle;
 	/** 순간이동 위치 */
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess=true))
 	FVector MoveToLocation;
 	/** 이동여부 */
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess=true))
 	bool bCanMove;
 	/** 태그명 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Potal", meta=(AllowPrivateAccess=true))

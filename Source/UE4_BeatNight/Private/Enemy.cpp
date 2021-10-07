@@ -6,6 +6,7 @@
 #include "BeatNightPlayer.h"
 #include "EnemyAIController.h"
 #include "PotalActor.h"
+#include "SpawnEnemy.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -27,8 +28,6 @@ AEnemy::AEnemy()
 	
 	AttackSphere = CreateDefaultSubobject<USphereComponent>(TEXT("AttackSphere"));
 	AttackSphere->SetupAttachment(GetRootComponent());
-	// 태그 추가
-	Tags.Add(TagName);
 }
 
 // Called when the game starts or when spawned
@@ -44,6 +43,9 @@ void AEnemy::BeginPlay()
 	AgroSphere->OnComponentEndOverlap.AddDynamic(this, &AEnemy::AgroSphereEndOverlap);
 	AttackSphere->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::AttackSphereBeginOverlap);
 	AttackSphere->OnComponentEndOverlap.AddDynamic(this, &AEnemy::AttackSphereEndOverlap);
+
+	// 태그 추가
+	Tags.Add(TagName);
 }
 
 void AEnemy::DoDamage(ABeatNightPlayer* Player)
@@ -89,6 +91,13 @@ void AEnemy::Die()
 	// TODO 체력바 숨기기
 	// HideHealthBar(); 
 	// 사망 몽타주 실행
+	PlayDeathAnim();
+	// 아이템 드롭
+	DropItem();
+}
+
+void AEnemy::PlayDeathAnim()
+{
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if(AnimInstance && DeathMontage)
 	{
@@ -100,8 +109,6 @@ void AEnemy::Die()
 		EnemyController->GetBlackboardComponent()->SetValueAsObject(FName("Target"), nullptr);
 		EnemyController->StopMovement();
 	}
-	// 아이템 드롭
-	DropItem();
 }
 
 void AEnemy::FinishDeath()
@@ -112,15 +119,20 @@ void AEnemy::FinishDeath()
 
 void AEnemy::DestroyEnemy()
 {
-	CheckDestroyEnemy(); // SpawnEnemy 엑터삭제
+	if(MonsterName.IsEqual(TEXT("BossStage1")))
+	{
+		IsBoosStage1 = true;
+	}
 	Destroy();
+	CheckDestroyEnemy(); // SpawnEnemy 엑터삭제
 }
 
 void AEnemy::CheckDestroyEnemy()
 {
 	TArray<AActor*> arrOutActors;
+	int MonsterNum = 0;
 	// BossStage1일 경우 
-	if(MonsterName.IsEqual(TEXT("BossStage1")))
+	if(IsBoosStage1)
 	{
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemy::StaticClass(), arrOutActors);
 		if(arrOutActors.IsValidIndex(0))
@@ -131,16 +143,17 @@ void AEnemy::CheckDestroyEnemy()
 				AEnemy* FindSpawnEnemy = dynamic_cast<AEnemy*>(arrOutActors[i]);
 				if(FindSpawnEnemy)
 				{
-					FindSpawnEnemy->Destroy();
+					FindSpawnEnemy->bDying = true;
+					FindSpawnEnemy->PlayDeathAnim();
 				}
 			}
 		}
+		IsBoosStage1 = false;
 	}
 	else
 	{
 		// 월드에 남아있는 몬스터 확인
-		UGameplayStatics::GetAllActorsWithTag(GetWorld(), TagName, arrOutActors);
-		int MonsterNum = 0;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemy::StaticClass(), arrOutActors);
 		if(arrOutActors.IsValidIndex(0))
 		{
 			for(int i = 0; i < arrOutActors.Num(); ++i)
@@ -152,16 +165,24 @@ void AEnemy::CheckDestroyEnemy()
 				}
 			}
 		}
-		// 월드에 남아있는 몬스터가 없을 경우 포탈 작동하게
-		if(MonsterNum==0){
-			for(int i = 0; i < arrOutActors.Num(); ++i)
+	}
+	// 월드에 남아있는 몬스터가 없을 경우 포탈 작동하게
+	if(MonsterNum==0){
+		TArray<AActor*> FindLastArray;
+		UGameplayStatics::GetAllActorsWithTag(GetWorld(), TagName, FindLastArray);
+		
+		for(int i = 0; i < FindLastArray.Num(); ++i)
+		{
+			APotalActor* FindPotal = dynamic_cast<APotalActor*>(FindLastArray[i]);
+			ASpawnEnemy* SpawnActorEnemy = dynamic_cast<ASpawnEnemy*>(FindLastArray[i]);
+			if(FindPotal)
 			{
-				APotalActor* FindPotal = dynamic_cast<APotalActor*>(arrOutActors[i]);
-				if(FindPotal)
-				{
-					FindPotal->SetbCanMove(true);
-					FindPotal->GetPortalParticle()->SetVisibility(true);
-				}
+				FindPotal->SetbCanMove(true);
+				FindPotal->GetPortalParticle()->SetVisibility(true);
+			}
+			if(SpawnActorEnemy)
+			{
+				SpawnActorEnemy->Destroy();
 			}
 		}
 	}
@@ -187,6 +208,7 @@ void AEnemy::InitalizedData()
 	bUlitmateDamaged = false; // Player가 Ultimate 데미지를 받았을 경우(BossStage2에서만 사용)
 	UlitmateDamaged = 10.f; // 추가 데미지
 	UltimateDurationTime = 10.f; // BossStage2 Ulitmate 공격 지속시간
+	IsBoosStage1 = false; // BossStage1 = True, 사망시 월드 내 모든 몬스터 제거
 }
 
 void AEnemy::DropItem()

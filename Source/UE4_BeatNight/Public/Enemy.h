@@ -86,10 +86,17 @@ protected:
 	/** Ultimate 추가 데미지 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
 	float UlitmateDamaged;
+	/** BossStage1 = True, 사망시 월드 내 모든 몬스터 제거 */
+	UPROPERTY()
+	bool IsBoosStage1;
 	/** 플레이어에게 데미지 받을때 */
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	/** 사망 */
+	UFUNCTION()
 	void Die();
+	/** 사망 애니메이션 실행 */
+	UFUNCTION()
+	void PlayDeathAnim();
 	/** 사망이후 애니메이션 멈춤 */
 	UFUNCTION(BlueprintCallable)
 	virtual void FinishDeath();
