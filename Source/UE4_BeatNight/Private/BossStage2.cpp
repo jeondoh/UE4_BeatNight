@@ -136,9 +136,11 @@ void ABossStage2::BossGunShot()
 	{
 		AEnemyBullet* Bullet = GetWorld()->SpawnActor<AEnemyBullet>(SpawnBullet,
 			SocketTransForm.GetLocation(), GetActorRotation(), Params);
-
-		Bullet->SetBulletInfos(this, BulletSpeed);
-		--LastAmmo; // 총알 수 줄어듬
+		if(Bullet)
+		{
+			Bullet->SetBulletInfos(this, BulletSpeed);
+			--LastAmmo; // 총알 수 줄어듬
+		}
 	}
 }
 
@@ -171,8 +173,10 @@ void ABossStage2::BossUltimateAttack()
 	{
 		AEnemyBullet* Bullet = GetWorld()->SpawnActor<AEnemyBullet>(SpawnBulletUltimate,
 			SocketTransForm.GetLocation(), GetActorRotation(), Params);
-
-		Bullet->SetBulletInfos(this, BulletSpeed);
+		if(Bullet)
+		{
+			Bullet->SetBulletInfos(this, BulletSpeed);			
+		}
 	}
 }
 
@@ -203,9 +207,11 @@ void ABossStage2::BossGuidedMissile()
 			
 			AEnemyBullet* Bullet = GetWorld()->SpawnActor<AEnemyBullet>(SpawnGuidedBullet,
 				RandomLocation, GetActorRotation(), Params);
-			
-			Bullet->SetBulletInfos(this, 0);
-			Bullet->StartCurveBullet();
+			if(Bullet)
+			{
+				Bullet->SetBulletInfos(this, 0);
+				Bullet->StartCurveBullet();				
+			}
 		}
 	}
 }
