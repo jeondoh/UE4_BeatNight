@@ -13,5 +13,26 @@ UCLASS()
 class UE4_BEATNIGHT_API AWasps : public AEnemy
 {
 	GENERATED_BODY()
-	
+
+public:
+	AWasps();
+
+private:
+
+	/** 총알 스폰 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Boss|Props", meta=(AllowPrivateAccess=true))
+	TSubclassOf<class AEnemyBullet> SpawnBullet;
+
+	/** 총알 속도 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Boss|Props", meta=(AllowPrivateAccess=true))
+	float BulletSpeed;
+
+	/** 공격 Delay 시간 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Boss|Props", meta=(AllowPrivateAccess=true))
+	float DelayAttackTime;
+
+	UFUNCTION(BlueprintCallable)
+	void Attack();
+
+	virtual void FinishDeath() override;
 };

@@ -174,16 +174,18 @@ void AEnemy::CheckDestroyEnemy()
 		for(int i = 0; i < FindLastArray.Num(); ++i)
 		{
 			APotalActor* FindPotal = dynamic_cast<APotalActor*>(FindLastArray[i]);
-			ASpawnEnemy* SpawnActorEnemy = dynamic_cast<ASpawnEnemy*>(FindLastArray[i]);
+			// ASpawnEnemy* SpawnActorEnemy = dynamic_cast<ASpawnEnemy*>(FindLastArray[i]);
 			if(FindPotal)
 			{
 				FindPotal->SetbCanMove(true);
 				FindPotal->GetPortalParticle()->SetVisibility(true);
 			}
+			/*
 			if(SpawnActorEnemy)
 			{
 				SpawnActorEnemy->Destroy();
 			}
+			*/
 		}
 	}
 }
