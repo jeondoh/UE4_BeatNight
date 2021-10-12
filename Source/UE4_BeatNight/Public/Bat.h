@@ -4,18 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "Enemy.h"
-#include "Wasps.generated.h"
+#include "Bat.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class UE4_BEATNIGHT_API AWasps : public AEnemy
+class UE4_BEATNIGHT_API ABat : public AEnemy
 {
 	GENERATED_BODY()
 
 public:
-	AWasps();
+	ABat();
 
 private:
 	/** 총알 스폰 */
@@ -34,4 +34,5 @@ private:
 	void Attack();
 
 	virtual void FinishDeath() override;
+	
 };
