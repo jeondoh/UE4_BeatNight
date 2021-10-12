@@ -53,10 +53,10 @@ protected:
 	
 	/** 최대 체력 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
-	int32 MaxHealth;
+	float MaxHealth;
 	/** 체력 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
-	int32 Health;
+	float Health;
 	/** 데미지 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
 	float EnemyDamage;

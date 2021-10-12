@@ -45,6 +45,7 @@ float ABossStage2::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 	if(Health <= 0.f)
 	{
 		Health = 0.f;
+		SetVisibilityPlayerParticle(); // 파티클 제거
 		Die();
 	}
 	return DamageAmount;
@@ -53,7 +54,7 @@ float ABossStage2::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 void ABossStage2::CheckHP()
 {
 	if(Health < 0) return;
-	int32 HealthComp = MaxHealth * 0.4;
+	float HealthComp = MaxHealth * 0.4;
 	// 피가 40% 미만일 경우 패턴변경 
 	if(HealthComp > Health)
 	{
@@ -220,7 +221,7 @@ FName ABossStage2::GetAttackSectionName()
 {
 	FName SectionName;
 	const int32 Section{FMath::RandRange(1, 100)};
-
+	/*
 	if(Section >= 1 && Section <= 40)
 	{
 		// 40%
@@ -252,5 +253,11 @@ FName ABossStage2::GetAttackSectionName()
 		BulletSpeed = 2200.f; // 총알 속도
 		EnemyDamage = bUlitmateDamaged ? 50.f + UlitmateDamaged : 50.f; // 데미지
 	}
+	*/
+	// 10%
+	SectionName = AttackUlitmate;
+	DelayTime = 3.5f; // 대기시간
+	BulletSpeed = 2200.f; // 총알 속도
+	EnemyDamage = bUlitmateDamaged ? 50.f + UlitmateDamaged : 50.f; // 데미지
 	return SectionName;
 }

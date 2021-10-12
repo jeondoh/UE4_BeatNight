@@ -6,7 +6,6 @@
 #include "BeatNightPlayer.h"
 #include "EnemyAIController.h"
 #include "PotalActor.h"
-#include "SpawnEnemy.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -54,7 +53,7 @@ void AEnemy::DoDamage(ABeatNightPlayer* Player)
 	if(bUlitmateDamaged)
 	{
 		DamagedPlayer = Player;
-		GetWorldTimerManager().SetTimer(BossStage2Timer, this, &AEnemy::SetVisibilityPlayerParticle, UltimateDurationTime);		
+		GetWorldTimerManager().SetTimer(BossStage2Timer, this, &AEnemy::SetVisibilityPlayerParticle, UltimateDurationTime, false);		
 	}
 }
 
