@@ -15,7 +15,7 @@ ABat::ABat()
 void ABat::Attack()
 {
 	// Boss Enemy 소켓 가져오기
-	const USkeletalMeshSocket* MuzzleSocket = GetMesh()->GetSocketByName("SpineBulletSocket");
+	const USkeletalMeshSocket* MuzzleSocket = GetMesh()->GetSocketByName("BatBulletSocket");
 	const FTransform SocketTransForm = MuzzleSocket->GetSocketTransform(GetMesh());
 	// 스폰
 	FActorSpawnParameters Params;
