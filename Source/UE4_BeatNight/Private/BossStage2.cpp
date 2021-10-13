@@ -45,6 +45,7 @@ float ABossStage2::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 	if(Health <= 0.f)
 	{
 		Health = 0.f;
+		SetVisibilityPlayerParticle(); // 파티클 제거
 		Die();
 	}
 	return DamageAmount;
@@ -53,7 +54,7 @@ float ABossStage2::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 void ABossStage2::CheckHP()
 {
 	if(Health < 0) return;
-	int32 HealthComp = MaxHealth * 0.4;
+	float HealthComp = MaxHealth * 0.4;
 	// 피가 40% 미만일 경우 패턴변경 
 	if(HealthComp > Health)
 	{
@@ -136,9 +137,11 @@ void ABossStage2::BossGunShot()
 	{
 		AEnemyBullet* Bullet = GetWorld()->SpawnActor<AEnemyBullet>(SpawnBullet,
 			SocketTransForm.GetLocation(), GetActorRotation(), Params);
-
-		Bullet->SetBulletInfos(this, BulletSpeed);
-		--LastAmmo; // 총알 수 줄어듬
+		if(Bullet)
+		{
+			Bullet->SetBulletInfos(this, BulletSpeed);
+			--LastAmmo; // 총알 수 줄어듬
+		}
 	}
 }
 
@@ -171,8 +174,10 @@ void ABossStage2::BossUltimateAttack()
 	{
 		AEnemyBullet* Bullet = GetWorld()->SpawnActor<AEnemyBullet>(SpawnBulletUltimate,
 			SocketTransForm.GetLocation(), GetActorRotation(), Params);
-
-		Bullet->SetBulletInfos(this, BulletSpeed);
+		if(Bullet)
+		{
+			Bullet->SetBulletInfos(this, BulletSpeed);			
+		}
 	}
 }
 
@@ -203,9 +208,11 @@ void ABossStage2::BossGuidedMissile()
 			
 			AEnemyBullet* Bullet = GetWorld()->SpawnActor<AEnemyBullet>(SpawnGuidedBullet,
 				RandomLocation, GetActorRotation(), Params);
-			
-			Bullet->SetBulletInfos(this, 0);
-			Bullet->StartCurveBullet();
+			if(Bullet)
+			{
+				Bullet->SetBulletInfos(this, 0);
+				Bullet->StartCurveBullet();				
+			}
 		}
 	}
 }

@@ -49,7 +49,8 @@ void AStageDivActor::BoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, A
 				ASpawnEnemy* FindSpawnEnemy = dynamic_cast<ASpawnEnemy*>(arrOutActors[i]);
 				if(FindSpawnEnemy)
 				{
-					FindSpawnEnemy->SpawnEnemy();					
+					FindSpawnEnemy->SpawnEnemy();
+					FindSpawnEnemy->Destroy();
 				}
 			}
 		}
