@@ -6,6 +6,7 @@
 #include "DrawDebugHelpers.h"
 #include "Enemy.h"
 #include "EnemyAIController.h"
+#include "Weapon.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
 
@@ -25,6 +26,8 @@ ABeatNightPlayer::ABeatNightPlayer()
 
 	HitUlitmateParticle->SetVisibility(false);
 	HitUlitmateParticle2->SetVisibility(false);
+
+	bCanInventory = false;
 }
 
 // Called when the game starts or when spawned
@@ -77,6 +80,26 @@ void ABeatNightPlayer::InitalizedData()
 void ABeatNightPlayer::Die()
 {
 	
+}
+
+bool ABeatNightPlayer::CheckInventory(int Index)
+{
+	if(Inventory[Index] == nullptr)
+	{
+		return true;
+	}
+	return false;
+}
+
+bool ABeatNightPlayer::AddInventory(AWeapon* AttachWeapon)
+{
+	if(InventoryIndex == -1) return false;
+	if(bCanInventory && AttachWeapon)
+	{
+		Inventory[InventoryIndex] = AttachWeapon;
+		return true;
+	}
+	return false;
 }
 
 void ABeatNightPlayer::TraceEnemyToDamage(FVector StartLocation, FVector EndLocation, float WeaponDamage)

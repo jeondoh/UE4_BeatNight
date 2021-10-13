@@ -27,6 +27,10 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VR|Variables", meta = (AllowPrivateAccess = "true"))
 	AActor* AttachedActor;
 
+	/** Player Class > Blueprint에서 초기화 해줌 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="VR|Props", meta=(AllowPrivateAccess=true))
+	class ABeatNightPlayer* MotionPlayer;
+
 public:
 	FORCEINLINE AActor* GetAttachedActor() const {return AttachedActor;}
 

@@ -96,6 +96,18 @@ private:
 	/** VR Widget Interaction */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Char|VR", meta = (AllowPrivateAccess = true))
 	class UWidgetInteractionComponent* WidgetComp;
+	/** 인벤토리 장착 여부 확인(Overlap 되었을때) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Char|Inventory", meta=(AllowPrivateAccess=true))
+	bool bCanInventory;
+	/** 인벤토리 인덱스(Overlap 되었을때) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Char|Inventory", meta=(AllowPrivateAccess=true))
+	int InventoryIndex;
+	/** 인벤토리 확인 */
+	UFUNCTION(BlueprintCallable)
+	bool CheckInventory(int Index);
+	/** 무기 Attach */
+	UFUNCTION(BlueprintCallable)
+	bool AddInventory(class AWeapon* AttachWeapon);
 
 	/**************************************************************************************************/
 	// Enemy 상호작용
