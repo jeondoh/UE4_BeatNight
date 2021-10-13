@@ -60,6 +60,10 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Char|Inventory", meta=(AllowPrivateAccess=true))
 	TArray<class AWeapon*> Inventory;
 
+	/** 캐릭터 인벤토리 Class */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Char|Inventory", meta=(AllowPrivateAccess=true))
+	class AInventory* BPInventory;
+
 	/** 캐릭터 이동속도 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Char|Props", meta=(AllowPrivateAccess=true))
 	float MovementSpeed;

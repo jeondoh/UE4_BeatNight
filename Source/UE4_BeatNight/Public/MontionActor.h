@@ -27,4 +27,8 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VR|Variables", meta = (AllowPrivateAccess = "true"))
 	AActor* AttachedActor;
 
+public:
+	FORCEINLINE AActor* GetAttachedActor() const {return AttachedActor;}
+
+	
 };
