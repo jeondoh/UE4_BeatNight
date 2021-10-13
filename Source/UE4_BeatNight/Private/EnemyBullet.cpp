@@ -85,6 +85,16 @@ void AEnemyBullet::SetBulletInfos(AEnemy* GetEnemy, float Speed)
 void AEnemyBullet::BoxCompBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
     UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if(OtherActor)
+	{
+		FString OverlapActorName = *OtherActor->GetName();
+		if(OverlapActorName.Contains(TEXT("StageDivActor")))
+		{
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), OtherBulletParticles, GetActorTransform()); 
+			Destroy();
+		}
+	}
+
 	ABeatNightPlayer* TargetPlayer = Cast<ABeatNightPlayer>(OtherActor);
 	// 총 맞는 대상이 Player
 	if(TargetPlayer)

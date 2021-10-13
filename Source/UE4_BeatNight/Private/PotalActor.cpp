@@ -4,8 +4,10 @@
 #include "PotalActor.h"
 
 #include "BeatNightPlayer.h"
+#include "Enemy.h"
 #include "Components/ArrowComponent.h"
 #include "Components/BoxComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
@@ -41,7 +43,6 @@ void APotalActor::BeginPlay()
 	Tags.Add(TagName);
 	
 	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &APotalActor::BoxCompBeginOverlap);
-	BoxComponent->OnComponentEndOverlap.AddDynamic(this, &APotalActor::BoxCompEndOverlap);
 }
 
 void APotalActor::BoxCompBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -49,24 +50,18 @@ void APotalActor::BoxCompBeginOverlap(UPrimitiveComponent* OverlappedComponent, 
 {
 	if(OtherActor == nullptr) return;
 
-	if(bCanMove)
+	ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(OtherActor);
+	if(Player)
 	{
-		ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(OtherActor);
-		if(Player)
+		TArray<AActor*> FindEnemyArr;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemy::StaticClass(), FindEnemyArr);
+
+		bCanMove = FindEnemyArr.IsValidIndex(0) ? false : true;
+
+		if(bCanMove)
 		{
 			PlayLevelSeq(Player);
 		}
 	}
-}
-
-void APotalActor::BoxCompEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
-	if(OtherActor  == nullptr) return;
 	
-	ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(OtherActor);
-	if(Player)
-	{
-		bCanMove = true;
-	}
 }

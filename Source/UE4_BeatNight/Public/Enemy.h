@@ -53,10 +53,10 @@ protected:
 	
 	/** 최대 체력 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
-	int32 MaxHealth;
+	float MaxHealth;
 	/** 체력 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
-	int32 Health;
+	float Health;
 	/** 데미지 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
 	float EnemyDamage;
@@ -73,7 +73,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
 	float DelayTime;
 	/** 사망여부 */
-	UPROPERTY(VisibleAnywhere, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
 	bool bDying;
 	/** 대상이 어그로 범위 안으로 들어왔을때 Move 범위 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Enemy|Props", meta=(AllowPrivateAccess=true))

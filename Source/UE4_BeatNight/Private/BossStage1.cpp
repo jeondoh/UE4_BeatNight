@@ -80,8 +80,10 @@ void ABossStage1::BossFire()
 	{
 		AEnemyBullet* Bullet = GetWorld()->SpawnActor<AEnemyBullet>(SpawnBullet,
 			SocketTransForm.GetLocation(), GetActorRotation(), Params);
-
-		Bullet->SetBulletInfos(this, BulletSpeed);
+		if(Bullet)
+		{
+			Bullet->SetBulletInfos(this, BulletSpeed);
+		}
 	}
 }
 
