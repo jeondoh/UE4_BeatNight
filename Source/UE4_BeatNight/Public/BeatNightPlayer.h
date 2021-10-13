@@ -89,6 +89,9 @@ private:
 	/** VR 오른손 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Char|VR", meta=(AllowPrivateAccess=true))
 	class AMontionActor* RightController;
+	/** VR Widget Interaction */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Char|VR", meta = (AllowPrivateAccess = true))
+	class UWidgetInteractionComponent* WidgetComp;
 
 	/**************************************************************************************************/
 	// Enemy 상호작용
