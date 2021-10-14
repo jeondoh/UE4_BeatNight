@@ -105,9 +105,12 @@ private:
 	/** 인벤토리 확인 */
 	UFUNCTION(BlueprintCallable)
 	bool CheckInventory(int Index);
-	/** 무기 Attach */
+	/** Inventory에 무기 저장 */
 	UFUNCTION(BlueprintCallable)
 	bool AddInventory(class AWeapon* AttachWeapon);
+	/** Inventory에서 무기 제거 */
+	UFUNCTION(BlueprintCallable)
+	void RemoveInventory(int Index);
 
 	/**************************************************************************************************/
 	// Enemy 상호작용

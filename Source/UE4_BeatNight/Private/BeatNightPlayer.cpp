@@ -34,7 +34,7 @@ ABeatNightPlayer::ABeatNightPlayer()
 void ABeatNightPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	Inventory.Init(nullptr, 6);
 }
 
 // Called every frame
@@ -86,6 +86,7 @@ bool ABeatNightPlayer::CheckInventory(int Index)
 {
 	if(Inventory[Index] == nullptr)
 	{
+		InventoryIndex = Index;
 		return true;
 	}
 	return false;
@@ -101,6 +102,13 @@ bool ABeatNightPlayer::AddInventory(AWeapon* AttachWeapon)
 	}
 	return false;
 }
+
+void ABeatNightPlayer::RemoveInventory(int Index)
+{
+	if(Index==-1) return;
+	Inventory[Index] = nullptr;
+}
+
 
 void ABeatNightPlayer::TraceEnemyToDamage(FVector StartLocation, FVector EndLocation, float WeaponDamage)
 {

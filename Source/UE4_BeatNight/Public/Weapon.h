@@ -54,5 +54,15 @@ private:
 	class USoundCue* WeaponSound;
 
 	/**************************************************************************************************/
+	// 인벤토리
+
+	/** 무기가 인벤토리에 있는지 여부 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Weapon|Inventory", meta=(AllowPrivateAccess=true))
+	bool bInInventory;
+	/** 인벤토리에 저장되어 있는 인덱스 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Weapon|Inventory", meta=(AllowPrivateAccess=true))
+	int WeaponInvenIndex;
+	
+	/**************************************************************************************************/
 	
 };
