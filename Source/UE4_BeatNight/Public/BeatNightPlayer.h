@@ -32,6 +32,9 @@ private:
 
 	void InitalizedData();
 
+	UFUNCTION()
+	void LoadGame();
+
 	/**************************************************************************************************/
 	// 캐릭터 컴포넌트
 
@@ -80,7 +83,7 @@ private:
 	/** 코인 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Char|Items", meta=(AllowPrivateAccess=true))
 	uint8 Item_Coins;
-	/** 열쇠 */
+	/** 열쇠(가챠박스) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Char|Items", meta=(AllowPrivateAccess=true))
 	uint8 Item_Keys;
 
@@ -144,6 +147,7 @@ public:
 	FORCEINLINE void SetMovementSpeed(float Speed) {MovementSpeed = Speed;}
 
 	FORCEINLINE TArray<class AWeapon*> GetInventory() const {return Inventory;}
+	FORCEINLINE void SetInventory(TArray<class AWeapon*> Arr) {Inventory = Arr;}
 
 	FORCEINLINE UParticleSystemComponent* GetHitUlitmateParticle() const {return HitUlitmateParticle;}
 	FORCEINLINE UParticleSystemComponent* GetHitUlitmateParticle2() const {return HitUlitmateParticle2;}

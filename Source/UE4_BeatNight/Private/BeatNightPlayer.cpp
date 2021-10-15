@@ -3,6 +3,7 @@
 
 #include "BeatNightPlayer.h"
 
+#include "BeatNightGameModeBase.h"
 #include "DrawDebugHelpers.h"
 #include "Enemy.h"
 #include "EnemyAIController.h"
@@ -35,6 +36,7 @@ void ABeatNightPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 	Inventory.Init(nullptr, 6);
+	LoadGame();
 }
 
 // Called every frame
@@ -75,6 +77,12 @@ void ABeatNightPlayer::InitalizedData()
 	MaxHealth = 1000.f;
 	Health = 1000.f;
 	MovementSpeed = 1.f;
+}
+
+void ABeatNightPlayer::LoadGame()
+{
+	ABeatNightGameModeBase* GameMode = Cast<ABeatNightGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	GameMode->LoadGame();
 }
 
 void ABeatNightPlayer::Die()
