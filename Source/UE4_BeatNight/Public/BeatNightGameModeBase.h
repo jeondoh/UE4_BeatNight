@@ -23,10 +23,20 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void LoadGame();
 	
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetLoadInventoryToPlayer(class ABeatNightPlayer* Player);
+	
 private:
+
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess=true))
+	class UBeatNightSaveGame* LoadGameInstance;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess=true))
+	TArray<class AWeapon*> LoadPlayerInventory;
+	
 	UFUNCTION()
 	void SaveInventory(class UBeatNightSaveGame* GameInstance, class ABeatNightPlayer* Player);
-	UFUNCTION()
-	void LoadInventory(class UBeatNightSaveGame* LoadGameInstance, class ABeatNightPlayer* Player);
 
+	UFUNCTION()
+	void LoadInventory(ABeatNightPlayer* Player);
 };

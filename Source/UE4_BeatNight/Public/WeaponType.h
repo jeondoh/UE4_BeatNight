@@ -9,6 +9,17 @@ enum class EWeaponType : uint8
 };
 
 UENUM(BlueprintType)
+enum class EWeaponName : uint8
+{
+	EWN_Noraml UMETA(DisplayName = "Normal"),
+	EWN_Anaconda UMETA(DisplayName = "Anaconda"),
+	EWN_ColtDouble UMETA(DisplayName = "ColtDouble"),
+	EWN_Remington UMETA(DisplayName = "Remington"),
+	EWN_ShotGun UMETA(DisplayName = "ShotGun"),
+	EWN_Winchester UMETA(DisplayName = "Winchester")
+};
+
+UENUM(BlueprintType)
 enum class ESwordType : uint8
 {
 	EST_Level1 UMETA(DisplayName = "Level1"),

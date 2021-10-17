@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/SaveGame.h"
+#include "WeaponType.h"
 #include "BeatNightSaveGame.generated.h"
 
 
@@ -25,9 +26,27 @@ struct FBeatNightData
 	/** 열쇠(가챠박스) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Char|Items", meta=(AllowPrivateAccess=true))
 	uint8 Item_Keys;
-	/** 인벤토리 정보 */
-	UPROPERTY(VisibleAnywhere, Category="SaveGame|Data")
-	TArray<class AWeapon*> Inventory;
+};
+
+USTRUCT(BlueprintType)
+struct FWeaponData
+{
+	GENERATED_BODY()
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="SaveGame|Data")
+	TArray<int32> WeaponIndex;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="SaveGame|Data")
+	TArray<int32> WeaponAmmo;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="SaveGame|Data")
+	TArray<EWeaponType> WeaponTypeArr;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="SaveGame|Data")
+	TArray<EWeaponName> WeaponNameArr;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="SaveGame|Data")
+	TArray<ESwordType> WeaponSwordLevelArr;
 };
 
 /**
@@ -49,5 +68,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category="SaveGame")
 	FBeatNightData BeatNightData;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="SaveGame")
+	FWeaponData WeaponData;
 	
 };
