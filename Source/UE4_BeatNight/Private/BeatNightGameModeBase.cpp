@@ -40,7 +40,6 @@ void ABeatNightGameModeBase::LoadGame()
 		Player->SetItemCoins(LoadGameInstance->BeatNightData.Item_Coins);
 		Player->SetItemKeys(LoadGameInstance->BeatNightData.Item_Keys);
 		SetLoadInventoryToPlayer(Player);
-		// LoadInventory(LoadGameInstance, Player);
 	}
 }
 
@@ -76,43 +75,5 @@ void ABeatNightGameModeBase::LoadInventory(ABeatNightPlayer* Player)
 	if(LoadGameInstance)
 	{
 		SetLoadInventoryToPlayer(Player);
-		/*
-		int SwordIndex = 0;
-		LoadPlayerInventory.Init(nullptr, 6);
-		// Player Inventory 초기화
-		TArray<int32> LoadArr = LoadGameInstance->WeaponData.WeaponIndex; // Inventory Index값
-		TArray<int32> LoadWeaponAmmo = LoadGameInstance->WeaponData.WeaponAmmo; // Weapon 총알수
-		TArray<EWeaponType> LoadWeaponType = LoadGameInstance->WeaponData.WeaponTypeArr; // Weapon 타입
-		TArray<EWeaponName> LoadWeaponName = LoadGameInstance->WeaponData.WeaponNameArr; // Weapon 이름
-		TArray<ESwordType> LoadSwordLevelArr = LoadGameInstance->WeaponData.WeaponSwordLevelArr; // Weapon(Sword) 레벨
-		
-		for(int i=0; i<LoadWeaponType.Num(); i++)
-		{
-			FActorSpawnParameters Param;
-			Param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-			
-			if(LoadWeaponType[i] == EWeaponType::EWT_Sword)
-			{
-				AWeapon_Sword* Sword = GetWorld()->SpawnActor<AWeapon_Sword>(AWeapon_Sword::StaticClass(), Param);
-				if(Sword)
-				{
-					Sword->SetEWeaponType(LoadWeaponType[i]);
-					Sword->SetSwordType(LoadSwordLevelArr[SwordIndex++]);
-					Sword->SetWeaponDataTable();
-					LoadPlayerInventory[LoadArr[i]] = Sword;					
-				}
-			}
-			else
-			{
-				AWeapon* LoadWeapon = GetWorld()->SpawnActor<AWeapon>(AWeapon::StaticClass(), Param);
-				LoadWeapon->SetGunAmmo(LoadWeaponAmmo[i]);
-				LoadWeapon->SetEWeaponType(LoadWeaponType[i]);
-				LoadWeapon->SetEWeaponName(LoadWeaponName[i]);
-				LoadPlayerInventory[LoadArr[i]] = LoadWeapon;	
-			}
-		}
-		Player->SetInventory(LoadPlayerInventory);
-		// SetLoadInventoryToPlayer();
-		*/
 	}
 }
