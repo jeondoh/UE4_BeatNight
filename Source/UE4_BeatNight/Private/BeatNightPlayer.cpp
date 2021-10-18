@@ -136,28 +136,4 @@ void ABeatNightPlayer::TraceEnemyToDamage(FVector StartLocation, FVector EndLoca
 			// HitEnemy->ShowHitNumber(Damage, BeamHitResult.Location, bHeadShot);
 		}
 	}
-	/*
-	TArray<FHitResult> HitResult;
-	GetWorld()->LineTraceMultiByObjectType(HitResult, StartLocation, EndLocation, FCollisionObjectQueryParams::AllObjects);
-	// GetWorld()->LineTraceMultiByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility);
-
-	DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Red, false, 2.0f, 0, 1.0f);
-
-	for(FHitResult Result : HitResult)
-	{
-		UE_LOG(LogTemp, Error, TEXT("%s"), *Result.Actor->GetName());
-		if(Result.bBlockingHit)
-		{
-			AEnemy* HitEnemy = Cast<AEnemy>(Result.Actor.Get());
-			if(HitEnemy)
-			{
-				UGameplayStatics::ApplyDamage(HitEnemy, WeaponDamage, GetController(),
-					this, UDamageType::StaticClass());
-				// TODO : 데미지 UI 보여주기
-				// HitEnemy->ShowHitNumber(Damage, BeamHitResult.Location, bHeadShot);
-				break;
-			}
-		}
-	}
-	*/
 }
