@@ -32,6 +32,7 @@ void ASpawnEnemy::SpawnEnemy()
 	// Enemy 몬스터명 & 정찰 포인트 지정
 	if(CastEnemy)
 	{
+		CastEnemy->SetPatrolTagName(SpawnMonsterName); // 스테이지 구별을 위해 몬스터명 지정(Flying Enemy)
 		CastEnemy->SetMonsterName(SpawnMonsterName); // 스테이지 구별을 위해 몬스터명 지정
 		CastEnemy->SetMonsterTagName(TagName); // 스테이지 구별을 위해 몬스터명 지정
 		CastEnemy->SetPatrolPoint(PatrolPoint); // 정찰 포인트1

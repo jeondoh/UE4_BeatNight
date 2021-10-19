@@ -30,10 +30,6 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Wasp|Props", meta=(AllowPrivateAccess=true))
 	float DelayAttackTime;
 
-	/** PatrolLocation Tag명 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Wasp|Props", meta=(AllowPrivateAccess=true))
-	FName PatrolTagName;
-	
 	UFUNCTION(BlueprintCallable)
 	void Attack();
 

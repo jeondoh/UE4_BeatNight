@@ -66,6 +66,9 @@ protected:
 	/** 스테이지에 따른 몬스터명 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
 	FName MonsterName;
+	/** PatrolLocation Tag명 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
+	FName PatrolTagName;
 	/** 공격가능여부(AnimInstance에서 사용) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Enemy|Props", meta=(AllowPrivateAccess=true))
 	bool bCanAttack;
@@ -206,6 +209,8 @@ private:
 // Getter & Setter
 public:
 	FORCEINLINE void SetMonsterName(FName Name) {MonsterName = Name;}
+
+	FORCEINLINE void SetPatrolTagName(FName Name) {PatrolTagName = Name;}
 	
 	FORCEINLINE FName GetMonsterTagName() const {return TagName;}
 	FORCEINLINE void SetMonsterTagName(FName Name) {TagName = Name;}

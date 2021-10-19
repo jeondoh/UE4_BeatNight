@@ -4,6 +4,7 @@
 #include "Inventory.h"
 
 #include "MontionActor.h"
+#include "Weapon.h"
 #include "Components/BoxComponent.h"
 
 // Sets default values
@@ -37,43 +38,4 @@ void AInventory::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Slot1->OnComponentBeginOverlap.AddDynamic(this, &AInventory::OverlapBeginSlot);
-	Slot1->OnComponentEndOverlap.AddDynamic(this, &AInventory::OverlapEndSlot);
-
-	Slot2->OnComponentBeginOverlap.AddDynamic(this, &AInventory::OverlapBeginSlot);
-	Slot2->OnComponentEndOverlap.AddDynamic(this, &AInventory::OverlapEndSlot);
-
-	Slot3->OnComponentBeginOverlap.AddDynamic(this, &AInventory::OverlapBeginSlot);
-	Slot3->OnComponentEndOverlap.AddDynamic(this, &AInventory::OverlapEndSlot);
-
-	Slot4->OnComponentBeginOverlap.AddDynamic(this, &AInventory::OverlapBeginSlot);
-	Slot4->OnComponentEndOverlap.AddDynamic(this, &AInventory::OverlapEndSlot);
-
-	Slot5->OnComponentBeginOverlap.AddDynamic(this, &AInventory::OverlapBeginSlot);
-	Slot5->OnComponentEndOverlap.AddDynamic(this, &AInventory::OverlapEndSlot);
-
-	Slot6->OnComponentBeginOverlap.AddDynamic(this, &AInventory::OverlapBeginSlot);
-	Slot6->OnComponentEndOverlap.AddDynamic(this, &AInventory::OverlapEndSlot);
-}
-
-void AInventory::OverlapBeginSlot(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	if(OtherActor==nullptr) return;
-
-	AMontionActor* MotionController = Cast<AMontionActor>(OtherActor);
-	if(MotionController)
-	{
-		AActor* AttachedActor = MotionController->GetAttachedActor();
-		if(AttachedActor)
-		{
-			
-		}
-	}
-	
-}
-
-void AInventory::OverlapEndSlot(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
 }
