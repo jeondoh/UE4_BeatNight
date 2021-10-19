@@ -132,6 +132,8 @@ void ABeatNightPlayer::TraceEnemyToDamage(FVector StartLocation, FVector EndLoca
 		{
 			UGameplayStatics::ApplyDamage(HitEnemy, WeaponDamage, GetController(),
 				this, UDamageType::StaticClass());
+						
+			
 			// TODO : 데미지 UI 보여주기
 			// HitEnemy->ShowHitNumber(Damage, BeamHitResult.Location, bHeadShot);
 		}
