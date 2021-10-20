@@ -8,6 +8,7 @@
 #include "Enemy.h"
 #include "EnemyAIController.h"
 #include "Weapon.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
 
@@ -66,7 +67,7 @@ float ABeatNightPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 		auto EnemyController = Cast<AEnemyAIController>(EventInstigator);
 		if(EnemyController)
 		{
-			// EnemyController->GetBlackboardComponent()->SetValueAsBool(TEXT("PlayerDead"), true);			
+			EnemyController->GetBlackboardComponent()->SetValueAsBool(TEXT("PlayerDeath"), true);			
 		}
 	}
 	return DamageAmount;
