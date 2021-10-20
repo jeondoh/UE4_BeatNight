@@ -24,6 +24,8 @@ public:
 	/** 데미지 입히기 */
 	UFUNCTION()
 	void DoDamage(class ABeatNightPlayer* Player);
+	/** 데미지 랜덤화 */
+	float RandomizationDamage(float Damage);
 	
 protected:
 	// Called when the game starts or when spawned
@@ -107,8 +109,6 @@ protected:
 	void DestroyEnemy();
 	/** 사망이후 SpawnEnemy까지 삭제 */
 	void CheckDestroyEnemy();
-	/** 데미지 랜덤화 */
-	float RandomizationDamage(float Damage);
 	/** False : HP가 60% 이상일때 True : HP가 40%미만일때 */
 	bool bHPDown;
 	/** Player가 Ultimate 데미지를 받았을 경우(BossStage2에서만 사용) */
@@ -163,7 +163,7 @@ private:
 
 	/** 공격 받을때 이팩트 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Effect", meta=(AllowPrivateAccess=true))
-	UParticleSystemComponent* DamagedParticle;
+	UParticleSystem* DamagedParticle;
 
 	/** 공격 받을때 사운드 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Effect", meta=(AllowPrivateAccess=true))
@@ -226,7 +226,9 @@ public:
 	FORCEINLINE float GetEnemyDamage() const {return EnemyDamage;}
 	FORCEINLINE void SetEnemyDamage(float Damage) {EnemyDamage = Damage;}
 
-	FORCEINLINE AEnemyAIController* GetEnemyController() {return EnemyController;}
+	FORCEINLINE AEnemyAIController* GetEnemyController() const {return EnemyController;}
+
+	FORCEINLINE UParticleSystem* GetDamagedParticle() const {return DamagedParticle;}
 
 	FORCEINLINE bool GetHpDown() const {return bHPDown;}
 

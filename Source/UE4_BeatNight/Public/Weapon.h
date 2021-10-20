@@ -38,6 +38,10 @@ protected:
 	/** 무기(총) 총알 수 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon|Props")
 	int32 GunAmmo;
+
+	/** 무기 사운드  */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon|Props", meta=(AllowPrivateAccess=true))
+	class USoundCue* WeaponSound;
 	
 	/**************************************************************************************************/
 
@@ -48,10 +52,6 @@ private:
 	/** 무기 이팩트 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon|Props", meta=(AllowPrivateAccess=true))
 	class UParticleSystem* WeaponEffect;
-
-	/** 무기 사운드  */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon|Props", meta=(AllowPrivateAccess=true))
-	class USoundCue* WeaponSound;
 
 	/**************************************************************************************************/
 	// 인벤토리

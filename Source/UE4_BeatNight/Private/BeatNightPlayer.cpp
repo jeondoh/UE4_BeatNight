@@ -123,19 +123,19 @@ void ABeatNightPlayer::TraceEnemyToDamage(FVector StartLocation, FVector EndLoca
 	FHitResult OutHitResult;
 	GetWorld()->LineTraceSingleByChannel(OutHitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility);
 
-	DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Red, false, 2.0f, 0, 1.0f);
+	DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::White, false, 0.2f, 0, 0.1f);
 
 	if(OutHitResult.bBlockingHit)
 	{
 		AEnemy* HitEnemy = Cast<AEnemy>(OutHitResult.Actor.Get());
 		if(HitEnemy)
 		{
-			UGameplayStatics::ApplyDamage(HitEnemy, WeaponDamage, GetController(),
-				this, UDamageType::StaticClass());
-						
-			
-			// TODO : 데미지 UI 보여주기
-			// HitEnemy->ShowHitNumber(Damage, BeamHitResult.Location, bHeadShot);
+			UGameplayStatics::ApplyDamage(HitEnemy, WeaponDamage, GetController(), this, UDamageType::StaticClass());
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitEnemy->GetDamagedParticle(), OutHitResult.Location, FRotator::ZeroRotator, FVector(2.f));
+		}
+		else
+		{
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), GunParticle, OutHitResult.Location);
 		}
 	}
 }

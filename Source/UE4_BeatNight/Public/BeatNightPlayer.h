@@ -121,6 +121,9 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void TraceEnemyToDamage(FVector StartLocation, FVector EndLocation, float WeaponDamage);
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Char|Effect", meta=(AllowPrivateAccess=true))
+	UParticleSystem* GunParticle;
+	
 	/**************************************************************************************************/
 
 
