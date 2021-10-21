@@ -29,11 +29,7 @@ private:
 	/** 공격 Delay 시간 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Bat|Props", meta=(AllowPrivateAccess=true))
 	float DelayAttackTime;
-
-	/** PatrolLocation Tag명 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Bat|Props", meta=(AllowPrivateAccess=true))
-	FName PatrolTagName;
-
+	
 	UFUNCTION(BlueprintCallable)
 	void Attack();
 

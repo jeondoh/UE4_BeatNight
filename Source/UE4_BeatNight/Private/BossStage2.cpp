@@ -252,6 +252,6 @@ FName ABossStage2::GetAttackSectionName()
 		DelayTime = 3.5f; // 대기시간
 		BulletSpeed = 2200.f; // 총알 속도
 		EnemyDamage = bUlitmateDamaged ? 50.f + UlitmateDamaged : 50.f; // 데미지
-	}
+	} 
 	return SectionName;
 }

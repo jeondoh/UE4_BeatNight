@@ -32,6 +32,8 @@ private:
 
 	void InitalizedData();
 
+	void LoadGame();
+
 	/**************************************************************************************************/
 	// 캐릭터 컴포넌트
 
@@ -56,7 +58,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Char|Props", meta=(AllowPrivateAccess=true))
 	float Defense;
 
-	/** 캐릭터 인벤토리(임시) */
+	/** 캐릭터 인벤토리 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Char|Inventory", meta=(AllowPrivateAccess=true))
 	TArray<class AWeapon*> Inventory;
 
@@ -80,7 +82,7 @@ private:
 	/** 코인 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Char|Items", meta=(AllowPrivateAccess=true))
 	uint8 Item_Coins;
-	/** 열쇠 */
+	/** 열쇠(가챠박스) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Char|Items", meta=(AllowPrivateAccess=true))
 	uint8 Item_Keys;
 
@@ -119,6 +121,9 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void TraceEnemyToDamage(FVector StartLocation, FVector EndLocation, float WeaponDamage);
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Char|Effect", meta=(AllowPrivateAccess=true))
+	UParticleSystem* GunParticle;
+	
 	/**************************************************************************************************/
 
 
@@ -144,6 +149,7 @@ public:
 	FORCEINLINE void SetMovementSpeed(float Speed) {MovementSpeed = Speed;}
 
 	FORCEINLINE TArray<class AWeapon*> GetInventory() const {return Inventory;}
+	FORCEINLINE void SetInventory(TArray<class AWeapon*> WeaponArr) {Inventory = WeaponArr;}
 
 	FORCEINLINE UParticleSystemComponent* GetHitUlitmateParticle() const {return HitUlitmateParticle;}
 	FORCEINLINE UParticleSystemComponent* GetHitUlitmateParticle2() const {return HitUlitmateParticle2;}

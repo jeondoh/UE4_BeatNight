@@ -22,9 +22,9 @@ void AItem_Key::AreaSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent,
 	{
 		int PlayerKeys = Player->GetItemKeys();
 		Player->SetItemKeys(++PlayerKeys);
-		if(GotSound)
+		if(PickupSound)
 		{
-			UGameplayStatics::PlaySoundAtLocation(this, GotSound, GetActorLocation());
+			UGameplayStatics::PlaySoundAtLocation(this, PickupSound, GetActorLocation());
 		}
 		Destroy();
 	}

@@ -3,8 +3,6 @@
 
 #include "Inventory.h"
 
-#include "MontionActor.h"
-#include "Weapon.h"
 #include "Components/BoxComponent.h"
 
 // Sets default values

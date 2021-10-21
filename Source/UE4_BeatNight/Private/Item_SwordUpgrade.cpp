@@ -19,8 +19,7 @@ void AItem_SwordUpgrade::BoxCollisionBeginOverlap(UPrimitiveComponent* Overlappe
 	bool bGetItem = BuyItem();
 	if(bGetItem)
 	{
-		// TODO : 인벤토리에서 Sword 찾고 업그레이드 로직
-		// 임시
+		// 인벤토리에서 Sword 찾고 업그레이드
 		TArray<AWeapon*> Weapons = CastPlayer->GetInventory();
 		for(AWeapon* Weapon : Weapons)
 		{

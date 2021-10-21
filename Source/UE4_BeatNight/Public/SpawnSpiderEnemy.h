@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Item.h"
 #include "GameFramework/Actor.h"
 #include "SpawnSpiderEnemy.generated.h"
 
@@ -21,8 +22,11 @@ protected:
 
 public:
 	/** 죽을때 드롭여부 */
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, Category="EnemySpawn|Drop", meta=(AllowPrivateAccess=true))
 	bool bDropItem;
+	/** 아이템 타입 */
+	UPROPERTY(EditAnywhere, Category="EnemySpawn|Drop", meta=(AllowPrivateAccess=true))
+	TSubclassOf<AItem> ItemType;
 	
 	UFUNCTION()
 	void SpawnEnemy();
