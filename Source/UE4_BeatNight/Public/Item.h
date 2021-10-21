@@ -58,6 +58,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="ItemComp|Props")
 	uint8 ItemCoin;
 
+	/** 획득 사운드  */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ItemComp|Props")
+	class USoundCue* PickupSound;
+
 	/** 플레이어 */
 	UPROPERTY()
 	class ABeatNightPlayer* CastPlayer;

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Item.h"
 #include "GameFramework/Actor.h"
 #include "SpawnEnemy.generated.h"
 
@@ -31,8 +32,14 @@ private:
 	/**************************************************************************************************/
 	// Enemy 스폰
 
+	/** 죽을때 드롭여부 */
+	UPROPERTY(EditAnywhere, Category="EnemySpawn|Drop", meta=(AllowPrivateAccess=true))
+	bool bDropItem;
+	/** 아이템 타입 */
+	UPROPERTY(EditAnywhere, Category="EnemySpawn|Drop", meta=(AllowPrivateAccess=true))
+	TSubclassOf<AItem> ItemType;
 	/** 스폰 타입 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="EnemySpawn", meta=(AllowPrivateAccess=true))
+	UPROPERTY(EditAnywhere, Category="EnemySpawn", meta=(AllowPrivateAccess=true))
 	TSubclassOf<class AEnemy> SpawnEnemyType;
 	/** 스폰시 지정할 몬스터.명 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="EnemySpawn", meta=(AllowPrivateAccess=true))

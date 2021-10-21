@@ -42,6 +42,10 @@ protected:
 	/** 무기 사운드  */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon|Props", meta=(AllowPrivateAccess=true))
 	class USoundCue* WeaponSound;
+
+	/** 무기 장착 사운드  */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon|Props", meta=(AllowPrivateAccess=true))
+	class USoundCue* EquippedSound;
 	
 	/**************************************************************************************************/
 

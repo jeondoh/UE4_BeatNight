@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Item.h"
 #include "GameFramework/Character.h"
 #include "Enemy.generated.h"
 
@@ -34,8 +35,6 @@ protected:
 	// 캐릭터(Player)
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Enemy", meta=(AllowPrivateAccess=true))	
 	class ABeatNightPlayer* BeatNightPlayer;
-	UPROPERTY()
-	class ABeatNightPlayer* DamagedPlayer;
 
 	/**************************************************************************************************/
 	// 애니메이션 & 몽타주
@@ -99,6 +98,9 @@ protected:
 	/** 사망 */
 	UFUNCTION()
 	void Die();
+	/** 사망시 콜리전 제거 */
+	UFUNCTION()
+	void DieCollision();
 	/** 사망 애니메이션 실행 */
 	UFUNCTION()
 	void PlayDeathAnim();
@@ -150,7 +152,7 @@ private:
 	bool bDropItem;
 	/** 아이템 타입 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Items", meta=(AllowPrivateAccess=true))
-	TSubclassOf<class AItem> ItemType;
+	TSubclassOf<AItem> ItemType;
 	/** 아이템 드롭 사운드 */
 	UPROPERTY(EditAnywhere, Category = "Enemy|Items", meta=(AllowPrivateAccess=true, MakeEditWidget=true))
 	class USoundCue* DropSound;
@@ -229,12 +231,16 @@ public:
 	FORCEINLINE AEnemyAIController* GetEnemyController() const {return EnemyController;}
 
 	FORCEINLINE UParticleSystem* GetDamagedParticle() const {return DamagedParticle;}
+	FORCEINLINE USoundCue* GetDamagedSound() const {return DamagedSound;}
 
 	FORCEINLINE bool GetHpDown() const {return bHPDown;}
 
 	FORCEINLINE void SetbDropItem(bool Drop) {bDropItem = Drop;}
-
+	FORCEINLINE void SetItemType(TSubclassOf<AItem> Item) {ItemType = Item;}
+	
 	FORCEINLINE bool GetUltimateDamaged() const {return bUlitmateDamaged;}
 	FORCEINLINE void SetUltimateDamaged(bool bDmaged) {bUlitmateDamaged = bDmaged;}
+
+	
 	
 };
