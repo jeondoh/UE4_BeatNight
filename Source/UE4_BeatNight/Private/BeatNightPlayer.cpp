@@ -78,6 +78,7 @@ void ABeatNightPlayer::InitalizedData()
 	MaxHealth = 1000.f;
 	Health = 1000.f;
 	MovementSpeed = 1.f;
+	bCanGoStage2 = false;
 }
 
 void ABeatNightPlayer::LoadGame()

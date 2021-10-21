@@ -135,6 +135,11 @@ void AEnemy::DestroyEnemy()
 {
 	if(MonsterName.IsEqual(TEXT("BossStage1")))
 	{
+		ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(UGameplayStatics::GetPlayerPawn(this, 0));
+		if(Player)
+		{
+			Player->SetCanGoStage2(true);
+		}
 		IsBoosStage1 = true;
 	}
 	Destroy();

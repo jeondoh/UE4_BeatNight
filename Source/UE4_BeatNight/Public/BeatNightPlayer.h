@@ -74,6 +74,10 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Char|Props", meta=(AllowPrivateAccess=true))
 	FName PlayerStageName;
 
+	/** Stage1 클리어 이후 이동가능여부 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Char|Props", meta=(AllowPrivateAccess=true))
+	bool bCanGoStage2;
+
 	void Die();
 	
 	/**************************************************************************************************/
@@ -135,6 +139,9 @@ public:
 	
 	FORCEINLINE float GetHealth() const {return Health;}
 	FORCEINLINE void SetHealth(float Amount) {Health = Amount;}
+
+	FORCEINLINE bool GetCanGoStage2() const {return bCanGoStage2;}
+	FORCEINLINE void SetCanGoStage2(bool Cango) {bCanGoStage2 = Cango;}
 	
 	FORCEINLINE uint8 GetItemCoins() const {return Item_Coins;}
 	FORCEINLINE void SetItemCoins(int Coins) {Item_Coins = Coins;}
