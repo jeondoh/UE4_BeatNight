@@ -190,8 +190,8 @@ void AEnemy::CheckDestroyEnemy()
 			APotalActor* FindPotal = dynamic_cast<APotalActor*>(FindLastArray[i]);
 			if(FindPotal)
 			{
+				FindPotal->OpenDoor();
 				FindPotal->SetbCanMove(true);
-				FindPotal->GetPortalParticle()->SetVisibility(true);
 			}
 		}
 	}

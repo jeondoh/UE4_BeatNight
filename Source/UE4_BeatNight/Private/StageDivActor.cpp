@@ -4,6 +4,8 @@
 #include "StageDivActor.h"
 
 #include "BeatNightPlayer.h"
+#include "Enemy.h"
+#include "PotalActor.h"
 #include "SpawnEnemy.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -42,6 +44,8 @@ void AStageDivActor::BoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, A
 		TArray<AActor*> arrOutActors;
 		UGameplayStatics::GetAllActorsWithTag(GetWorld(), StageName, arrOutActors);
 
+		int MonsterNum = 0;
+		
 		if(arrOutActors.IsValidIndex(0))
 		{
 			for(int i = 0; i < arrOutActors.Num(); ++i)
@@ -54,6 +58,31 @@ void AStageDivActor::BoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, A
 				}
 			}
 		}
+
+		TArray<AActor*> arrOutActors2;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemy::StaticClass(), arrOutActors2);
+		
+		for(int i = 0; i < arrOutActors2.Num(); ++i)
+		{
+			AEnemy* FindEnemy = dynamic_cast<AEnemy*>(arrOutActors2[i]);
+			if(FindEnemy)
+			{
+				MonsterNum++;					
+			}
+		}
+		if(MonsterNum == 0)
+		{
+			for(int i = 0; i < arrOutActors.Num(); ++i)
+			{
+				APotalActor* FindPotal = dynamic_cast<APotalActor*>(arrOutActors[i]);
+				if(FindPotal)
+				{
+					FindPotal->OpenDoor();
+					FindPotal->SetbCanMove(true);
+				}				
+			}
+		}
+		
 	}
 	
 }

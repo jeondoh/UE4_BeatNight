@@ -16,20 +16,19 @@ APotalActor::APotalActor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
-	SetRootComponent(StaticMeshComponent);
+	DefaultSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("DefaultSceneRoot"));
+	SetRootComponent(DefaultSceneComponent);
+	
+	// StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
+	// SetRootComponent(StaticMeshComponent);
 
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComp"));
-	BoxComponent->SetupAttachment(GetRootComponent());
+	// BoxComponent->SetupAttachment(GetRootComponent());
 
 	Arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
 	Arrow->SetupAttachment(GetRootComponent());
 
-	PortalParticle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("PortalParticle"));
-	PortalParticle->SetupAttachment(GetRootComponent());
-
 	bCanMove = false;
-	PortalParticle->SetVisibility(false);
 }
 
 // Called when the game starts or when spawned
@@ -38,7 +37,7 @@ void APotalActor::BeginPlay()
 	Super::BeginPlay();
 
 	const FVector ArrowLocation{Arrow->GetForwardVector()};
-	MoveToLocation = GetActorLocation() + ArrowLocation * -500;
+	MoveToLocation = GetActorLocation() + ArrowLocation * -220;
 	
 	Tags.Add(TagName);
 	
@@ -60,6 +59,7 @@ void APotalActor::BoxCompBeginOverlap(UPrimitiveComponent* OverlappedComponent, 
 
 		if(bCanMove)
 		{
+			OpenDoor();
 			PlayLevelSeq(Player);
 		}
 	}
