@@ -283,7 +283,6 @@ void AEnemy::AgroSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AA
 			// 어그로 범위내에 Player가 들어오면 Blackboard의 Target을 Set
 			if(EnemyController->GetBlackboardComponent())
 			{
-				UE_LOG(LogTemp, Error, TEXT("agroBegin"));
 				EnemyController->GetBlackboardComponent()->SetValueAsObject(TEXT("Target"), Player);
 				EnemyController->GetBlackboardComponent()->SetValueAsBool(TEXT("CanAttack"), bCanAttack);
 			}	
@@ -307,7 +306,6 @@ void AEnemy::AgroSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 			// 어그로 범위내에 Player가 없으면 Blackboard의 Target을 null 처리
 			if(EnemyController->GetBlackboardComponent())
 			{
-				UE_LOG(LogTemp, Error, TEXT("agroend"));
 				EnemyController->GetBlackboardComponent()->SetValueAsObject(TEXT("Target"), nullptr);
 				EnemyController->GetBlackboardComponent()->SetValueAsBool(TEXT("CanAttack"), bCanAttack);
 			}
