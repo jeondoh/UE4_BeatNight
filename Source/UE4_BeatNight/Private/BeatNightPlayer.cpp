@@ -9,6 +9,7 @@
 #include "EnemyAIController.h"
 #include "Weapon.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Components/WidgetComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
 
@@ -22,6 +23,7 @@ ABeatNightPlayer::ABeatNightPlayer()
 
 	HitUlitmateParticle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("HitUlitmateParticle"));
 	HitUlitmateParticle2 = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("HitUlitmateParticle2"));
+	HitWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HitWidget"));
 
 	HitUlitmateParticle->SetupAttachment(GetRootComponent());
 	HitUlitmateParticle2->SetupAttachment(GetRootComponent());
@@ -137,7 +139,7 @@ void ABeatNightPlayer::TraceEnemyToDamage(FVector StartLocation, FVector EndLoca
 			UGameplayStatics::ApplyDamage(HitEnemy, RandomDamaged, GetController(), this, UDamageType::StaticClass());
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitEnemy->GetDamagedParticle(), OutHitResult.Location, FRotator::ZeroRotator, FVector(2.f));
 			// 데미지 UI 보여주기
-			HitEnemy->ShowHitNumber(RandomDamaged, OutHitResult.Location);
+			ShowHitNumber(RandomDamaged, OutHitResult.Location, HitEnemy->GetActorRotation());
 		}
 		else
 		{

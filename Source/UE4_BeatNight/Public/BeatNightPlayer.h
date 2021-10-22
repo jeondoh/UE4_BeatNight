@@ -27,6 +27,10 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	/** 데미지 UI */
+	UFUNCTION(BlueprintImplementableEvent)
+	void ShowHitNumber(int32 Damage, FVector HitLocation, FRotator HitRotator);
 	
 private:
 
@@ -42,6 +46,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category="Char|Particle", meta=(AllowPrivateAccess=true))
 	UParticleSystemComponent* HitUlitmateParticle2;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Char|Component", meta=(AllowPrivateAccess=true))
+	class UWidgetComponent* HitWidget;
 	
 	/**************************************************************************************************/
 	// 캐릭터 상태

@@ -78,7 +78,11 @@ void AWeapon_Sword::BoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComp
 		{
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), SwordParticle, SocketTransform.GetLocation());
 			// 데미지 UI 보여주기
-			Enemy->ShowHitNumber(RandomDamaged, SocketTransform.GetLocation());
+			ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(UGameplayStatics::GetPlayerPawn(this, 0));
+			if(Player)
+			{
+				Player->ShowHitNumber(RandomDamaged, SocketTransform.GetLocation(), Enemy->GetActorRotation());
+			}
 		}
 		if(WeaponSound)
 		{
