@@ -103,12 +103,17 @@ private:
 	/** VR 왼손 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Char|VR", meta=(AllowPrivateAccess=true))
 	class AMontionActor* LeftController;
+
 	/** VR 오른손 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Char|VR", meta=(AllowPrivateAccess=true))
 	class AMontionActor* RightController;
-	/** VR Widget Interaction */
+	
+	/** VR Widget Interaction 왼손*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Char|VR", meta = (AllowPrivateAccess = true))
-	class UWidgetInteractionComponent* WidgetComp;
+	class UWidgetInteractionComponent* WidgetCompLeft;
+	/** VR Widget Interaction 오른손*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Char|VR", meta = (AllowPrivateAccess = true))
+	class UWidgetInteractionComponent* WidgetCompRight;
 	/** 인벤토리 장착 여부 확인(Overlap 되었을때) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Char|Inventory", meta=(AllowPrivateAccess=true))
 	bool bCanInventory;
