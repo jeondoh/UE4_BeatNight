@@ -22,9 +22,9 @@ void AItem_Coin::AreaSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent
 	{
 		int PlayerCoins = Player->GetItemCoins();
 		Player->SetItemCoins(++PlayerCoins);
-		if(GotSound)
+		if(PickupSound)
 		{
-			UGameplayStatics::PlaySoundAtLocation(this, GotSound, GetActorLocation());
+			UGameplayStatics::PlaySoundAtLocation(this, PickupSound, GetActorLocation());
 		}
 		Destroy();
 	}

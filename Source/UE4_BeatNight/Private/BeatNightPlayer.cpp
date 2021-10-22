@@ -3,9 +3,12 @@
 
 #include "BeatNightPlayer.h"
 
+#include "BeatNightGameModeBase.h"
 #include "DrawDebugHelpers.h"
 #include "Enemy.h"
 #include "EnemyAIController.h"
+#include "Weapon.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
 
@@ -25,13 +28,16 @@ ABeatNightPlayer::ABeatNightPlayer()
 
 	HitUlitmateParticle->SetVisibility(false);
 	HitUlitmateParticle2->SetVisibility(false);
+
+	bCanInventory = false;
 }
 
 // Called when the game starts or when spawned
 void ABeatNightPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	Inventory.Init(nullptr, 6);
+	LoadGame();
 }
 
 // Called every frame
@@ -61,7 +67,7 @@ float ABeatNightPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 		auto EnemyController = Cast<AEnemyAIController>(EventInstigator);
 		if(EnemyController)
 		{
-			// EnemyController->GetBlackboardComponent()->SetValueAsBool(TEXT("PlayerDead"), true);			
+			EnemyController->GetBlackboardComponent()->SetValueAsBool(TEXT("PlayerDeath"), true);			
 		}
 	}
 	return DamageAmount;
@@ -74,51 +80,63 @@ void ABeatNightPlayer::InitalizedData()
 	MovementSpeed = 1.f;
 }
 
+void ABeatNightPlayer::LoadGame()
+{
+	ABeatNightGameModeBase* GameMode = Cast<ABeatNightGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	GameMode->LoadGame();
+}
+
 void ABeatNightPlayer::Die()
 {
 	
 }
+
+bool ABeatNightPlayer::CheckInventory(int Index)
+{
+	if(Inventory[Index] == nullptr)
+	{
+		InventoryIndex = Index;
+		return true;
+	}
+	return false;
+}
+
+bool ABeatNightPlayer::AddInventory(AWeapon* AttachWeapon)
+{
+	if(InventoryIndex == -1) return false;
+	if(bCanInventory && AttachWeapon)
+	{
+		Inventory[InventoryIndex] = AttachWeapon;
+		return true;
+	}
+	return false;
+}
+
+void ABeatNightPlayer::RemoveInventory(int Index)
+{
+	if(Index==-1) return;
+	Inventory[Index] = nullptr;
+}
+
 
 void ABeatNightPlayer::TraceEnemyToDamage(FVector StartLocation, FVector EndLocation, float WeaponDamage)
 {
 	FHitResult OutHitResult;
 	GetWorld()->LineTraceSingleByChannel(OutHitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility);
 
-	DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Red, false, 2.0f, 0, 1.0f);
+	DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::White, false, 0.2f, 0, 0.1f);
 
 	if(OutHitResult.bBlockingHit)
 	{
 		AEnemy* HitEnemy = Cast<AEnemy>(OutHitResult.Actor.Get());
 		if(HitEnemy)
 		{
-			UGameplayStatics::ApplyDamage(HitEnemy, WeaponDamage, GetController(),
-				this, UDamageType::StaticClass());
-			// TODO : 데미지 UI 보여주기
-			// HitEnemy->ShowHitNumber(Damage, BeamHitResult.Location, bHeadShot);
+			UGameplayStatics::ApplyDamage(HitEnemy, WeaponDamage, GetController(), this, UDamageType::StaticClass());
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitEnemy->GetDamagedParticle(), OutHitResult.Location, FRotator::ZeroRotator, FVector(2.f));
 		}
-	}
-	/*
-	TArray<FHitResult> HitResult;
-	GetWorld()->LineTraceMultiByObjectType(HitResult, StartLocation, EndLocation, FCollisionObjectQueryParams::AllObjects);
-	// GetWorld()->LineTraceMultiByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility);
-
-	DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Red, false, 2.0f, 0, 1.0f);
-
-	for(FHitResult Result : HitResult)
-	{
-		UE_LOG(LogTemp, Error, TEXT("%s"), *Result.Actor->GetName());
-		if(Result.bBlockingHit)
+		else
 		{
-			AEnemy* HitEnemy = Cast<AEnemy>(Result.Actor.Get());
-			if(HitEnemy)
-			{
-				UGameplayStatics::ApplyDamage(HitEnemy, WeaponDamage, GetController(),
-					this, UDamageType::StaticClass());
-				// TODO : 데미지 UI 보여주기
-				// HitEnemy->ShowHitNumber(Damage, BeamHitResult.Location, bHeadShot);
-				break;
-			}
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), GunParticle, OutHitResult.Location);
 		}
 	}
-	*/
 }

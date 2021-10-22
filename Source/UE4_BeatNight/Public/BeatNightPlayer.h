@@ -32,6 +32,8 @@ private:
 
 	void InitalizedData();
 
+	void LoadGame();
+
 	/**************************************************************************************************/
 	// 캐릭터 컴포넌트
 
@@ -56,7 +58,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Char|Props", meta=(AllowPrivateAccess=true))
 	float Defense;
 
-	/** 캐릭터 인벤토리(임시) */
+	/** 캐릭터 인벤토리 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Char|Inventory", meta=(AllowPrivateAccess=true))
 	TArray<class AWeapon*> Inventory;
 
@@ -80,7 +82,7 @@ private:
 	/** 코인 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Char|Items", meta=(AllowPrivateAccess=true))
 	uint8 Item_Coins;
-	/** 열쇠 */
+	/** 열쇠(가챠박스) */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Char|Items", meta=(AllowPrivateAccess=true))
 	uint8 Item_Keys;
 
@@ -98,10 +100,24 @@ private:
 	/** VR Widget Interaction 왼손*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Char|VR", meta = (AllowPrivateAccess = true))
 	class UWidgetInteractionComponent* WidgetCompLeft;
-
 	/** VR Widget Interaction 오른손*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Char|VR", meta = (AllowPrivateAccess = true))
-		class UWidgetInteractionComponent* WidgetCompRight;
+	class UWidgetInteractionComponent* WidgetCompRight;
+	/** 인벤토리 장착 여부 확인(Overlap 되었을때) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Char|Inventory", meta=(AllowPrivateAccess=true))
+	bool bCanInventory;
+	/** 인벤토리 인덱스(Overlap 되었을때) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Char|Inventory", meta=(AllowPrivateAccess=true))
+	int InventoryIndex;
+	/** 인벤토리 확인 */
+	UFUNCTION(BlueprintCallable)
+	bool CheckInventory(int Index);
+	/** Inventory에 무기 저장 */
+	UFUNCTION(BlueprintCallable)
+	bool AddInventory(class AWeapon* AttachWeapon);
+	/** Inventory에서 무기 제거 */
+	UFUNCTION(BlueprintCallable)
+	void RemoveInventory(int Index);
 
 	/**************************************************************************************************/
 	// Enemy 상호작용
@@ -110,6 +126,9 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void TraceEnemyToDamage(FVector StartLocation, FVector EndLocation, float WeaponDamage);
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Char|Effect", meta=(AllowPrivateAccess=true))
+	UParticleSystem* GunParticle;
+	
 	/**************************************************************************************************/
 
 
@@ -135,6 +154,7 @@ public:
 	FORCEINLINE void SetMovementSpeed(float Speed) {MovementSpeed = Speed;}
 
 	FORCEINLINE TArray<class AWeapon*> GetInventory() const {return Inventory;}
+	FORCEINLINE void SetInventory(TArray<class AWeapon*> WeaponArr) {Inventory = WeaponArr;}
 
 	FORCEINLINE UParticleSystemComponent* GetHitUlitmateParticle() const {return HitUlitmateParticle;}
 	FORCEINLINE UParticleSystemComponent* GetHitUlitmateParticle2() const {return HitUlitmateParticle2;}

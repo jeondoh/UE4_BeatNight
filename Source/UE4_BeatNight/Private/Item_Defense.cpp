@@ -4,6 +4,8 @@
 #include "Item_Defense.h"
 
 #include "BeatNightPlayer.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 
 AItem_Defense::AItem_Defense()
 {
@@ -21,6 +23,10 @@ void AItem_Defense::BoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComp
 	if(bGetItem)
 	{
 		CastPlayer->SetDefense(DefenseAmount);
+		if(PickupSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, PickupSound, GetActorLocation());
+		}
 		Destroy();
 	}
 	// TODO : 플레이어 Coin 부족 시 경고창 UI 생성

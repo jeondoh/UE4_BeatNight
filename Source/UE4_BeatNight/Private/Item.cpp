@@ -44,7 +44,6 @@ void AItem::BeginPlay()
 void AItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 	// 아이템 회전 (bRotate 여부에 따라)
 	ItemRotate(DeltaTime);
 }

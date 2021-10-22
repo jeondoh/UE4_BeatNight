@@ -27,6 +27,14 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="ItemComp|Props")
 	class UStaticMeshComponent* StaticMeshComponent;
 
+	/** 충돌상자 */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="ItemComp|Props", meta=(AllowPrivateAccess=true))
+	class UBoxComponent* CollisionBox;
+
+	/** 아이템 범위 Collision */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="ItemComp|Props", meta=(AllowPrivateAccess=true))
+	class USphereComponent* AreaSphere;
+
 	/**************************************************************************************************/
 	// 아이템 속성 
 
@@ -49,6 +57,10 @@ protected:
 	/** 아이템을 사기 위한 코인 개수 */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="ItemComp|Props")
 	uint8 ItemCoin;
+
+	/** 획득 사운드  */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ItemComp|Props")
+	class USoundCue* PickupSound;
 
 	/** 플레이어 */
 	UPROPERTY()
@@ -81,21 +93,6 @@ public:
 	UFUNCTION()
 	virtual void AreaSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, 
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-
-private:
-	
-	/**************************************************************************************************/
-	// 컴포넌트
-
-	/** 충돌상자 */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="ItemComp|Props", meta=(AllowPrivateAccess=true))
-	class UBoxComponent* CollisionBox;
-
-	/** 아이템 범위 Collision */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="ItemComp|Props", meta=(AllowPrivateAccess=true))
-	class USphereComponent* AreaSphere;
-
-	/**************************************************************************************************/
 
 public:
 	FORCEINLINE	uint8 GetItemCoin() const {return ItemCoin;}

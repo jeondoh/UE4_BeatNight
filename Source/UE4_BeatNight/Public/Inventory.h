@@ -40,16 +40,12 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Inventory|Comp", meta=(AllowPrivateAccess=true))
 	class UBoxComponent* CollisionBox;
 
+	/** Player Class > Blueprint에서 초기화 해줌 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Inventory|Props", meta=(AllowPrivateAccess=true))
+	class ABeatNightPlayer* InventoryPlayer;
+	
 	/** 슬롯 배열 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Inventory|", meta=(AllowPrivateAccess=true))
 	TArray<UStaticMeshComponent*> SlotMeshArr;
 
-	/** 오버랩 이벤트 */
-	UFUNCTION()
-	void OverlapBeginSlot(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
-	UFUNCTION()
-	void OverlapEndSlot(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 };
