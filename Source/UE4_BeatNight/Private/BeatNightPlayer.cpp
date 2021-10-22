@@ -132,12 +132,23 @@ void ABeatNightPlayer::TraceEnemyToDamage(FVector StartLocation, FVector EndLoca
 		AEnemy* HitEnemy = Cast<AEnemy>(OutHitResult.Actor.Get());
 		if(HitEnemy)
 		{
-			UGameplayStatics::ApplyDamage(HitEnemy, WeaponDamage, GetController(), this, UDamageType::StaticClass());
+			if(HitEnemy->GetDying()) return;
+			const float RandomDamaged = RandomizationDamage(WeaponDamage);
+			UGameplayStatics::ApplyDamage(HitEnemy, RandomDamaged, GetController(), this, UDamageType::StaticClass());
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitEnemy->GetDamagedParticle(), OutHitResult.Location, FRotator::ZeroRotator, FVector(2.f));
+			// 데미지 UI 보여주기
+			HitEnemy->ShowHitNumber(RandomDamaged, OutHitResult.Location);
 		}
 		else
 		{
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), GunParticle, OutHitResult.Location);
 		}
 	}
+}
+
+float ABeatNightPlayer::RandomizationDamage(float Damage)
+{
+	int Rand = FMath::RandRange(Damage-10.f, Damage+10.f);
+	if(Rand <= 0) return 0;
+	return Rand;
 }

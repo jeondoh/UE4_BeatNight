@@ -43,9 +43,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon|Props", meta=(AllowPrivateAccess=true))
 	class USoundCue* WeaponSound;
 
-	/** 무기 장착 사운드  */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon|Props", meta=(AllowPrivateAccess=true))
-	class USoundCue* EquippedSound;
+	/** 데미지 랜덤화 */
+	UFUNCTION()
+	float RandomizationDamage(float Damage);
 	
 	/**************************************************************************************************/
 

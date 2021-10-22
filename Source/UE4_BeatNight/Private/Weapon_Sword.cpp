@@ -70,11 +70,15 @@ void AWeapon_Sword::BoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComp
 	AEnemy* Enemy = Cast<AEnemy>(OtherActor);
 	if(Enemy)
 	{
-		DoDamageSword(Enemy);
+		if(Enemy->GetDying()) return;
+		const int RandomDamaged = RandomizationDamage(WeaponDamage);
+		DoDamageSword(Enemy, RandomDamaged);
 		const FTransform SocketTransform = StaticMeshComponent->GetSocketTransform("HitSocket", ERelativeTransformSpace::RTS_World);
 		if(SwordParticle)
 		{
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), SwordParticle, SocketTransform.GetLocation());
+			// 데미지 UI 보여주기
+			Enemy->ShowHitNumber(RandomDamaged, SocketTransform.GetLocation());
 		}
 		if(WeaponSound)
 		{
@@ -84,11 +88,12 @@ void AWeapon_Sword::BoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComp
 	}
 }
 
-void AWeapon_Sword::DoDamageSword(AEnemy* Enemy)
+void AWeapon_Sword::DoDamageSword(AEnemy* Enemy, float Damaged)
 {
 	ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(UGameplayStatics::GetPlayerPawn(this, 0));
-	UGameplayStatics::ApplyDamage(Enemy, WeaponDamage, Player->GetController(), this, UDamageType::StaticClass());
+	UGameplayStatics::ApplyDamage(Enemy, Damaged, Player->GetController(), this, UDamageType::StaticClass());
 	CollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	SetSwordRumble();
 	GetWorldTimerManager().SetTimer(SwordTimer, this, &AWeapon_Sword::DisableCollision, CollisionEnableTime);
 }
 

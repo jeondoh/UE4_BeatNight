@@ -37,7 +37,7 @@ private:
 	
 	/** 스폰 타입 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="EnemySpawn", meta=(AllowPrivateAccess=true))
-	TSubclassOf<class AEnemy> SpawnEnemyType;
+	TSubclassOf<class ASpider> SpawnEnemyType;
 	/** 스폰시 지정할 몬스터 이름 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="EnemySpawn", meta=(AllowPrivateAccess=true))
 	FName SpawnMonsterName;

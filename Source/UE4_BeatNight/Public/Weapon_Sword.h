@@ -43,6 +43,9 @@ public:
 	void SetWeaponDataTable();
 
 	virtual void BeginPlay() override;
+	
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetSwordRumble();
 
 private:
 	/**************************************************************************************************/
@@ -55,7 +58,7 @@ private:
 	/** 데이터 테이블 */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Sword|DataTable", meta=(AllowPrivateAccess=true))
 	UDataTable* SwordDataTable;
-
+	
 	/** 데이터 테이블 데이터 SET */
 	void SetWeaponDataRow(FSwordDataTable* WeaponDataRow);
 	
@@ -63,7 +66,7 @@ private:
 		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
 
 	UFUNCTION(BlueprintCallable)
-	void DoDamageSword(class AEnemy* Enemy);
+	void DoDamageSword(class AEnemy* Enemy, float Damaged);
 
 	UPROPERTY(EditAnywhere, Category="Sword|Effect", meta=(AllowPrivateAccess=true))
 	UParticleSystem* SwordParticle;

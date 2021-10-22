@@ -7,8 +7,10 @@
 #include "EnemyAIController.h"
 #include "PotalActor.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Blueprint/UserWidget.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
+#include "Components/WidgetComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Particles/ParticleSystemComponent.h"
@@ -28,6 +30,9 @@ AEnemy::AEnemy()
 	
 	AttackSphere = CreateDefaultSubobject<USphereComponent>(TEXT("AttackSphere"));
 	AttackSphere->SetupAttachment(GetRootComponent());
+
+	HitWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HitWidget"));
+	HitWidget->SetupAttachment(GetRootComponent());
 }
 
 // Called when the game starts or when spawned
@@ -356,5 +361,7 @@ void AEnemy::GetLookAtRotation(FVector TargetLocation)
 
 float AEnemy::RandomizationDamage(float Damage)
 {
-	return FMath::RandRange(Damage-10.f, Damage+30.f);
+	int Rand = FMath::RandRange(Damage-10.f, Damage+30.f);
+	if(Rand <= 0) return 0;
+	return Rand;
 }

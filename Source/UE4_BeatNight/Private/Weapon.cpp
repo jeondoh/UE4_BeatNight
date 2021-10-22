@@ -25,3 +25,10 @@ void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 }
+
+float AWeapon::RandomizationDamage(float Damage)
+{
+	int Rand = FMath::RandRange(Damage-10.f, Damage+10.f);
+	if(Rand <= 0) return 0;
+	return Rand;
+}

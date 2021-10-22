@@ -27,6 +27,9 @@ public:
 	void DoDamage(class ABeatNightPlayer* Player);
 	/** 데미지 랜덤화 */
 	float RandomizationDamage(float Damage);
+	/** 데미지 UI */
+	UFUNCTION(BlueprintImplementableEvent)
+	void ShowHitNumber(int32 Damage, FVector HitLocation);
 	
 protected:
 	// Called when the game starts or when spawned
@@ -143,6 +146,9 @@ private:
 	/** 공격 범위 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Enemy|Component", meta=(AllowPrivateAccess=true))
 	class USphereComponent* AttackSphere;
+	/** Hit Widget */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Enemy|Component", meta=(AllowPrivateAccess=true))
+	class UWidgetComponent* HitWidget;
 	
 	/**************************************************************************************************/
 	// 아이템 드롭
@@ -215,6 +221,9 @@ public:
 	FORCEINLINE void SetPatrolTagName(FName Name) {PatrolTagName = Name;}
 	
 	FORCEINLINE FName GetMonsterTagName() const {return TagName;}
+
+	FORCEINLINE bool GetDying() const {return bDying;}
+
 	FORCEINLINE void SetMonsterTagName(FName Name) {TagName = Name;}
 
 	FORCEINLINE UBehaviorTree* GetBehaviorTree() const {return BehaviorTree;}

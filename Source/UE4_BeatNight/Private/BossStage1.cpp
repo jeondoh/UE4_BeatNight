@@ -90,16 +90,39 @@ void ABossStage1::BossFire()
 void ABossStage1::SpawnSpider()
 {
 	TArray<AActor*> Arr;
+	TArray<AActor*> EnemyArr;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASpawnSpiderEnemy::StaticClass(), Arr);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASpider::StaticClass(), EnemyArr);
 
 	if(Arr.IsValidIndex(0))
 	{
-		for(int i = 0; i < Arr.Num(); ++i)
+		int SpawnEnemy = 0;
+		bool bSpawn = true;
+
+		for(int i = 0; i < EnemyArr.Num(); ++i)
 		{
-			ASpawnSpiderEnemy* FindSpawnActor = dynamic_cast<ASpawnSpiderEnemy*>(Arr[i]);
-			FindSpawnActor->bDropItem = false;
-			FindSpawnActor->SpawnEnemy();
-		}	
+			ASpider* FindSpawnEnemy = dynamic_cast<ASpider*>(EnemyArr[i]);
+			if(FindSpawnEnemy)
+			{
+				SpawnEnemy++;
+			}
+		}
+		if(SpawnEnemy >= 6)
+		{
+			bSpawn = false;
+		}
+		if(bSpawn)
+		{
+			for(int i = 0; i < Arr.Num(); ++i)
+			{
+				ASpawnSpiderEnemy* FindSpawnActor = dynamic_cast<ASpawnSpiderEnemy*>(Arr[i]);
+				if(FindSpawnActor)
+				{
+					FindSpawnActor->bDropItem = false;
+					FindSpawnActor->SpawnEnemy();				
+				}
+			}	
+		}
 	}
 }
 

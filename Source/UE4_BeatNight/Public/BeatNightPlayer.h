@@ -77,7 +77,7 @@ private:
 	/** Stage1 클리어 이후 이동가능여부 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Char|Props", meta=(AllowPrivateAccess=true))
 	bool bCanGoStage2;
-
+	
 	void Die();
 	
 	/**************************************************************************************************/
@@ -117,6 +117,9 @@ private:
 	/** Inventory에서 무기 제거 */
 	UFUNCTION(BlueprintCallable)
 	void RemoveInventory(int Index);
+	/** 데미지 랜덤화 */
+	UFUNCTION()
+	float RandomizationDamage(float Damage);
 
 	/**************************************************************************************************/
 	// Enemy 상호작용
