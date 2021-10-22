@@ -4,6 +4,8 @@
 #include "Item_Health.h"
 
 #include "BeatNightPlayer.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 
 
 AItem_Health::AItem_Health()
@@ -21,6 +23,10 @@ void AItem_Health::AreaSphereBeginOverlap(UPrimitiveComponent* OverlappedCompone
 	{
 		ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(OtherActor);
 		HealPlayer(Player);
+		if(PickupSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, PickupSound, GetActorLocation());
+		}
 	}
 }
 

@@ -7,6 +7,7 @@
 #include "EnemyAIController.h"
 #include "PotalActor.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -52,7 +53,6 @@ void AEnemy::DoDamage(ABeatNightPlayer* Player)
 	UGameplayStatics::ApplyDamage(Player, RandomizationDamage(EnemyDamage), EnemyController, this, UDamageType::StaticClass());
 	if(bUlitmateDamaged)
 	{
-		DamagedPlayer = Player;
 		GetWorldTimerManager().SetTimer(BossStage2Timer, this, &AEnemy::SetVisibilityPlayerParticle, UltimateDurationTime, false);		
 	}
 }
@@ -64,8 +64,13 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 	
 	if(EnemyController)
 	{
+		ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(UGameplayStatics::GetPlayerPawn(this, 0));
 		// 타겟 어그로
-		EnemyController->GetBlackboardComponent()->SetValueAsObject(FName("Target"), DamageCauser);
+		EnemyController->GetBlackboardComponent()->SetValueAsObject(FName("Target"), Player);
+	}
+	if(DamagedSound)
+	{
+		UGameplayStatics::PlaySound2D(this, GetDamagedSound());
 	}
 	Health -= DamageAmount;
 	if(Health <= 0.f)
@@ -79,18 +84,22 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 void AEnemy::SetVisibilityPlayerParticle()
 {
 	SetUltimateDamaged(false);
-	DamagedPlayer->GetHitUlitmateParticle()->SetVisibility(false);
-	DamagedPlayer->GetHitUlitmateParticle2()->SetVisibility(false);
+	ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(UGameplayStatics::GetPlayerPawn(this, 0));
+	if(Player)
+	{
+		Player->GetHitUlitmateParticle()->SetVisibility(false);
+		Player->GetHitUlitmateParticle2()->SetVisibility(false);		
+	}
 }
 
 void AEnemy::Die()
 {
 	if(bDying) return;
 	bDying = true;
-	// TODO 체력바 숨기기
-	// HideHealthBar(); 
 	// 사망 몽타주 실행
 	PlayDeathAnim();
+	// 콜리전 제거
+	DieCollision();
 	// 아이템 드롭
 	DropItem();
 }
@@ -108,6 +117,12 @@ void AEnemy::PlayDeathAnim()
 		EnemyController->GetBlackboardComponent()->SetValueAsObject(FName("Target"), nullptr);
 		EnemyController->StopMovement();
 	}
+}
+
+void AEnemy::DieCollision()
+{
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void AEnemy::FinishDeath()
@@ -173,18 +188,11 @@ void AEnemy::CheckDestroyEnemy()
 		for(int i = 0; i < FindLastArray.Num(); ++i)
 		{
 			APotalActor* FindPotal = dynamic_cast<APotalActor*>(FindLastArray[i]);
-			// ASpawnEnemy* SpawnActorEnemy = dynamic_cast<ASpawnEnemy*>(FindLastArray[i]);
 			if(FindPotal)
 			{
 				FindPotal->SetbCanMove(true);
 				FindPotal->GetPortalParticle()->SetVisibility(true);
 			}
-			/*
-			if(SpawnActorEnemy)
-			{
-				SpawnActorEnemy->Destroy();
-			}
-			*/
 		}
 	}
 }

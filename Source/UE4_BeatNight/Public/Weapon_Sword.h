@@ -42,6 +42,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetWeaponDataTable();
 
+	virtual void BeginPlay() override;
+
 private:
 	/**************************************************************************************************/
 	// 검 속성
@@ -56,7 +58,26 @@ private:
 
 	/** 데이터 테이블 데이터 SET */
 	void SetWeaponDataRow(FSwordDataTable* WeaponDataRow);
+	
+	virtual void BoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
 
+	UFUNCTION(BlueprintCallable)
+	void DoDamageSword(class AEnemy* Enemy);
+
+	UPROPERTY(EditAnywhere, Category="Sword|Effect", meta=(AllowPrivateAccess=true))
+	UParticleSystem* SwordParticle;
+
+	/** 검 공격 타이머 */
+	UPROPERTY()
+	FTimerHandle SwordTimer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Sword|Timer", meta=(AllowPrivateAccess=true))
+	float CollisionEnableTime;
+	
+	UFUNCTION()
+	void DisableCollision();
+	
 public:
 	FORCEINLINE ESwordType GetSwordType() const {return SwordType;}
 	FORCEINLINE void SetSwordType(ESwordType Type) {SwordType = Type;}

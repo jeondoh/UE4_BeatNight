@@ -3,8 +3,20 @@
 
 #include "Weapon_Sword.h"
 
+#include "BeatNightPlayer.h"
+#include "Enemy.h"
+#include "Components/BoxComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
+
 AWeapon_Sword::AWeapon_Sword()
 {
+	CollisionEnableTime = 1.f;
+}
+
+void AWeapon_Sword::BeginPlay()
+{
+	Super::BeginPlay();
 }
 
 void AWeapon_Sword::OnConstruction(const FTransform& Transform)
@@ -48,4 +60,39 @@ void AWeapon_Sword::SetWeaponDataRow(FSwordDataTable* WeaponDataRow)
 		StaticMeshComponent->SetStaticMesh(WeaponDataRow->StaticMeshDataTable);
 		StaticMeshComponent->SetMaterial(0, WeaponDataRow->MatInterface);
 	}
+}
+
+void AWeapon_Sword::BoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if(OtherActor == nullptr) return;
+
+	AEnemy* Enemy = Cast<AEnemy>(OtherActor);
+	if(Enemy)
+	{
+		DoDamageSword(Enemy);
+		const FTransform SocketTransform = StaticMeshComponent->GetSocketTransform("HitSocket", ERelativeTransformSpace::RTS_World);
+		if(SwordParticle)
+		{
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), SwordParticle, SocketTransform.GetLocation());
+		}
+		if(WeaponSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, WeaponSound, SocketTransform.GetLocation());
+		}
+		
+	}
+}
+
+void AWeapon_Sword::DoDamageSword(AEnemy* Enemy)
+{
+	ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(UGameplayStatics::GetPlayerPawn(this, 0));
+	UGameplayStatics::ApplyDamage(Enemy, WeaponDamage, Player->GetController(), this, UDamageType::StaticClass());
+	CollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetWorldTimerManager().SetTimer(SwordTimer, this, &AWeapon_Sword::DisableCollision, CollisionEnableTime);
+}
+
+void AWeapon_Sword::DisableCollision()
+{
+	CollisionBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 }

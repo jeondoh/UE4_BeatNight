@@ -35,7 +35,8 @@ void ASpawnSpiderEnemy::SpawnEnemy()
 	AEnemy* CastEnemy = GetWorld()->SpawnActor<AEnemy>(SpawnEnemyType, GetActorLocation(), GetActorRotation(), Param);
 	if(CastEnemy)
 	{
-		CastEnemy->SetbDropItem(bDropItem);
+		CastEnemy->SetbDropItem(bDropItem); // 죽을때 드롭
+		CastEnemy->SetItemType(ItemType); // 죽을때 드롭 아이템
 		CastEnemy->SetMonsterName(SpawnMonsterName); // 스테이지 구별을 위해 몬스터명 지정
 		CastEnemy->SetEnemyAIController(); // Enemy의 BehaviorTree설정 (AI 동작)
 		// 소환된 거미가 바로 캐릭터에게 이동(공격)할 수 있도록

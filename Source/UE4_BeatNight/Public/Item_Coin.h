@@ -22,12 +22,4 @@ private:
 	virtual void AreaSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
 	
-	/**************************************************************************************************/
-	// 이팩트
-	
-	/** 획득 사운드 */
-	UPROPERTY(EditAnywhere, Category = "Coins|Effect", meta=(AllowPrivateAccess=true, MakeEditWidget=true))
-	class USoundCue* GotSound;
-
-	
 };
