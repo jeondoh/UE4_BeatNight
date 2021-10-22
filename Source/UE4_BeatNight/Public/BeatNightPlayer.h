@@ -90,12 +90,18 @@ private:
 	/** VR 왼손 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Char|VR", meta=(AllowPrivateAccess=true))
 	class AMontionActor* LeftController;
+
 	/** VR 오른손 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Char|VR", meta=(AllowPrivateAccess=true))
 	class AMontionActor* RightController;
-	/** VR Widget Interaction */
+	
+	/** VR Widget Interaction 왼손*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Char|VR", meta = (AllowPrivateAccess = true))
-	class UWidgetInteractionComponent* WidgetComp;
+	class UWidgetInteractionComponent* WidgetCompLeft;
+
+	/** VR Widget Interaction 오른손*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Char|VR", meta = (AllowPrivateAccess = true))
+		class UWidgetInteractionComponent* WidgetCompRight;
 
 	/**************************************************************************************************/
 	// Enemy 상호작용
