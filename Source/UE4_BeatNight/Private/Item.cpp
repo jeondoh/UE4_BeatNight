@@ -6,6 +6,7 @@
 #include "BeatNightPlayer.h"
 #include "Components/BoxComponent.h"
 #include "Components/SphereComponent.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 AItem::AItem()
@@ -21,6 +22,9 @@ AItem::AItem()
 
 	AreaSphere = CreateDefaultSubobject<USphereComponent>(TEXT("AreaSphere"));
 	AreaSphere->SetupAttachment(GetRootComponent());
+
+	ItemParticle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ItemParticle"));
+	ItemParticle->SetupAttachment(GetRootComponent());
 
 	// INIT
 	BItemRotate = false; // 아이템 회전 여부

@@ -35,12 +35,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="ItemComp|Props", meta=(AllowPrivateAccess=true))
 	class USphereComponent* AreaSphere;
 
-	/**************************************************************************************************/
-	// 아이템 속성 
-
 	/** 아이템 외형 파티클 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ItemComp|Props")
-	class UParticleSystem* ItemParticle;
+	class UParticleSystemComponent* ItemParticle;
+	
+	/**************************************************************************************************/
+	// 아이템 속성 
 	
 	/** 아이템 회전 여부 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ItemComp|Rotate")

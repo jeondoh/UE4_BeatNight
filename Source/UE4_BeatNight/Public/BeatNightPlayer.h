@@ -28,9 +28,12 @@ public:
 
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
-	/** 데미지 UI */
+	/** 데미지(Enemy) UI */
 	UFUNCTION(BlueprintImplementableEvent)
 	void ShowHitNumber(int32 Damage, FVector HitLocation, FRotator HitRotator);
+	/** 데미지(Player) UI */
+	UFUNCTION(BlueprintImplementableEvent)
+	void ShowDamagedUI();
 	
 private:
 

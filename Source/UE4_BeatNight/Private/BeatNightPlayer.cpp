@@ -71,7 +71,9 @@ float ABeatNightPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 		{
 			EnemyController->GetBlackboardComponent()->SetValueAsBool(TEXT("PlayerDeath"), true);			
 		}
+		return 0;
 	}
+	ShowDamagedUI();
 	return DamageAmount;
 }
 
