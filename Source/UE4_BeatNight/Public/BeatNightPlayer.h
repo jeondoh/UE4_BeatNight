@@ -39,13 +39,16 @@ public:
 	void ShowDieWidget();
 	/** 상점 > 아이템 구매 */
 	UFUNCTION(BlueprintCallable)
-	void BuyItem(class AItem* Item, FName ItemName, uint8 ItemCoin, float Amount, class USoundCue* SoundCue);
+	void BuyItem(class AItem* Item, FName ItemName);
 	/** 아이템 획득(Key, Coin) */
 	UFUNCTION(BlueprintImplementableEvent)
 	void ShowGetItemUI();
 	/** 상점 > 아이템 구매 실패 */
 	UFUNCTION(BlueprintImplementableEvent)
 	void GetFailItemToShop();
+	/** 상점 > 아이템 업그레이드 실패 */
+	UFUNCTION(BlueprintImplementableEvent)
+	void GetFailItemToUpgrade();
 	
 private:
 

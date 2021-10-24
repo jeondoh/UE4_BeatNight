@@ -16,11 +16,11 @@ class UE4_BEATNIGHT_API AItem_Defense : public AItem
 	
 public:
 	AItem_Defense();
+
+	UFUNCTION()
+	bool BuyDefense(class ABeatNightPlayer* Player);
 	
 private:
-	virtual void BoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
-	
 	/**************************************************************************************************/
 	// 속성
 	

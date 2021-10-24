@@ -5,36 +5,44 @@
 
 #include "BeatNightPlayer.h"
 #include "Weapon_Sword.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 
 AItem_SwordUpgrade::AItem_SwordUpgrade()
 {
 	BItemRotate = true;
 }
 
-void AItem_SwordUpgrade::BoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+int AItem_SwordUpgrade::UpgradeSword(ABeatNightPlayer* Player)
 {
-	Super::BoxCollisionBeginOverlap(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
-	bool bGetItem = BuyItem();
-	if(bGetItem)
+	const uint8 PlayerCoin = Player->GetItemCoins();
+	if(PlayerCoin >= ItemCoin)
 	{
 		// 인벤토리에서 Sword 찾고 업그레이드
-		TArray<AWeapon*> Weapons = CastPlayer->GetInventory();
+		TArray<AWeapon*> Weapons = Player->GetInventory();
 		for(AWeapon* Weapon : Weapons)
 		{
 			AWeapon_Sword* Sword = Cast<AWeapon_Sword>(Weapon);
 			if(Sword)
 			{
-				ESwordType GetType = Sword->GetSwordType();
+				const ESwordType GetType = Sword->GetSwordType();
 				if(GetType == ESwordType::EST_Level3) continue;
 				if(GetType == ESwordType::EST_Level4) continue; // LEVEL4가 최대
 
 				Sword->SetSwordType(SetSwordUpgradeType(GetType));
 				Sword->SetWeaponDataTable();
+				if(PickupSound)
+				{
+					UGameplayStatics::PlaySoundAtLocation(this, PickupSound, GetActorLocation());
+				}
+				Player->SetItemCoins(PlayerCoin - ItemCoin);
 				Destroy();
+				return 1;
 			}
 		}
+		return 2;
 	}
+	return 0;
 }
 
 ESwordType AItem_SwordUpgrade::SetSwordUpgradeType(ESwordType Type)

@@ -7,12 +7,15 @@
 #include "DrawDebugHelpers.h"
 #include "Enemy.h"
 #include "EnemyAIController.h"
+#include "Item_Defense.h"
+#include "Item_Health.h"
+#include "Item_Key.h"
+#include "Item_SwordUpgrade.h"
 #include "Weapon.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
-#include "Sound/SoundCue.h"
 
 // Sets default values
 ABeatNightPlayer::ABeatNightPlayer()
@@ -161,40 +164,56 @@ float ABeatNightPlayer::RandomizationDamage(float Damage)
 	return Rand;
 }
 
-void ABeatNightPlayer::BuyItem(AItem* Item, FName ItemName, uint8 ItemCoin, float Amount, USoundCue* SoundCue)
+void ABeatNightPlayer::BuyItem(AItem* Item, FName ItemName)
 {
-	bool IsBuy = false;
+	bool bBuyItem = false;
+	
 	if(ItemName.IsEqual("Defense"))
 	{
-		const uint8 PlayerCoin = GetItemCoins();
-		if(PlayerCoin >= ItemCoin)
+		AItem_Defense* DefenseClass = Cast<AItem_Defense>(Item);
+		if(DefenseClass)
 		{
-			SetItemCoins(PlayerCoin - ItemCoin);
-			SetDefense(GetDefense() + Amount);
-			IsBuy = true;
+			bBuyItem = DefenseClass->BuyDefense(this);
 		}
 	}
 	else if(ItemName.IsEqual("HP"))
 	{
-
+		AItem_Health* HealthClass = Cast<AItem_Health>(Item);
+		if(HealthClass)
+		{
+			bBuyItem = HealthClass->HealPlayer(this);
+		}
 	}
 	else if(ItemName.IsEqual("Upgrade"))
 	{
-
+		AItem_SwordUpgrade* SwordUpgrade = Cast<AItem_SwordUpgrade>(Item);
+		if(SwordUpgrade)
+		{
+			const int UpgradeSword = SwordUpgrade->UpgradeSword(this);
+			switch (UpgradeSword)
+			{
+			case 0 : // 코인부족
+				GetFailItemToShop();
+				return;
+			case 1 : // 구매성공
+				return;
+			case 2 : // 업그레이드 할 칼이 없음
+				GetFailItemToUpgrade();
+				return;
+			}
+		}
 	}
 	else if(ItemName.IsEqual("Key"))
 	{
-
-	}
-	if(IsBuy)
-	{
-		if(SoundCue)
+		AItem_Key* KeyClass = Cast<AItem_Key>(Item);
+		if(KeyClass)
 		{
-			UGameplayStatics::PlaySoundAtLocation(this, SoundCue, GetActorLocation());
+			bBuyItem = KeyClass->BuyKey(this);
 		}
-		Item->Destroy();
-		return;
 	}
-	// Coin 부족시 아이템 구매 실패 UI
-	GetFailItemToShop();
+	if(!bBuyItem)
+	{
+		// Coin 부족시 아이템 구매 실패 UI
+		GetFailItemToShop();
+	}
 }

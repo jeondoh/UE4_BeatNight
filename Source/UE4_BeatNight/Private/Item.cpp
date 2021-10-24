@@ -52,6 +52,7 @@ void AItem::BeginPlay()
 	if(ItemType == EItemType::EIT_Store)
 	{
 		WidgetComponent->SetVisibility(true);
+		ItemParticle->SetVisibility(false);
 		CollisionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Ignore);
 		AreaSphere->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Ignore);
 		SetWidgetCoinNum();
