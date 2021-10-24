@@ -34,6 +34,18 @@ public:
 	/** 데미지(Player) UI */
 	UFUNCTION(BlueprintImplementableEvent)
 	void ShowDamagedUI();
+	/** 사망시 UI */
+	UFUNCTION(BlueprintImplementableEvent)
+	void ShowDieWidget();
+	/** 상점 > 아이템 구매 */
+	UFUNCTION(BlueprintCallable)
+	void BuyItem(class AItem* Item, FName ItemName, uint8 ItemCoin, float Amount, class USoundCue* SoundCue);
+	/** 아이템 획득(Key, Coin) */
+	UFUNCTION(BlueprintImplementableEvent)
+	void ShowGetItemUI();
+	/** 상점 > 아이템 구매 실패 */
+	UFUNCTION(BlueprintImplementableEvent)
+	void GetFailItemToShop();
 	
 private:
 
@@ -87,7 +99,15 @@ private:
 	/** Stage1 클리어 이후 이동가능여부 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Char|Props", meta=(AllowPrivateAccess=true))
 	bool bCanGoStage2;
-	
+
+	/** 캐릭터 사망 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Char|Props", meta=(AllowPrivateAccess=true))
+	bool bPlayerDie;
+
+	/** 캐릭터 사망 */
+	UPROPERTY(BlueprintReadOnly, Category="Char|Props", meta=(AllowPrivateAccess=true))
+	FName GetItemName;
+
 	void Die();
 	
 	/**************************************************************************************************/
@@ -97,7 +117,7 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Char|Items", meta=(AllowPrivateAccess=true))
 	uint8 Item_Coins;
 	/** 열쇠(가챠박스) */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Char|Items", meta=(AllowPrivateAccess=true))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Char|Items", meta=(AllowPrivateAccess=true))
 	uint8 Item_Keys;
 
 	/**************************************************************************************************/
@@ -152,6 +172,8 @@ private:
 public:
 	FORCEINLINE float GetMaxHealth() const {return MaxHealth;}
 
+	FORCEINLINE void SetItemName(FName TEXT) {GetItemName = TEXT;}
+
 	FORCEINLINE FName GetPlayerStageName() const {return PlayerStageName;}
 	FORCEINLINE void SetPlayerStageName(FName Name) {PlayerStageName = Name;}
 	
@@ -179,3 +201,4 @@ public:
 	FORCEINLINE UParticleSystemComponent* GetHitUlitmateParticle() const {return HitUlitmateParticle;}
 	FORCEINLINE UParticleSystemComponent* GetHitUlitmateParticle2() const {return HitUlitmateParticle2;}
 };
+

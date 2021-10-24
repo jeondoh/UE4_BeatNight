@@ -16,6 +16,9 @@ public:
 	// Sets default values for this actor's properties
 	AItem();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetWidgetCoinNum();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -38,6 +41,10 @@ protected:
 	/** 아이템 외형 파티클 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ItemComp|Props")
 	class UParticleSystemComponent* ItemParticle;
+	
+	/** 아이템 위젯 컴포넌트 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="ItemComp|Props")
+	class UWidgetComponent* WidgetComponent;
 	
 	/**************************************************************************************************/
 	// 아이템 속성 
@@ -96,4 +103,8 @@ public:
 
 public:
 	FORCEINLINE	uint8 GetItemCoin() const {return ItemCoin;}
+
+	FORCEINLINE	USphereComponent* GetSphereComponent() const {return AreaSphere;}
+
+	FORCEINLINE	UWidgetComponent* GetWidgetComponent() const {return WidgetComponent;}
 };

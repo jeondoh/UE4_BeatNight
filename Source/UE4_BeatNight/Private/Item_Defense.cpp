@@ -19,6 +19,7 @@ void AItem_Defense::BoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComp
 	Super::BoxCollisionBeginOverlap(OverlappedComponent, OtherActor, OtherComp,
 		OtherBodyIndex, bFromSweep, SweepResult);
 
+	/*
 	bool bGetItem = BuyItem();
 	if(bGetItem)
 	{
@@ -29,5 +30,5 @@ void AItem_Defense::BoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComp
 		}
 		Destroy();
 	}
-	// TODO : 플레이어 Coin 부족 시 경고창 UI 생성
+	*/
 }

@@ -37,8 +37,9 @@ float ABossStage2::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 
 	if(EnemyController)
 	{
+		ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(UGameplayStatics::GetPlayerPawn(this, 0));
 		// 타겟 어그로
-		EnemyController->GetBlackboardComponent()->SetValueAsObject(FName("Target"), DamageCauser);
+		EnemyController->GetBlackboardComponent()->SetValueAsObject(FName("Target"), Player);
 	}
 	Health -= DamageAmount;
 	CheckHP();

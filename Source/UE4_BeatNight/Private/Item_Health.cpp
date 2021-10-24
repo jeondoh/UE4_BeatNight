@@ -41,7 +41,6 @@ void AItem_Health::BoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedCompo
 	{
 		HealPlayer(CastPlayer);
 	}
-	// TODO : 플레이어 Coin 부족 시 경고창 UI 생성
 }
 
 void AItem_Health::HealPlayer(ABeatNightPlayer* Player)

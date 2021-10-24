@@ -22,6 +22,8 @@ void AItem_Coin::AreaSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent
 	{
 		int PlayerCoins = Player->GetItemCoins();
 		Player->SetItemCoins(++PlayerCoins);
+		Player->SetItemName(TEXT("COIN"));
+		Player->ShowGetItemUI();
 		if(PickupSound)
 		{
 			UGameplayStatics::PlaySoundAtLocation(this, PickupSound, GetActorLocation());

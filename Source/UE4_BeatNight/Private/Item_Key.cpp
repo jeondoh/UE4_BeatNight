@@ -22,6 +22,8 @@ void AItem_Key::AreaSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent,
 	{
 		int PlayerKeys = Player->GetItemKeys();
 		Player->SetItemKeys(++PlayerKeys);
+		Player->SetItemName(TEXT("KEY"));
+		Player->ShowGetItemUI();
 		if(PickupSound)
 		{
 			UGameplayStatics::PlaySoundAtLocation(this, PickupSound, GetActorLocation());

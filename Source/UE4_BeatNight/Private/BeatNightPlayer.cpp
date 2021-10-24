@@ -12,6 +12,7 @@
 #include "Components/WidgetComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "Sound/SoundCue.h"
 
 // Sets default values
 ABeatNightPlayer::ABeatNightPlayer()
@@ -32,6 +33,7 @@ ABeatNightPlayer::ABeatNightPlayer()
 	HitUlitmateParticle2->SetVisibility(false);
 
 	bCanInventory = false;
+	bPlayerDie = false;
 }
 
 // Called when the game starts or when spawned
@@ -93,7 +95,9 @@ void ABeatNightPlayer::LoadGame()
 
 void ABeatNightPlayer::Die()
 {
-	
+	SetMovementSpeed(0.f);
+	bPlayerDie = true;
+	ShowDieWidget();
 }
 
 bool ABeatNightPlayer::CheckInventory(int Index)
@@ -155,4 +159,42 @@ float ABeatNightPlayer::RandomizationDamage(float Damage)
 	int Rand = FMath::RandRange(Damage-10.f, Damage+10.f);
 	if(Rand <= 0) return 0;
 	return Rand;
+}
+
+void ABeatNightPlayer::BuyItem(AItem* Item, FName ItemName, uint8 ItemCoin, float Amount, USoundCue* SoundCue)
+{
+	bool IsBuy = false;
+	if(ItemName.IsEqual("Defense"))
+	{
+		const uint8 PlayerCoin = GetItemCoins();
+		if(PlayerCoin >= ItemCoin)
+		{
+			SetItemCoins(PlayerCoin - ItemCoin);
+			SetDefense(GetDefense() + Amount);
+			IsBuy = true;
+		}
+	}
+	else if(ItemName.IsEqual("HP"))
+	{
+
+	}
+	else if(ItemName.IsEqual("Upgrade"))
+	{
+
+	}
+	else if(ItemName.IsEqual("Key"))
+	{
+
+	}
+	if(IsBuy)
+	{
+		if(SoundCue)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, SoundCue, GetActorLocation());
+		}
+		Item->Destroy();
+		return;
+	}
+	// Coin 부족시 아이템 구매 실패 UI
+	GetFailItemToShop();
 }
