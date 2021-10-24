@@ -49,6 +49,9 @@ public:
 	/** 상점 > 아이템 업그레이드 실패 */
 	UFUNCTION(BlueprintImplementableEvent)
 	void GetFailItemToUpgrade();
+	/** 게임 클리어 위젯 */
+	UFUNCTION(BlueprintImplementableEvent)
+	void ShowGameClearWidget();
 	
 private:
 
@@ -107,6 +110,10 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Char|Props", meta=(AllowPrivateAccess=true))
 	bool bPlayerDie;
 
+	/** 게임 클리어 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Char|Props", meta=(AllowPrivateAccess=true))
+	bool bGameClear;
+	
 	/** 캐릭터 사망 */
 	UPROPERTY(BlueprintReadOnly, Category="Char|Props", meta=(AllowPrivateAccess=true))
 	FName GetItemName;
@@ -185,6 +192,8 @@ public:
 
 	FORCEINLINE bool GetCanGoStage2() const {return bCanGoStage2;}
 	FORCEINLINE void SetCanGoStage2(bool Cango) {bCanGoStage2 = Cango;}
+
+	FORCEINLINE void SetGameClear(bool Clear) {bGameClear = Clear;}
 	
 	FORCEINLINE uint8 GetItemCoins() const {return Item_Coins;}
 	FORCEINLINE void SetItemCoins(int Coins) {Item_Coins = Coins;}

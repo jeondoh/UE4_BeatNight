@@ -37,6 +37,7 @@ ABeatNightPlayer::ABeatNightPlayer()
 
 	bCanInventory = false;
 	bPlayerDie = false;
+	bGameClear = false;
 }
 
 // Called when the game starts or when spawned

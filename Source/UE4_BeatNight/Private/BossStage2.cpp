@@ -35,9 +35,9 @@ float ABossStage2::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 {
 	if(bDying) return 0;
 
+	ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(UGameplayStatics::GetPlayerPawn(this, 0));
 	if(EnemyController)
 	{
-		ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(UGameplayStatics::GetPlayerPawn(this, 0));
 		// 타겟 어그로
 		EnemyController->GetBlackboardComponent()->SetValueAsObject(FName("Target"), Player);
 	}
@@ -48,6 +48,8 @@ float ABossStage2::TakeDamage(float DamageAmount, FDamageEvent const& DamageEven
 		Health = 0.f;
 		SetVisibilityPlayerParticle(); // 파티클 제거
 		Die();
+		Player->SetGameClear(true);
+		Player->ShowGameClearWidget();
 	}
 	return DamageAmount;
 }
@@ -191,16 +193,15 @@ void ABossStage2::BossGuidedMissile()
 	FActorSpawnParameters Params;
 	Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-	int GuidedBullet = bHPDown ? 7 : 5; // 유도탄 개수
+	const int GuidedBullet = bHPDown ? 7 : 5; // 유도탄 개수
 	
 	if(SpawnGuidedBullet)
 	{
 		// 유도탄 6개 소환
 		for(int i=1; i<=GuidedBullet; i++)
 		{
-			FVector SocketLocation = SocketTransForm.GetLocation();
-
-			float RandomFloat = FMath::RandRange(-500, 500);
+			const FVector SocketLocation = SocketTransForm.GetLocation();
+			const float RandomFloat = FMath::RandRange(-500, 500);
 			FVector RandomLocation = FVector(
 				SocketLocation.X,
 				SocketLocation.Y + RandomFloat,
