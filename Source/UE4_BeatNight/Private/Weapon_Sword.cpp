@@ -7,6 +7,7 @@
 #include "Enemy.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "Sound/SoundCue.h"
 
 AWeapon_Sword::AWeapon_Sword()
@@ -45,7 +46,7 @@ void AWeapon_Sword::SetWeaponDataTable()
 			WeaponDataRow = WeaponTableObject->FindRow<FSwordDataTable>(FName("LEVEL3"), TEXT(""));			
 			break;
 		case ESwordType::EST_Level4:
-			WeaponDataRow = WeaponTableObject->FindRow<FSwordDataTable>(FName("LEVEL4"), TEXT(""));			
+			WeaponDataRow = WeaponTableObject->FindRow<FSwordDataTable>(FName("LEVEL4"), TEXT(""));
 			break;
 		}
 		SetWeaponDataRow(WeaponDataRow);

@@ -235,12 +235,14 @@ void AEnemy::DropItem()
 		// Enemy 위치에 스폰
 		const FVector EnemyLocate = GetActorLocation();
 		// 아이템 스폰
-		GetWorld()->SpawnActor<AItem>(ItemType, EnemyLocate, GetActorRotation(), Param);
+		AItem* DropItem = GetWorld()->SpawnActor<AItem>(ItemType, EnemyLocate, GetActorRotation(), Param);
+		DropItem->GetSphereComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		// 아이템 드롭 사운드
 		if(DropSound)
 		{
 			UGameplayStatics::PlaySoundAtLocation(this, DropSound, EnemyLocate);
 		}
+		DropItem->GetSphereComponent()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	}
 }
 

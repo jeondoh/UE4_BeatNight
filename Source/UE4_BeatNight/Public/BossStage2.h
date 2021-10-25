@@ -25,7 +25,6 @@ protected:
 
 	/** 플레이어에게 데미지 받을때 */
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
-	
 
 private:
 	/**************************************************************************************************/

@@ -49,6 +49,12 @@ void ASpider::BeginPlay()
 	RightLegCollision->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
 	RightLegCollision->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 	RightLegCollision->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
+
+	ABeatNightPlayer* Player = Cast<ABeatNightPlayer>(UGameplayStatics::GetPlayerPawn(this, 0));
+	if(Player)
+	{
+		PlayerMovement = Player->GetMovementSpeed();		
+	}
 }
 
 void ASpider::ActivateLeftLeg()
@@ -224,7 +230,6 @@ void ASpider::WebToPlayerAttack()
 		    ABeatNightPlayer* HitPlayer = Cast<ABeatNightPlayer>(BeamHitResult.Actor.Get());
 		    if(HitPlayer){
 		    	SlowPlayer = HitPlayer;
-		    	PlayerMovement = HitPlayer->GetMovementSpeed();
 				HitPlayer->SetMovementSpeed(PlayerSlowMovement);
 		    	GetWorldTimerManager().SetTimer(WebHandler, this, &ASpider::WebToPlayerSlow, WebTime); // 캐릭터 이동속도 복구 
 		    }

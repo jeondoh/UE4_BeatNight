@@ -17,11 +17,10 @@ class UE4_BEATNIGHT_API AItem_SwordUpgrade : public AItem
 
 public:
 	AItem_SwordUpgrade();
+
+	int UpgradeSword(class ABeatNightPlayer* Player);
 	
 private:
-	virtual void BoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-			UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
-	
 	ESwordType SetSwordUpgradeType(ESwordType Type);
 	
 };

@@ -7,6 +7,10 @@
 #include "DrawDebugHelpers.h"
 #include "Enemy.h"
 #include "EnemyAIController.h"
+#include "Item_Defense.h"
+#include "Item_Health.h"
+#include "Item_Key.h"
+#include "Item_SwordUpgrade.h"
 #include "Weapon.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Components/WidgetComponent.h"
@@ -32,6 +36,8 @@ ABeatNightPlayer::ABeatNightPlayer()
 	HitUlitmateParticle2->SetVisibility(false);
 
 	bCanInventory = false;
+	bPlayerDie = false;
+	bGameClear = false;
 }
 
 // Called when the game starts or when spawned
@@ -71,7 +77,9 @@ float ABeatNightPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 		{
 			EnemyController->GetBlackboardComponent()->SetValueAsBool(TEXT("PlayerDeath"), true);			
 		}
+		return 0;
 	}
+	ShowDamagedUI();
 	return DamageAmount;
 }
 
@@ -91,7 +99,9 @@ void ABeatNightPlayer::LoadGame()
 
 void ABeatNightPlayer::Die()
 {
-	
+	SetMovementSpeed(0.f);
+	bPlayerDie = true;
+	ShowDieWidget();
 }
 
 bool ABeatNightPlayer::CheckInventory(int Index)
@@ -153,4 +163,58 @@ float ABeatNightPlayer::RandomizationDamage(float Damage)
 	int Rand = FMath::RandRange(Damage-10.f, Damage+10.f);
 	if(Rand <= 0) return 0;
 	return Rand;
+}
+
+void ABeatNightPlayer::BuyItem(AItem* Item, FName ItemName)
+{
+	bool bBuyItem = false;
+	
+	if(ItemName.IsEqual("Defense"))
+	{
+		AItem_Defense* DefenseClass = Cast<AItem_Defense>(Item);
+		if(DefenseClass)
+		{
+			bBuyItem = DefenseClass->BuyDefense(this);
+		}
+	}
+	else if(ItemName.IsEqual("HP"))
+	{
+		AItem_Health* HealthClass = Cast<AItem_Health>(Item);
+		if(HealthClass)
+		{
+			bBuyItem = HealthClass->HealPlayer(this);
+		}
+	}
+	else if(ItemName.IsEqual("Upgrade"))
+	{
+		AItem_SwordUpgrade* SwordUpgrade = Cast<AItem_SwordUpgrade>(Item);
+		if(SwordUpgrade)
+		{
+			const int UpgradeSword = SwordUpgrade->UpgradeSword(this);
+			switch (UpgradeSword)
+			{
+			case 0 : // 코인부족
+				GetFailItemToShop();
+				return;
+			case 1 : // 구매성공
+				return;
+			case 2 : // 업그레이드 할 칼이 없음
+				GetFailItemToUpgrade();
+				return;
+			}
+		}
+	}
+	else if(ItemName.IsEqual("Key"))
+	{
+		AItem_Key* KeyClass = Cast<AItem_Key>(Item);
+		if(KeyClass)
+		{
+			bBuyItem = KeyClass->BuyKey(this);
+		}
+	}
+	if(!bBuyItem)
+	{
+		// Coin 부족시 아이템 구매 실패 UI
+		GetFailItemToShop();
+	}
 }

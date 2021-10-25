@@ -6,6 +6,8 @@
 #include "BeatNightPlayer.h"
 #include "Components/BoxComponent.h"
 #include "Components/SphereComponent.h"
+#include "Components/WidgetComponent.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 AItem::AItem()
@@ -21,6 +23,12 @@ AItem::AItem()
 
 	AreaSphere = CreateDefaultSubobject<USphereComponent>(TEXT("AreaSphere"));
 	AreaSphere->SetupAttachment(GetRootComponent());
+
+	ItemParticle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ItemParticle"));
+	ItemParticle->SetupAttachment(GetRootComponent());
+
+	WidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("WidgetComponent"));
+	WidgetComponent->SetupAttachment(GetRootComponent());
 
 	// INIT
 	BItemRotate = false; // 아이템 회전 여부
@@ -38,6 +46,21 @@ void AItem::BeginPlay()
 	CollisionBox->OnComponentEndOverlap.AddDynamic(this, &AItem::BoxCollisionEndOverlap);
 	AreaSphere->OnComponentBeginOverlap.AddDynamic(this, &AItem::AreaSphereBeginOverlap);
 	AreaSphere->OnComponentEndOverlap.AddDynamic(this, &AItem::AreaSphereEndOverlap);
+
+	// 위젯 컴포넌트 Visible
+	WidgetComponent->SetVisibility(false);
+	if(ItemType == EItemType::EIT_Store)
+	{
+		WidgetComponent->SetVisibility(true);
+		ItemParticle->SetVisibility(false);
+		CollisionBox->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Ignore);
+		AreaSphere->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Ignore);
+		SetWidgetCoinNum();
+	}
+	else
+	{
+		WidgetComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
 }
 
 // Called every frame
@@ -88,6 +111,8 @@ bool AItem::BuyItem()
 			CastPlayer->SetItemCoins(PlayerCoin - ItemCoin);
 			return true;
 		}
+		// Coin 부족시 아이템 구매 실패 UI
+		CastPlayer->GetFailItemToShop();
 	}
 	return false;
 }

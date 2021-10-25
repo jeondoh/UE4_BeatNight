@@ -13,21 +13,20 @@ AItem_Defense::AItem_Defense()
 	BItemRotate = true;
 }
 
-void AItem_Defense::BoxCollisionBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+bool AItem_Defense::BuyDefense(ABeatNightPlayer* Player)
 {
-	Super::BoxCollisionBeginOverlap(OverlappedComponent, OtherActor, OtherComp,
-		OtherBodyIndex, bFromSweep, SweepResult);
-
-	bool bGetItem = BuyItem();
-	if(bGetItem)
+	const uint8 PlayerCoin = Player->GetItemCoins();
+	if(PlayerCoin >= ItemCoin)
 	{
-		CastPlayer->SetDefense(DefenseAmount);
+		Player->SetItemCoins(PlayerCoin - ItemCoin);
+		Player->SetDefense(Player->GetDefense() + DefenseAmount);
 		if(PickupSound)
 		{
 			UGameplayStatics::PlaySoundAtLocation(this, PickupSound, GetActorLocation());
 		}
 		Destroy();
+		return true;
 	}
-	// TODO : 플레이어 Coin 부족 시 경고창 UI 생성
+	return false;
 }
+

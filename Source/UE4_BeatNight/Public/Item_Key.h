@@ -17,6 +17,8 @@ class UE4_BEATNIGHT_API AItem_Key : public AItem
 public:
 	AItem_Key();
 
+	bool BuyKey(class ABeatNightPlayer* Player);
+
 private:
 	virtual void AreaSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
