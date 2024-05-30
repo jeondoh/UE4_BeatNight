@@ -227,7 +227,7 @@ void ASpider::WebToPlayerAttack()
 		bool bBeamEnd = GetBeamEndLocation(SocketTransForm.GetLocation(), BeamHitResult);
 		if(bBeamEnd)
 		{
-		    ABeatNightPlayer* HitPlayer = Cast<ABeatNightPlayer>(BeamHitResult.Actor.Get());
+		    ABeatNightPlayer* HitPlayer = Cast<ABeatNightPlayer>(BeamHitResult.GetActor());
 		    if(HitPlayer){
 		    	SlowPlayer = HitPlayer;
 				HitPlayer->SetMovementSpeed(PlayerSlowMovement);

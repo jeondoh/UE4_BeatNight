@@ -1,6 +1,6 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "4.26",
+	"EngineAssociation": "5.3",
 	"Category": "",
 	"Description": "",
 	"Modules": [
@@ -15,32 +15,45 @@
 	],
 	"Plugins": [
 		{
-			"Name": "OculusAudio",
-			"Enabled": true
-		},
-		{
-			"Name": "OculusOpenXR",
+			"Name": "OpenXR",
 			"Enabled": true,
 			"SupportedTargetPlatforms": [
-				"Win32",
 				"Win64",
+				"Linux",
 				"Android"
 			]
 		},
 		{
-			"Name": "OnlineSubsystemOculus",
-			"Enabled": true
+			"Name": "OpenXREyeTracker",
+			"Enabled": true,
+			"SupportedTargetPlatforms": [
+				"Win64",
+				"Linux",
+				"Android"
+			]
 		},
 		{
-			"Name": "UdpMessaging",
-			"Enabled": false
-		},
-		{
-			"Name": "ApexDestruction",
-			"Enabled": true
+			"Name": "OpenXRHandTracking",
+			"Enabled": true,
+			"SupportedTargetPlatforms": [
+				"Win64",
+				"Linux",
+				"Android"
+			]
 		}
 	],
 	"TargetPlatforms": [
-		"Android"
+		"Android",
+		"IOS",
+		"Linux",
+		"Mac",
+		"PS4",
+		"PS5",
+		"Windows",
+		"WindowsNoEditor",
+		"Switch",
+		"XboxOne",
+		"XSX",
+		"HoloLens"
 	]
 }

@@ -141,7 +141,7 @@ void ABeatNightPlayer::TraceEnemyToDamage(FVector StartLocation, FVector EndLoca
 
 	if(OutHitResult.bBlockingHit)
 	{
-		AEnemy* HitEnemy = Cast<AEnemy>(OutHitResult.Actor.Get());
+		AEnemy* HitEnemy = Cast<AEnemy>(OutHitResult.GetActor());
 		if(HitEnemy)
 		{
 			if(HitEnemy->GetDying()) return;
